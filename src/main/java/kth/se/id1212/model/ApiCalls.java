@@ -27,6 +27,10 @@ public class ApiCalls {
             .uri(URI.create(API_URL + PremiumEnd + API_KEY))
             .build();
 
+    private final HttpRequest freeApiRequest = HttpRequest.newBuilder()
+            .uri(URI.create(API_URL_FREE + FreeEnd))
+            .build();
+
     public String getNewArrayPremium() throws IOException {
 
         HttpResponse<String> apiResponse = null;
@@ -57,6 +61,21 @@ public class ApiCalls {
         }
 
         System.out.println("Some kind of array: " + words);
+
+        return apiResponseBody;
+    }
+
+    public String getNewArrayFree() {
+        HttpResponse<String> apiResponse = null;
+        try {
+            apiResponse = client.send(freeApiRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (InterruptedException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        String apiResponseBody = apiResponse.body();
+
+        System.out.println("Sent to API: " + premiumApiRequest);
+        System.out.println("API Response: " + apiResponseBody);
 
         return apiResponseBody;
     }
