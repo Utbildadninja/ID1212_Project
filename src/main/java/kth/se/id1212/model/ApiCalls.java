@@ -44,7 +44,7 @@ public class ApiCalls {
         System.out.println("Sent to API: " + premiumApiRequest);
         System.out.println("API Response: " + apiResponseBody);
 
-// Parse the API response into a list of objects
+        // Parse the API response into a list of objects
         List<Word> words = new ArrayList<>();
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new StringReader(apiResponseBody));
@@ -55,7 +55,7 @@ public class ApiCalls {
         }
         reader.endArray();
 
-// Iterate over the list and print the word for each object
+        // Iterate over the list and print the word for each object
         for (Word word : words) {
             System.out.println(word.getWord());
         }
