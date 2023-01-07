@@ -8,8 +8,10 @@
 <h1><%= "Med egna ord" %>
 </h1>
 <br/>
-<a href="testView.jsp">Testing</a>
-<br/>
 <a href="setUpView.jsp">Play Game</a>
+<br/>
+<a href="settingsView.jsp">Settings</a>
+<br/>
+<a href="testView.jsp">Testing section</a>
 </body>
 </html>

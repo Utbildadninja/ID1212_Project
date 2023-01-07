@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class Game {
+    // TODO Add a Team object, containing name, score etc
     ApiCalls apiCalls = new ApiCalls();
     WordBean wordBean = null;
     int currentRound = -1;
@@ -18,9 +19,9 @@ public class Game {
         if (wordList == null) {
             getNewArray();
             this.currentWordCounter = 0;
-            this.score = 0;
         }
-
+        
+        this.score = 0;
         currentRound = 0;
         setCurrentWord();
     }

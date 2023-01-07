@@ -21,17 +21,13 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Received GET request");
         handleRequest(request, response);
-
-
     }
 
     // Handles all POST requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("Received POST request");
-
         handleRequest(request, response);
-
     }
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -57,8 +53,17 @@ public class ControllerServlet extends HttpServlet {
         else if (jspFile.endsWith("/gameView.jsp")) {
             doGameView(request, response, session);
         }
+        else if (jspFile.endsWith("/pauseView.jsp")) {
+            doPauseView(request, response, session);
+        }
         else if (jspFile.endsWith("/setUpView.jsp")) {
             doSetUpView(request, response, session);
+        }
+        else if (jspFile.endsWith("/settingsView.jsp")) {
+            doSettingsView(request, response, session);
+        }
+        else if (jspFile.endsWith("/resultsView.jsp")) {
+            doResultsView(request, response, session);
         }
         else if (jspFile.endsWith("/testView.jsp")) {
             doTestView(request, response, session);
@@ -67,17 +72,41 @@ public class ControllerServlet extends HttpServlet {
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         String action = request.getParameter("action");
-        if (action.equals("correct")) {
-            System.out.println("Action was: " + action);
-            game.correct();
-        } else if (action.equals("skip")) {
-            System.out.println("Action was: " + action);
-            game.skip();
-        } else System.out.println("Action was " + action + ". That was unexpected");
+        // TODO Probably check logic, I should have been in bed
+        switch (action) {
+            case "correct":
+                System.out.println("Action was: " + action);
+                game.correct();
+                doGameViewProgress(request, response, session);
+                break;
+            case "skip":
+                System.out.println("Action was: " + action);
+                game.skip();
+                doGameViewProgress(request, response, session);
+                break;
+            case "finalGuessSkip":
+                // TODO Call finalSkip or something
+                response.sendRedirect("pauseView.jsp");
+                break;
+            case "finalGuessCorrect":
+                // TODO Call finalCorrect or something
+                response.sendRedirect("pauseView.jsp");
+                break;
+            case "results":
+                // TODO Call results or something
+                response.sendRedirect("resultsView.jsp");
+                break;
+            default:
+                System.out.println("Action was " + action + ". That was unexpected");
+                break;
+        }
 
+    }
+
+    private void doGameViewProgress(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         int score = game.getScore();
         String currentWord = game.getCurrentWord();
-        System.out.println("Setting current word from doGameView: " + currentWord);
+        System.out.println("Setting current word from doGameViewProgress: " + currentWord);
 
         session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
@@ -94,8 +123,22 @@ public class ControllerServlet extends HttpServlet {
         response.sendRedirect("gameView.jsp");
     }
 
-    private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+    private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 
+        response.sendRedirect("settingsView.jsp");
+    }
+
+    private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        // TODO Prepare for next team
+        response.sendRedirect("gameView.jsp");
+    }
+
+    private void doResultsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        response.sendRedirect("index.jsp");
+    }
+
+    private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        // Separat från resten, do what you want
         response.sendRedirect("testView.jsp");
     }
 
