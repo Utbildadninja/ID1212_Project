@@ -75,9 +75,11 @@ public class ControllerServlet extends HttpServlet {
             game.skip();
         } else System.out.println("Action was " + action + ". That was unexpected");
 
+        int score = game.getScore();
         String currentWord = game.getCurrentWord();
         System.out.println("Setting current word from doGameView: " + currentWord);
 
+        session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
 
         response.sendRedirect("gameView.jsp");
@@ -85,7 +87,9 @@ public class ControllerServlet extends HttpServlet {
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         game.newGame();
+        int score = game.getScore();
         String currentWord = game.getCurrentWord();
+        session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
         response.sendRedirect("gameView.jsp");
     }

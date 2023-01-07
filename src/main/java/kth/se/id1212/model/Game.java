@@ -12,11 +12,13 @@ public class Game {
     String currentWord = null;
     int currentWordCounter = -1;
     String[] wordList;
+    int score = 0;
 
     public void newGame() throws IOException {
         if (wordList == null) {
             getNewArray();
             this.currentWordCounter = 0;
+            this.score = 0;
         }
 
         currentRound = 0;
@@ -43,6 +45,7 @@ public class Game {
 
     public void correct () throws IOException {
         currentWordCounter++;
+        score += 10;
         setCurrentWord();
     }
 
@@ -63,6 +66,7 @@ public class Game {
         this.currentWordCounter = currentWordCounter;
     }
 
-
-
+    public int getScore() {
+        return score;
+    }
 }

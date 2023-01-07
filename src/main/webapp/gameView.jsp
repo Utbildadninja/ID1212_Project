@@ -6,8 +6,10 @@
 <body>
 <%
     String currentWord = session.getAttribute("currentWord").toString();
+    int score = (int) session.getAttribute("score");
 %>
 <p>Current word: <%=currentWord%></p>
+<p>Current score: <%=score%></p>
 
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <input type="hidden" name="action" value="correct">
