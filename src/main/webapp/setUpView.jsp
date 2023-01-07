@@ -11,10 +11,11 @@
     <title>Setup</title>
 </head>
 <body>
+<div>Pick a team name etc</div>
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
 
   <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-  <button type="submit">Send HTTP Request</button>
+  <button type="submit">Start Game</button>
 </form>
 </body>
 </html>

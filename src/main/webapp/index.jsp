@@ -10,6 +10,6 @@
 <br/>
 <a href="testView.jsp">Testing</a>
 <br/>
-<a href="setUpView.jsp">Pre-Game</a>
+<a href="setUpView.jsp">Play Game</a>
 </body>
 </html>

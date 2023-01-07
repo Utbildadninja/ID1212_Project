@@ -37,10 +37,16 @@ public class Game {
             System.out.println("One word remaining in list");
         }
 
+        // TODO If APIs are laggy, this could be moved to set before getting a new array when there's one word remaining.
         this.currentWord = wordList[currentWordCounter];
     }
 
     public void correct () throws IOException {
+        currentWordCounter++;
+        setCurrentWord();
+    }
+
+    public void skip() throws IOException {
         currentWordCounter++;
         setCurrentWord();
     }
@@ -56,4 +62,7 @@ public class Game {
     public void setCurrentWordCounter(int currentWordCounter) {
         this.currentWordCounter = currentWordCounter;
     }
+
+
+
 }

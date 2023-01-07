@@ -66,9 +66,17 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        game.correct();
+        String action = request.getParameter("action");
+        if (action.equals("correct")) {
+            System.out.println("Action was: " + action);
+            game.correct();
+        } else if (action.equals("skip")) {
+            System.out.println("Action was: " + action);
+            game.skip();
+        } else System.out.println("Action was " + action + ". That was unexpected");
+
         String currentWord = game.getCurrentWord();
-        System.out.println("Setting current word from gameView: " + currentWord);
+        System.out.println("Setting current word from doGameView: " + currentWord);
 
         session.setAttribute("currentWord", currentWord);
 
