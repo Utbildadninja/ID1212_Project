@@ -24,12 +24,15 @@ public class Game {
 
     public void getNewArray() throws IOException {
         // TODO Add logic to choose where to get the words from
-        wordList = callPremiumAPI();
+        //wordList = apiCalls.getNewArrayPremium();
+        wordList = apiCalls.getNewArrayFree();
     }
 
     public void setCurrentWord () throws IOException {
         if (this.currentWordCounter >= wordList.length) {
             this.currentWordCounter = 0;
+        } else if (this.currentWordCounter >= wordList.length -1) {
+            getNewArray();
         }
 
         //System.out.println("API response from Game: " + wordBeans)
@@ -42,8 +45,4 @@ public class Game {
         return currentWord;
     }
 
-    public String[] callPremiumAPI() throws IOException {
-
-        return apiCalls.getNewArrayPremium();
-    }
 }

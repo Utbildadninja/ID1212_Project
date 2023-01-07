@@ -62,20 +62,20 @@ public class ApiCalls {
         reader.endArray();
 
         // Iterate over the list and print the word for each object
-        String[] wordBeansString = new String[wordBeans.size()];
+        String[] wordListStringArray = new String[wordBeans.size()];
         int counter = 0;
         for (WordBean wordBean : wordBeans) {
-            wordBeansString[counter++] = wordBean.getWord();
+            wordListStringArray[counter++] = wordBean.getWord();
             //System.out.println(wordBean.getWord());
 
         }
 
         //System.out.println("Some kind of array: " + wordBeans);
 
-        return wordBeansString;
+        return wordListStringArray;
     }
 
-    public String getNewArrayFree() {
+    public String[] getNewArrayFree() {
         HttpResponse<String> apiResponse = null;
         try {
             apiResponse = client.send(freeApiRequest, HttpResponse.BodyHandlers.ofString());
@@ -84,16 +84,16 @@ public class ApiCalls {
         }
         String apiResponseBody = apiResponse.body();
 
-        System.out.println("Sent to API: " + premiumApiRequest);
+        System.out.println("Sent to API: " + freeApiRequest);
         System.out.println("API Response: " + apiResponseBody);
 
-//        String[] words = new Gson().fromJson(json, String[].class);
-//
-//        for (String word : words) {
-//            System.out.println(word);
-//        }
+        String[] wordListStringArray = new Gson().fromJson(apiResponseBody, String[].class);
 
-        return apiResponseBody;
+        for (String word : wordListStringArray) {
+            System.out.println(word);
+        }
+
+        return wordListStringArray;
     }
 
     private String getAPI_KEY() {

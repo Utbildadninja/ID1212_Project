@@ -15,7 +15,6 @@ import java.util.Map;
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
-    ApiCalls apiCalls = new ApiCalls();
     Game game = new Game();
 
 
@@ -67,14 +66,11 @@ public class ControllerServlet extends HttpServlet {
         String currentWord = game.getCurrentWord();
         System.out.println("Current word: " + currentWord);
 
+
         response.sendRedirect("testView.jsp");
     }
 
-    private void callFreeAPI() {
-        String apiResponse = apiCalls.getNewArrayFree();
 
-        System.out.println("API response from Controller: " + apiResponse);
-    }
 
 //    public List<WordBean> callPremiumAPI() throws IOException {
 //
