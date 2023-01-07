@@ -9,5 +9,7 @@
 </h1>
 <br/>
 <a href="testView.jsp">Testing</a>
+<br/>
+<a href="setUpView.jsp">Pre-Game</a>
 </body>
 </html>

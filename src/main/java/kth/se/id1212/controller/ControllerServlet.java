@@ -17,7 +17,6 @@ import java.util.Map;
 public class ControllerServlet extends HttpServlet {
     Game game = new Game();
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Received GET request");
@@ -55,27 +54,37 @@ public class ControllerServlet extends HttpServlet {
         if (jspFile == null) {
             System.out.println("Seems the jspFile is null");
         }
+        else if (jspFile.endsWith("/gameView.jsp")) {
+            doGameView(request, response, session);
+        }
+        else if (jspFile.endsWith("/setUpView.jsp")) {
+            doSetUpView(request, response, session);
+        }
         else if (jspFile.endsWith("/testView.jsp")) {
             doTestView(request, response, session);
         }
     }
 
-    private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        game.newGame();
-        game.setCurrentWord();
+    private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        game.correct();
         String currentWord = game.getCurrentWord();
-        System.out.println("Current word: " + currentWord);
+        System.out.println("Setting current word from gameView: " + currentWord);
 
+        session.setAttribute("currentWord", currentWord);
+
+        response.sendRedirect("gameView.jsp");
+    }
+
+    private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        game.newGame();
+        String currentWord = game.getCurrentWord();
+        session.setAttribute("currentWord", currentWord);
+        response.sendRedirect("gameView.jsp");
+    }
+
+    private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 
         response.sendRedirect("testView.jsp");
     }
-
-
-
-//    public List<WordBean> callPremiumAPI() throws IOException {
-//
-//        return apiCalls.getNewArrayPremium();
-//    }
-
 
 }

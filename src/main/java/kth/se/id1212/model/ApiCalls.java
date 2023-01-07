@@ -89,9 +89,9 @@ public class ApiCalls {
 
         String[] wordListStringArray = new Gson().fromJson(apiResponseBody, String[].class);
 
-        for (String word : wordListStringArray) {
-            System.out.println(word);
-        }
+//        for (String word : wordListStringArray) {
+//            System.out.println(word);
+//        }
 
         return wordListStringArray;
     }

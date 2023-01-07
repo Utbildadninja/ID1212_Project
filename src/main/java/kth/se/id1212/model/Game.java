@@ -20,6 +20,7 @@ public class Game {
         }
 
         currentRound = 0;
+        setCurrentWord();
     }
 
     public void getNewArray() throws IOException {
@@ -28,21 +29,31 @@ public class Game {
         wordList = apiCalls.getNewArrayFree();
     }
 
-    public void setCurrentWord () throws IOException {
+    public void setCurrentWord() throws IOException {
         if (this.currentWordCounter >= wordList.length) {
+            getNewArray();
             this.currentWordCounter = 0;
         } else if (this.currentWordCounter >= wordList.length -1) {
-            getNewArray();
+            System.out.println("One word remaining in list");
         }
 
-        //System.out.println("API response from Game: " + wordBeans)
-
         this.currentWord = wordList[currentWordCounter];
+    }
 
+    public void correct () throws IOException {
+        currentWordCounter++;
+        setCurrentWord();
     }
 
     public String getCurrentWord() {
         return currentWord;
     }
 
+    public int getCurrentWordCounter() {
+        return currentWordCounter;
+    }
+
+    public void setCurrentWordCounter(int currentWordCounter) {
+        this.currentWordCounter = currentWordCounter;
+    }
 }
