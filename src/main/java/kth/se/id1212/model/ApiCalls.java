@@ -9,7 +9,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,7 +30,14 @@ public class ApiCalls {
             .uri(URI.create(API_URL_FREE + FreeEnd))
             .build();
 
-    public String getNewArrayPremium() throws IOException {
+    /**
+     * Calls the RESTful API to get 20 words.
+     * Minimum 5 characters.
+     * API KEY has to be used to access this API.
+     * @return A String array
+     * @throws IOException Anything that goes wrong
+     */
+    public String[] getNewArrayPremium() throws IOException {
 
         HttpResponse<String> apiResponse = null;
         try {
@@ -45,24 +51,28 @@ public class ApiCalls {
         System.out.println("API Response: " + apiResponseBody);
 
         // Parse the API response into a list of objects
-        List<Word> words = new ArrayList<>();
+        List<WordBean> wordBeans = new ArrayList<>();
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new StringReader(apiResponseBody));
         reader.beginArray();
         while (reader.hasNext()) {
-            Word word = gson.fromJson(reader, Word.class);
-            words.add(word);
+            WordBean wordBean = gson.fromJson(reader, WordBean.class);
+            wordBeans.add(wordBean);
         }
         reader.endArray();
 
         // Iterate over the list and print the word for each object
-        for (Word word : words) {
-            System.out.println(word.getWord());
+        String[] wordBeansString = new String[wordBeans.size()];
+        int counter = 0;
+        for (WordBean wordBean : wordBeans) {
+            wordBeansString[counter++] = wordBean.getWord();
+            //System.out.println(wordBean.getWord());
+
         }
 
-        System.out.println("Some kind of array: " + words);
+        //System.out.println("Some kind of array: " + wordBeans);
 
-        return apiResponseBody;
+        return wordBeansString;
     }
 
     public String getNewArrayFree() {
@@ -76,6 +86,12 @@ public class ApiCalls {
 
         System.out.println("Sent to API: " + premiumApiRequest);
         System.out.println("API Response: " + apiResponseBody);
+
+//        String[] words = new Gson().fromJson(json, String[].class);
+//
+//        for (String word : words) {
+//            System.out.println(word);
+//        }
 
         return apiResponseBody;
     }
@@ -95,26 +111,6 @@ public class ApiCalls {
         return API_KEY;
     }
 
-    public static class Word {
-        private int id;
-        private String word;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getWord() {
-            return word;
-        }
-
-        public void setWord(String word) {
-            this.word = word;
-        }
-    }
 }
 
 
