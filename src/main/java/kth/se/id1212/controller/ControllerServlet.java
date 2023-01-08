@@ -54,30 +54,25 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
 
-        // Checks the parameter "jspFile" to point the request to correct method
-        String jspFile = request.getParameter("jspFile");
-        //System.out.println("jspFile from Controller: " + jspFile);
-        if (jspFile == null) {
-            System.out.println("Seems the jspFile is null");
-        }
-        else if (jspFile.endsWith("/gameView.jsp")) {
-            doGameView(request, response, session);
-        }
-        else if (jspFile.endsWith("/pauseView.jsp")) {
-            doPauseView(request, response, session);
-        }
-        else if (jspFile.endsWith("/setUpView.jsp")) {
-            doSetUpView(request, response, session);
-        }
-        else if (jspFile.endsWith("/settingsView.jsp")) {
-            doSettingsView(request, response, session);
-        }
-        else if (jspFile.endsWith("/resultsView.jsp")) {
-            doResultsView(request, response, session);
-        }
-        else if (jspFile.endsWith("/testView.jsp")) {
-            doTestView(request, response, session);
-        }
+            // Checks the parameter "jspFile" to point the request to correct method
+            String jspFile = request.getParameter("jspFile");
+            //System.out.println("jspFile from Controller: " + jspFile);
+            if (jspFile == null) {
+                System.out.println("Seems the jspFile is null");
+            } else if (jspFile.endsWith("/gameView.jsp")) {
+                doGameView(request, response, session);
+            } else if (jspFile.endsWith("/pauseView.jsp")) {
+                doPauseView(request, response, session);
+            } else if (jspFile.endsWith("/setUpView.jsp")) {
+                doSetUpView(request, response, session);
+            } else if (jspFile.endsWith("/settingsView.jsp")) {
+                doSettingsView(request, response, session);
+            } else if (jspFile.endsWith("/resultsView.jsp")) {
+                doResultsView(request, response, session);
+            } else if (jspFile.endsWith("/testView.jsp")) {
+                doTestView(request, response, session);
+            }
+
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -127,8 +122,7 @@ public class ControllerServlet extends HttpServlet {
 
         if (timeLeft <= 0) {
             response.sendRedirect("pauseView.jsp");
-        }
-        else
+        } else
             response.sendRedirect("gameView.jsp");
     }
 
@@ -187,16 +181,16 @@ public class ControllerServlet extends HttpServlet {
         // TODO Fix settingsBean, this can only lead to confusion
         SettingsBean settingsBean = new SettingsBean();
         Game game = activeSessions.get(session);
-        if (!game.isGameOver()) {
-            game.nextRound(settingsBean);
-            session.setAttribute("timeLeft", game.getTimeLeft());
-            session.setAttribute("currentTeamBean", game.getCurrentTeam());
-            session.setAttribute("nextTeamBean", game.getNextTeam());
-            session.setAttribute("score", game.getScore());
-            response.sendRedirect("gameView.jsp");
-        }
-        else {
+
+        game.nextRound(settingsBean);
+        session.setAttribute("timeLeft", game.getTimeLeft());
+        session.setAttribute("currentTeamBean", game.getCurrentTeam());
+        session.setAttribute("nextTeamBean", game.getNextTeam());
+        session.setAttribute("score", game.getScore());
+        if (game.isGameOver()) {
             response.sendRedirect("resultsView.jsp");
+        } else {
+            response.sendRedirect("gameView.jsp");
         }
 
     }
@@ -207,7 +201,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // Separat från resten, do what you want
-        
+
         response.sendRedirect("testView.jsp");
 
     }

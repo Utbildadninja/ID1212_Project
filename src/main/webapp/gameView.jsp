@@ -47,10 +47,10 @@
 <%--    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
 <%--    <button type="submit">FinalGuessSkip</button>--%>
 <%--</form>--%>
-<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-    <input type="hidden" name="action" value="results">
-    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-    <button type="submit">Results</button>
-</form>
+<%--<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
+<%--    <input type="hidden" name="action" value="results">--%>
+<%--    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
+<%--    <button type="submit">Results</button>--%>
+<%--</form>--%>
 </body>
 </html>
