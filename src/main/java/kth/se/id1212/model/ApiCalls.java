@@ -97,16 +97,16 @@ public class ApiCalls {
     }
 
     private String getAPI_KEY() {
-        String API_KEY = null;
+        String API_KEY = System.getenv("api_key");
 
-        try {
-            Scanner scanner = new Scanner(new File("C:\\API_KEY.txt"));
-            API_KEY = scanner.nextLine();
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            System.err.println("Scanner failed in the most horrible way");
-            e.printStackTrace();
-        }
+//        try {
+//            Scanner scanner = new Scanner(new File("C:\\API_KEY.txt"));
+//            API_KEY = scanner.nextLine();
+//            scanner.close();
+//        } catch (FileNotFoundException e) {
+//            System.err.println("Scanner failed in the most horrible way");
+//            e.printStackTrace();
+//        }
 
         return API_KEY;
     }

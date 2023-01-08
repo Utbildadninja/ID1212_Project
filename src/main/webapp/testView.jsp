@@ -11,7 +11,7 @@
   <title>TestView</title>
 </head>
 <body>
-
+WRITE SOMETHING PLZ
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
 
   <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">

@@ -42,3 +42,5 @@ build/
 .idea/dataSources/9318da94-8509-40f6-8612-c28c1aecd6f8/storage_v2/_src_/schema/SYSCS_UTIL.JC_i2A.meta
 .idea/dataSources/9318da94-8509-40f6-8612-c28c1aecd6f8/storage_v2/_src_/schema/SYSIBM.hzyvkg.meta
 derby.log
+.idea/dataSources/9318da94-8509-40f6-8612-c28c1aecd6f8/storage_v2/_src_/schema/SYS.rUIBAA.meta
+.idea/dataSources.xml

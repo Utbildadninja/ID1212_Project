@@ -3,10 +3,20 @@ package kth.se.id1212.controller;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+
 import kth.se.id1212.model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import kth.se.id1212.integration.OtherWordsDAO;
+import kth.se.id1212.model.ApiCalls;
+import kth.se.id1212.model.Game;
+import kth.se.id1212.model.WordBean;
+
+import java.io.IOException;
+import java.sql.DriverManager;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +24,7 @@ import java.util.Map;
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
+    OtherWordsDAO db = new OtherWordsDAO();
     Game game = new Game();
     List<TeamBean> teamsPlaying = new ArrayList<>();
 
@@ -28,6 +39,7 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("Received POST request");
+        System.out.println(DriverManager.getDrivers().getClass().getName()); //TODO remove
         handleRequest(request, response);
     }
 
@@ -187,8 +199,9 @@ public class ControllerServlet extends HttpServlet {
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // Separat från resten, do what you want
-
+        
         response.sendRedirect("testView.jsp");
+
     }
 
 }
