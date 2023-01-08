@@ -14,19 +14,30 @@ public class Game {
     String currentWord = null;
     int currentWordCounter = -1;
     String[] wordList;
-    int score = 0;
-    int timeLeft = 25; // TODO Set with settings
+    //int score = 0;
+    int timeLeft = 25; // TODO Could be set to null, set to another value before starting a game anyway
     List<TeamBean> teamsPlaying = new ArrayList<>();
+    TeamBean currentTeam;
+    int totalRounds = 2; // TODO Set with settings
+    boolean gameOver = false;
+    TeamBean nextTeam;
 
     public void newGame() throws IOException {
         if (wordList == null) {
             getNewArray();
             this.currentWordCounter = 0;
         }
-
-        this.score = 0;
+        this.gameOver = false;
         currentRound = 0;
+        currentTeam = teamsPlaying.get(0);
+        for (TeamBean team:teamsPlaying) {
+            team.setScore(0);
+        }
         setCurrentWord();
+//        if (teamsPlaying.size() > 1)
+//            nextTeam = teamsPlaying.get(1);
+//        else
+//            nextTeam = currentTeam;
     }
 
     public void getNewArray() throws IOException {
@@ -49,7 +60,8 @@ public class Game {
 
     public void correct () throws IOException {
         currentWordCounter++;
-        score += 10;
+        int score = currentTeam.getScore();
+        currentTeam.setScore(score + 10);
         setCurrentWord();
     }
 
@@ -58,8 +70,24 @@ public class Game {
         setCurrentWord();
     }
 
-    public void nextRound() {
-        startTimer();
+    public void nextRound(SettingsBean settingsBean) {
+        if (this.currentRound == this.totalRounds * teamsPlaying.size()) {
+            gameOver();
+        }
+        else {
+            currentTeam = teamsPlaying.get(currentRound%teamsPlaying.size());
+            currentRound++;
+            nextTeam = teamsPlaying.get(currentRound%teamsPlaying.size());
+            System.out.println("Current round is: " + currentRound + " current Team is: " + currentTeam.getName());
+            setTimeLeft(settingsBean.getRoundTime());
+            startTimer();
+        }
+
+    }
+
+    public void gameOver() {
+        System.out.println("Game is finished");
+        this.gameOver = true;
     }
 
     public void startTimer() {
@@ -116,7 +144,7 @@ public class Game {
     }
 
     public int getScore() {
-        return score;
+        return currentTeam.getScore();
     }
 
     public int getTimeLeft() {
@@ -125,5 +153,17 @@ public class Game {
 
     public void setTimeLeft(int timeLeft) {
         this.timeLeft = timeLeft;
+    }
+
+    public TeamBean getCurrentTeam() {
+        return currentTeam;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public TeamBean getNextTeam() {
+        return nextTeam;
     }
 }

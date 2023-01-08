@@ -1,3 +1,4 @@
+<%@ page import="kth.se.id1212.model.TeamBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -8,9 +9,11 @@
     String currentWord = session.getAttribute("currentWord").toString();
     int score = (int) session.getAttribute("score");
     int timeLeft = (int) session.getAttribute("timeLeft");
+    TeamBean teamBean = (TeamBean) session.getAttribute("currentTeamBean");
 %>
 <p>Current word: <%=currentWord%></p>
 <p>Current score: <%=score%></p>
+<p>Current team: <%=teamBean.getName()%></p>
 
 <p>Time remaining: <span id="timer"><%=timeLeft%></span> seconds</p>
 
@@ -39,11 +42,11 @@
     <button type="submit">Skip</button>
 </form>
 <div>Under construction obviously, for testing</div>
-<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-    <input type="hidden" name="action" value="finalGuessSkip">
-    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-    <button type="submit">FinalGuessSkip</button>
-</form>
+<%--<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
+<%--    <input type="hidden" name="action" value="finalGuessSkip">--%>
+<%--    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
+<%--    <button type="submit">FinalGuessSkip</button>--%>
+<%--</form>--%>
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <input type="hidden" name="action" value="results">
     <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">

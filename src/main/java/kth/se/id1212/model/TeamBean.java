@@ -3,7 +3,7 @@ package kth.se.id1212.model;
 public class TeamBean {
     private int id;
     private String name;
-    int score;
+    private int score;
 
     public void setName(String name) {
         this.name = name;

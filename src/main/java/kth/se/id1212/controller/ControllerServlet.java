@@ -56,7 +56,7 @@ public class ControllerServlet extends HttpServlet {
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
-        System.out.println("jspFile from Controller: " + jspFile);
+        //System.out.println("jspFile from Controller: " + jspFile);
         if (jspFile == null) {
             System.out.println("Seems the jspFile is null");
         }
@@ -85,9 +85,6 @@ public class ControllerServlet extends HttpServlet {
         Game game = activeSessions.get(session);
         // TODO Probably check logic, I should have been in bed
         switch (action) {
-            case "getTimeRemaining":
-                int timeRemaining = game.getTimeLeft();
-                response.getWriter().println(timeRemaining);
             case "correct":
                 System.out.println("Action was: " + action);
                 game.correct();
@@ -98,14 +95,14 @@ public class ControllerServlet extends HttpServlet {
                 game.skip();
                 doGameViewProgress(request, response, session);
                 break;
-            case "finalGuessSkip":
-                // TODO Call finalSkip or something
-                response.sendRedirect("pauseView.jsp");
-                break;
-            case "finalGuessCorrect":
-                // TODO Call finalCorrect or something
-                response.sendRedirect("pauseView.jsp");
-                break;
+//            case "finalGuessSkip":
+//                // TODO Call finalSkip or something
+//                response.sendRedirect("pauseView.jsp");
+//                break;
+//            case "finalGuessCorrect":
+//                // TODO Call finalCorrect or something
+//                response.sendRedirect("pauseView.jsp");
+//                break;
             case "results":
                 // TODO Call results or something
                 response.sendRedirect("resultsView.jsp");
@@ -129,10 +126,8 @@ public class ControllerServlet extends HttpServlet {
         session.setAttribute("timeLeft", timeLeft);
 
         if (timeLeft <= 0) {
-            game.nextRound();
             response.sendRedirect("pauseView.jsp");
         }
-
         else
             response.sendRedirect("gameView.jsp");
     }
@@ -167,10 +162,12 @@ public class ControllerServlet extends HttpServlet {
                 session.setAttribute("currentWord", currentWord);
 
                 int timeLeft = settingsBean.getRoundTime();
-                game.setTimeLeft(timeLeft);
                 session.setAttribute("timeLeft", timeLeft);
+                session.setAttribute("currentTeamBean", game.getCurrentTeam());
 
-                game.nextRound();
+                game.nextRound(settingsBean);
+
+                session.setAttribute("nextTeamBean", game.getNextTeam()); // TODO Probably a better solution to this
 
                 response.sendRedirect("gameView.jsp");
                 break;
@@ -187,8 +184,21 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // TODO Prepare for next team
-        response.sendRedirect("gameView.jsp");
+        // TODO Fix settingsBean, this can only lead to confusion
+        SettingsBean settingsBean = new SettingsBean();
+        Game game = activeSessions.get(session);
+        if (!game.isGameOver()) {
+            game.nextRound(settingsBean);
+            session.setAttribute("timeLeft", game.getTimeLeft());
+            session.setAttribute("currentTeamBean", game.getCurrentTeam());
+            session.setAttribute("nextTeamBean", game.getNextTeam());
+            session.setAttribute("score", game.getScore());
+            response.sendRedirect("gameView.jsp");
+        }
+        else {
+            response.sendRedirect("resultsView.jsp");
+        }
+
     }
 
     private void doResultsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {

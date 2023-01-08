@@ -32,7 +32,7 @@
 </ul>
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <label>
-        <input type="text" name="team" value="teamName">
+        <input type="text" name="team" placeholder="Enter team name">
     </label>
     <input type="hidden" name="action" value="add">
     <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
