@@ -1,7 +1,7 @@
 package kth.se.id1212.model;
 
 public class SettingsBean {
-    private int roundTime = 30;
+    private int roundTime = 15;
 
     public int getRoundTime() {
         return roundTime;

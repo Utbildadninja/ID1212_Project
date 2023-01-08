@@ -1,6 +1,7 @@
 package kth.se.id1212.model;
 
 public class TeamBean {
+    private int id;
     private String name;
     int score;
 
@@ -18,5 +19,13 @@ public class TeamBean {
 
     public int getScore() {
         return score;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

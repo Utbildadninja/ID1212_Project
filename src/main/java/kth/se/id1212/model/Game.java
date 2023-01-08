@@ -16,7 +16,7 @@ public class Game {
     int currentWordCounter = -1;
     String[] wordList;
     int score = 0;
-    int timeLeft = 15; // TODO Set with settings
+    int timeLeft = 25; // TODO Set with settings
 
     public void newGame() throws IOException {
         if (wordList == null) {
@@ -69,7 +69,7 @@ public class Game {
             @Override
             public void run() {
                 if (timeLeft > 0) {
-                    System.out.println("Time remaining: " + timeLeft + " seconds");
+                    //System.out.println("Time remaining: " + timeLeft + " seconds");
                     timeLeft--;
                 } else {
                     System.out.println("Time's up!");
@@ -99,5 +99,9 @@ public class Game {
 
     public int getTimeLeft() {
         return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
     }
 }

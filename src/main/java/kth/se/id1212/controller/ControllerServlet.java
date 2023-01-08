@@ -3,12 +3,10 @@ package kth.se.id1212.controller;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import kth.se.id1212.model.ApiCalls;
-import kth.se.id1212.model.Game;
-import kth.se.id1212.model.SettingsBean;
-import kth.se.id1212.model.WordBean;
+import kth.se.id1212.model.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +15,8 @@ import java.util.Map;
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
     Game game = new Game();
+    List<TeamBean> teamsPlaying = new ArrayList<>();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -117,23 +117,58 @@ public class ControllerServlet extends HttpServlet {
         int timeLeft = game.getTimeLeft();
         session.setAttribute("timeLeft", timeLeft);
 
-        response.sendRedirect("gameView.jsp");
+        if (timeLeft <= 0) {
+            response.sendRedirect("pauseView.jsp");
+        }
+
+        else
+            response.sendRedirect("gameView.jsp");
     }
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         SettingsBean settingsBean = new SettingsBean();
 
-        game.newGame();
-        int score = game.getScore();
-        String currentWord = game.getCurrentWord();
-        session.setAttribute("score", score);
-        session.setAttribute("currentWord", currentWord);
 
-        game.next();
-        int timeLeft = game.getTimeLeft();
-        session.setAttribute("timeLeft", timeLeft);
+        String action = request.getParameter("action");
+        switch (action) {
+            case "add":
+                String teamToAdd = request.getParameter("team");
+                TeamBean teamBean = new TeamBean();
+                teamBean.setName(teamToAdd);
+                teamBean.setId(teamsPlaying.size());
+                teamsPlaying.add(teamBean);
+                System.out.println("Added team: " + teamToAdd);
 
-        response.sendRedirect("gameView.jsp");
+                System.out.println("Teams in list:");
+                for (TeamBean bean : teamsPlaying) {
+                    System.out.println("Team ID: " + bean.getId());
+                    System.out.println("Team Name: " + bean.getName());
+                }
+
+                session.setAttribute("teamsPlaying", teamsPlaying);
+
+                response.sendRedirect("setUpView.jsp");
+                break;
+            case "start":
+                game.newGame();
+                int score = game.getScore();
+                String currentWord = game.getCurrentWord();
+                session.setAttribute("score", score);
+                session.setAttribute("currentWord", currentWord);
+
+                int timeLeft = settingsBean.getRoundTime();
+                game.setTimeLeft(timeLeft);
+                session.setAttribute("timeLeft", timeLeft);
+
+                game.next();
+
+                response.sendRedirect("gameView.jsp");
+                break;
+            default:
+                System.out.println("Action was " + action + ". That was unexpected");
+                break;
+        }
+
     }
 
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -152,7 +187,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // Separat från resten, do what you want
-        game.startTimer();
+
         response.sendRedirect("testView.jsp");
     }
 
