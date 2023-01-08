@@ -12,7 +12,16 @@
 
 
 <div>Pick a team name etc</div>
-<div>Teams playing: <%=teamsPlaying%></div>
+<ul>
+    <%if(teamsPlaying != null){
+        for (TeamBean teamBean : teamsPlaying) {
+    %>
+    <li><%=teamBean.getName()%></li>
+    <%
+            }
+        }
+    %>
+</ul>
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <label>
         <input type="text" name="team" value="teamName">
