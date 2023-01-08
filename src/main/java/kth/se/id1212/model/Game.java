@@ -1,8 +1,7 @@
 package kth.se.id1212.model;
 
-import kth.se.id1212.controller.ControllerServlet;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +16,7 @@ public class Game {
     String[] wordList;
     int score = 0;
     int timeLeft = 25; // TODO Set with settings
+    List<TeamBean> teamsPlaying = new ArrayList<>();
 
     public void newGame() throws IOException {
         if (wordList == null) {
@@ -58,7 +58,7 @@ public class Game {
         setCurrentWord();
     }
 
-    public void next() {
+    public void nextRound() {
         startTimer();
     }
 
@@ -80,6 +80,23 @@ public class Game {
         }, 0, 1, TimeUnit.SECONDS);
     }
 
+    public void addTeam(String teamToAdd) {
+        TeamBean teamBean = new TeamBean();
+        teamBean.setName(teamToAdd);
+        teamBean.setId(teamsPlaying.size());
+        teamsPlaying.add(teamBean);
+        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId());
+
+        System.out.println("Teams in list:");
+        for (TeamBean bean : teamsPlaying) {
+            System.out.println("Team ID: " + bean.getId());
+            System.out.println("Team Name: " + bean.getName());
+        }
+    }
+
+    public List<TeamBean> getTeamsPlaying() {
+        return teamsPlaying;
+    }
 
     public String getCurrentWord() {
         return currentWord;

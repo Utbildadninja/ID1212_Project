@@ -9,12 +9,8 @@ import kth.se.id1212.model.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import kth.se.id1212.integration.OtherWordsDAO;
-import kth.se.id1212.model.ApiCalls;
 import kth.se.id1212.model.Game;
-import kth.se.id1212.model.WordBean;
 
-import java.io.IOException;
 import java.sql.DriverManager;
 
 import java.util.Arrays;
@@ -24,9 +20,8 @@ import java.util.Map;
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
-    OtherWordsDAO db = new OtherWordsDAO();
+    //OtherWordsDAO db = new OtherWordsDAO();
     Game game = new Game();
-    List<TeamBean> teamsPlaying = new ArrayList<>();
 
 
     @Override
@@ -130,6 +125,7 @@ public class ControllerServlet extends HttpServlet {
         session.setAttribute("timeLeft", timeLeft);
 
         if (timeLeft <= 0) {
+            game.nextRound();
             response.sendRedirect("pauseView.jsp");
         }
 
@@ -145,19 +141,9 @@ public class ControllerServlet extends HttpServlet {
         switch (action) {
             case "add":
                 String teamToAdd = request.getParameter("team");
-                TeamBean teamBean = new TeamBean();
-                teamBean.setName(teamToAdd);
-                teamBean.setId(teamsPlaying.size());
-                teamsPlaying.add(teamBean);
-                System.out.println("Added team: " + teamToAdd);
+                game.addTeam(teamToAdd);
 
-                System.out.println("Teams in list:");
-                for (TeamBean bean : teamsPlaying) {
-                    System.out.println("Team ID: " + bean.getId());
-                    System.out.println("Team Name: " + bean.getName());
-                }
-
-                session.setAttribute("teamsPlaying", teamsPlaying);
+                session.setAttribute("teamsPlaying", game.getTeamsPlaying());
 
                 response.sendRedirect("setUpView.jsp");
                 break;
@@ -172,7 +158,7 @@ public class ControllerServlet extends HttpServlet {
                 game.setTimeLeft(timeLeft);
                 session.setAttribute("timeLeft", timeLeft);
 
-                game.next();
+                game.nextRound();
 
                 response.sendRedirect("gameView.jsp");
                 break;
