@@ -5,6 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import kth.se.id1212.model.ApiCalls;
 import kth.se.id1212.model.Game;
+import kth.se.id1212.model.SettingsBean;
 import kth.se.id1212.model.WordBean;
 
 import java.io.IOException;
@@ -74,6 +75,9 @@ public class ControllerServlet extends HttpServlet {
         String action = request.getParameter("action");
         // TODO Probably check logic, I should have been in bed
         switch (action) {
+            case "getTimeRemaining":
+                int timeRemaining = game.getTimeLeft();
+                response.getWriter().println(timeRemaining);
             case "correct":
                 System.out.println("Action was: " + action);
                 game.correct();
@@ -110,16 +114,25 @@ public class ControllerServlet extends HttpServlet {
 
         session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
+        int timeLeft = game.getTimeLeft();
+        session.setAttribute("timeLeft", timeLeft);
 
         response.sendRedirect("gameView.jsp");
     }
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        SettingsBean settingsBean = new SettingsBean();
+
         game.newGame();
         int score = game.getScore();
         String currentWord = game.getCurrentWord();
         session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
+
+        game.next();
+        int timeLeft = game.getTimeLeft();
+        session.setAttribute("timeLeft", timeLeft);
+
         response.sendRedirect("gameView.jsp");
     }
 
@@ -139,6 +152,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // Separat från resten, do what you want
+        game.startTimer();
         response.sendRedirect("testView.jsp");
     }
 

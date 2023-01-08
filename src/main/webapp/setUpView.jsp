@@ -13,6 +13,12 @@
 <body>
 <div>Pick a team name etc</div>
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+    <input type="text" name="team" value="teamName">
+    <input type="hidden" name="action" value="add">
+    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+    <button type="submit">Add Team</button>
+</form>
+<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
 
   <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
   <button type="submit">Start Game</button>

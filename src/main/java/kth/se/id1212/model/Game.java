@@ -4,6 +4,8 @@ import kth.se.id1212.controller.ControllerServlet;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Game {
     // TODO Add a Team object, containing name, score etc
@@ -14,13 +16,14 @@ public class Game {
     int currentWordCounter = -1;
     String[] wordList;
     int score = 0;
+    int timeLeft = 15; // TODO Set with settings
 
     public void newGame() throws IOException {
         if (wordList == null) {
             getNewArray();
             this.currentWordCounter = 0;
         }
-        
+
         this.score = 0;
         currentRound = 0;
         setCurrentWord();
@@ -55,6 +58,29 @@ public class Game {
         setCurrentWord();
     }
 
+    public void next() {
+        startTimer();
+    }
+
+    public void startTimer() {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
+        executor.scheduleAtFixedRate(new Runnable() {
+
+            @Override
+            public void run() {
+                if (timeLeft > 0) {
+                    System.out.println("Time remaining: " + timeLeft + " seconds");
+                    timeLeft--;
+                } else {
+                    System.out.println("Time's up!");
+                    executor.shutdown();
+                    // send update to controller
+                }
+            }
+        }, 0, 1, TimeUnit.SECONDS);
+    }
+
+
     public String getCurrentWord() {
         return currentWord;
     }
@@ -69,5 +95,9 @@ public class Game {
 
     public int getScore() {
         return score;
+    }
+
+    public int getTimeLeft() {
+        return timeLeft;
     }
 }
