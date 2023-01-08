@@ -7,21 +7,17 @@ import jakarta.servlet.annotation.*;
 import kth.se.id1212.model.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 import kth.se.id1212.model.Game;
 
 import java.sql.DriverManager;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
     //OtherWordsDAO db = new OtherWordsDAO();
-    Game game = new Game();
+    Map<HttpSession, Game> activeSessions = new HashMap<>();
 
 
     @Override
@@ -41,6 +37,12 @@ public class ControllerServlet extends HttpServlet {
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
+        Game game = (Game) session.getAttribute("gameModel");
+        if (game == null) {
+            game = new Game();
+            session.setAttribute("gameModel", game);
+        }
+        activeSessions.put(session, game);
 
         // Prints all parameters for the request, simply for debugging
         System.out.println("Printing parameters in this request");
@@ -80,6 +82,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         String action = request.getParameter("action");
+        Game game = activeSessions.get(session);
         // TODO Probably check logic, I should have been in bed
         switch (action) {
             case "getTimeRemaining":
@@ -115,6 +118,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doGameViewProgress(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        Game game = activeSessions.get(session);
         int score = game.getScore();
         String currentWord = game.getCurrentWord();
         System.out.println("Setting current word from doGameViewProgress: " + currentWord);
@@ -134,6 +138,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        Game game = activeSessions.get(session);
         SettingsBean settingsBean = new SettingsBean();
 
 
