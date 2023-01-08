@@ -83,15 +83,20 @@ public class Game {
     public void addTeam(String teamToAdd) {
         TeamBean teamBean = new TeamBean();
         teamBean.setName(teamToAdd);
-        teamBean.setId(teamsPlaying.size());
+        //teamBean.setId(teamsPlaying.size());
         teamsPlaying.add(teamBean);
-        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId());
+        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId() + " ID will always be 0 for now");
 
         System.out.println("Teams in list:");
         for (TeamBean bean : teamsPlaying) {
-            System.out.println("Team ID: " + bean.getId());
+            //System.out.println("Team ID: " + bean.getId());
             System.out.println("Team Name: " + bean.getName());
         }
+    }
+
+    // TODO Fix remove, probalby with ID, but then change the addTeam logic first. Or loop trough and remove the name
+    public void removeTeam(String name) {
+        teamsPlaying.removeIf(team -> team.getName().equals(name));
     }
 
     public List<TeamBean> getTeamsPlaying() {

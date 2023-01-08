@@ -16,7 +16,15 @@
     <%if(teamsPlaying != null){
         for (TeamBean teamBean : teamsPlaying) {
     %>
-    <li><%=teamBean.getName()%></li>
+    <li>
+        <%=teamBean.getName()%>
+        <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+            <input type="hidden" name="action" value="remove">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
+            <button type="submit">Remove</button>
+        </form>
+    </li>
     <%
             }
         }

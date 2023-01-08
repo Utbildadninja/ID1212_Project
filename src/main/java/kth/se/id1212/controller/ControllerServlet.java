@@ -19,7 +19,6 @@ public class ControllerServlet extends HttpServlet {
     //OtherWordsDAO db = new OtherWordsDAO();
     Map<HttpSession, Game> activeSessions = new HashMap<>();
 
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("Received GET request");
@@ -36,6 +35,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
+        // TODO Invalidate old sessions after certain time, if planning to actually run the server for other than project
         HttpSession session = request.getSession(true);
         Game game = (Game) session.getAttribute("gameModel");
         if (game == null) {
@@ -139,14 +139,21 @@ public class ControllerServlet extends HttpServlet {
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
-        SettingsBean settingsBean = new SettingsBean();
-
+        SettingsBean settingsBean = new SettingsBean(); // TODO Probably get from DB
 
         String action = request.getParameter("action");
         switch (action) {
             case "add":
                 String teamToAdd = request.getParameter("team");
                 game.addTeam(teamToAdd);
+
+                session.setAttribute("teamsPlaying", game.getTeamsPlaying());
+
+                response.sendRedirect("setUpView.jsp");
+                break;
+            case "remove":
+                String teamToRemove = request.getParameter("teamToRemove");
+                game.removeTeam(teamToRemove);
 
                 session.setAttribute("teamsPlaying", game.getTeamsPlaying());
 
