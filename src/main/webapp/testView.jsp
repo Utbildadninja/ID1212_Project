@@ -9,6 +9,7 @@
 <html>
 <head>
   <title>TestView</title>
+  <style><%@include file="/WEB-INF/style.css"%></style>
 </head>
 <body>
 WRITE SOMETHING PLZ
