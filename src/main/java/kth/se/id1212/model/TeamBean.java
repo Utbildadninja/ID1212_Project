@@ -4,6 +4,7 @@ public class TeamBean {
     private int id;
     private String name;
     private int score;
+    private String[] correctGuesses;
 
     public void setName(String name) {
         this.name = name;
@@ -27,5 +28,13 @@ public class TeamBean {
 
     public int getId() {
         return id;
+    }
+
+    public String[] getCorrectGuesses() {
+        return correctGuesses;
+    }
+
+    public void setCorrectGuesses(String[] correctGuesses) {
+        this.correctGuesses = correctGuesses;
     }
 }

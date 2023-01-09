@@ -180,13 +180,14 @@ public class ControllerServlet extends HttpServlet {
 //        session.setAttribute("roundTime", roundTimeFromDB);
 //        int roundTime = Integer.parseInt(request.getParameter("roundTimeSlider"));
         response.sendRedirect("settingsView.jsp");
-        
+
         /*
         Användaren har precis laddat sidan... Inga requests har gjorts. So... Om användaren loggar in...
         DÅ sätter vi settings från DB.
         Då kommer "rätt" settings att visas när användaren trycker sig in på settings.
         Om användaren inte har loggat in... Då vill vi visa default settings... Men då görs det inget request innan användaren kan se settings...
         Hmm...
+        Kanske gör att köra en onload request och sen en if (parameter.request) do settings
          */
     }
 
