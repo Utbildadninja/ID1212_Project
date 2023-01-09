@@ -43,9 +43,9 @@ public class OtherWordsDAO {
         }
     }
 
-    public ArrayList<LanguageBean> findLanguages(){
-
-    }
+//    public ArrayList<LanguageBean> findLanguages(){
+//
+//    }
 
     private void connectToDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.apache.derby.jdbc.ClientDriver");

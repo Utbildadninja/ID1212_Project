@@ -4,11 +4,35 @@
     <title>Settings</title>
 </head>
 <body>
+<%
+    int roundTime = (int) session.getAttribute("roundTimeSlider");
+%>
+
+
+
 Choose API, Database, round time etc
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-    <input type="hidden" name="action" value="skip">
+    <label for="roundTimeSlider">Round time:</label>
+    <input name="roundTimeSlider" type="range" min="10" max="120" value="30" step="5" class="slider" id="roundTimeSlider" oninput="roundTimeOutput.value = roundTimeSlider.value">
+    <output name="roundTimeOutput" id="roundTimeOutput">30</output>
+    <br>
+    <label for="numberOfRounds">Number of Rounds:</label>
+    <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="3" step="1" oninput="numberOfRoundsValue.value=numberOfRounds.value">
+    <output name="numberOfRoundsValue" id="numberOfRoundsValue">3</output>
+    <br>
+    Choose source of words:
+    <br>
+    <label for="freeApi">Free API</label>
+    <input type="radio" id="freeApi" name="wordSource" value="free" checked>
+
+    <label for="premiumApi">Premium API</label>
+    <input type="radio" id="premiumApi" name="wordSource" value="premium">
+
+    <input type="hidden" name="action" value="submit">
     <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+    <br>
     <button type="submit">Submit</button>
 </form>
+
 </body>
 </html>

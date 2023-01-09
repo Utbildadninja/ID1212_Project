@@ -71,6 +71,8 @@ public class ControllerServlet extends HttpServlet {
                 doResultsView(request, response, session);
             } else if (jspFile.endsWith("/testView.jsp")) {
                 doTestView(request, response, session);
+            } else {
+                System.out.println("That jspFile is not handled");
             }
 
     }
@@ -173,8 +175,19 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-
+//        SettingsBean settingsBean = new SettingsBean(); // TODO Get from DB if user logged in
+//        int roundTimeFromDB = settingsBean.getRoundTime();
+//        session.setAttribute("roundTime", roundTimeFromDB);
+//        int roundTime = Integer.parseInt(request.getParameter("roundTimeSlider"));
         response.sendRedirect("settingsView.jsp");
+        
+        /*
+        Användaren har precis laddat sidan... Inga requests har gjorts. So... Om användaren loggar in...
+        DÅ sätter vi settings från DB.
+        Då kommer "rätt" settings att visas när användaren trycker sig in på settings.
+        Om användaren inte har loggat in... Då vill vi visa default settings... Men då görs det inget request innan användaren kan se settings...
+        Hmm...
+         */
     }
 
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -182,6 +195,7 @@ public class ControllerServlet extends HttpServlet {
         SettingsBean settingsBean = new SettingsBean();
         Game game = activeSessions.get(session);
 
+        // TODO Could probably get rid of nextTeam by moving the setAttribute around. For example, set it after redirect... Possibly.
         game.nextRound(settingsBean);
         session.setAttribute("timeLeft", game.getTimeLeft());
         session.setAttribute("currentTeamBean", game.getCurrentTeam());
