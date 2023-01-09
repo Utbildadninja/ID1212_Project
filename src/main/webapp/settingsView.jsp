@@ -4,9 +4,9 @@
     <title>Settings</title>
 </head>
 <body>
-<%
-    int roundTime = (int) session.getAttribute("roundTimeSlider");
-%>
+<%--<%--%>
+<%--    int roundTime = (int) session.getAttribute("roundTimeSlider");--%>
+<%--%>--%>
 
 
 
