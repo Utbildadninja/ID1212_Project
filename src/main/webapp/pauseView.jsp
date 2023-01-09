@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Med egna ord</title>
+    <style><%@include file="/WEB-INF/style.css"%></style>
 </head>
 <body>
 <%TeamBean nextTeamBean = (TeamBean) session.getAttribute("nextTeamBean");%>

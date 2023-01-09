@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Settings</title>
+    <style><%@include file="/WEB-INF/style.css"%></style>
 </head>
 <body>
 <%--<%--%>
@@ -9,8 +10,9 @@
 <%--%>--%>
 
 
-
+<div class="settingsViewDiv">
 Choose API, Database, round time etc
+
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <label for="roundTimeSlider">Round time:</label>
     <input name="roundTimeSlider" type="range" min="10" max="120" value="30" step="5" class="slider" id="roundTimeSlider" oninput="roundTimeOutput.value = roundTimeSlider.value">
@@ -33,6 +35,7 @@ Choose API, Database, round time etc
     <br>
     <button type="submit">Submit</button>
 </form>
+</div>
 
 </body>
 </html>

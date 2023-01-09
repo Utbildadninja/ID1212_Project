@@ -3,23 +3,33 @@
 <html>
 <head>
     <title>Med egna ord</title>
-    <style><%@include file="/WEB-INF/style2.css"%></style>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        <%@include file="/WEB-INF/style.css" %>
+    </style>
 </head>
 <body>
-<div class="header"><h1>Med egna ord</h1></div>
-<div class="row">
-    <div class="column.side">user not logged in</div>
-
-    <div class="column.middle">
-    <a href="setUpView.jsp">Play Game</a>
-    <br/>
-    <a href="settingsView.jsp">Settings</a>
-    <br/>
-    <a href="testView.jsp">Testing section</a>
+<div class="outerDiv">
+    <div class="home-view-game-display-box">
+        <h1>Med egna ord</h1>
+        <div class="home-view-btn-container">
+            <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                <input type="hidden" name="action" value="play">
+                <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                <button class="home-view-btn" type="submit">PLAY</button>
+            </form>
+            <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                <input type="hidden" name="action" value="settings">
+                <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                <button class="home-view-btn" type="submit">SETTINGS</button>
+            </form>
+            <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                <input type="hidden" name="action" value="test">
+                <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                <button class="home-view-btn" type="submit">TESTING</button>
+            </form>
+        </div>
     </div>
 </div>
 
-<div class="footer">AwesomeInc - All rights reserved</div>
 </body>
 </html>

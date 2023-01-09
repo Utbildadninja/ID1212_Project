@@ -72,7 +72,8 @@ public class ControllerServlet extends HttpServlet {
             } else if (jspFile.endsWith("/testView.jsp")) {
                 doTestView(request, response, session);
             } else {
-                System.out.println("That jspFile is not handled");
+                //System.out.println("That jspFile is not handled");
+                doIndex(request, response, session);
             }
 
     }
@@ -188,6 +189,9 @@ public class ControllerServlet extends HttpServlet {
         Om användaren inte har loggat in... Då vill vi visa default settings... Men då görs det inget request innan användaren kan se settings...
         Hmm...
         Kanske gör att köra en onload request och sen en if (parameter.request) do settings
+
+        Eh, det måste ju bara vara att... Skapa ny settingsBean, finns det en användare inloggad. Hämta från DB. Annars standard.
+        Sen när det
          */
     }
 
@@ -212,6 +216,26 @@ public class ControllerServlet extends HttpServlet {
 
     private void doResultsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         response.sendRedirect("index.jsp");
+    }
+
+    private void doIndex(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        String action = request.getParameter("action");
+        switch (action) {
+            case "play":
+                response.sendRedirect("setUpView.jsp");
+                break;
+            case "settings":
+                response.sendRedirect("settingsView.jsp");
+                break;
+            case "test":
+                response.sendRedirect("testView.jsp");
+                break;
+            default:
+                System.out.println("Action was " + action + ". That was unexpected. Sending to Index");
+                response.sendRedirect("index.jsp");
+                break;
+        }
+
     }
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {

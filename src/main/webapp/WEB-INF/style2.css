@@ -24,6 +24,7 @@ body {
 
 /* Create three unequal columns that sits next to each other */
 .column {
+    text-align: center;
     padding: 100px;
     height: 300px; /* Should be removed. Only for demonstration */
 }
@@ -37,6 +38,7 @@ body {
 
 /* Middle column */
 .column.middle {
+    text-align: center;
     -webkit-flex: 2;
     -ms-flex: 2;
     flex: 2;

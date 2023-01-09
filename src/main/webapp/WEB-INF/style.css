@@ -1,76 +1,66 @@
 body {
-    font: normal 20px Verdana, Arial, sans-serif;
-    color: black;
-    /*background-color: azure;*/
-
+    margin: 0px;
+    background-color: rgba(95, 211, 250, 0.568);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
- * {
-     box-sizing: border-box;
-     background-color: azure;
- }
-
-
-/* Style the header */
-.header {
-    grid-area: header;
-    background-color: #f1f1f1;
-    padding: 30px;
+.settingsViewDiv{
     text-align: center;
-    font-size: 35px;
 }
 
-/* The grid container */
-.grid-container {
+/*Changes cursor when using buttons*/
+button {
+    cursor: pointer;
+}
+button[disabled] {
+    cursor:default;
+}
+/*Button on home view*/
+.home-view-btn {
+    width: 100%; /*Forms tvingar oss att sätta bredd på stylade knappar*/
+    background-color: greenyellow;
+    color: white;
+    font-weight: bolder;
+    font-size: 24px;
+    border-radius: 24px;
+    border-width: thick;
+    border-color: darkgoldenrod;
+    text-align: center;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.home-view-btn[disabled] {
+    background-color: gray;
+}
+
+.home-view-btn-container {
     display: grid;
-    grid-template-areas:
-    'header header header header header header'
-    'left middle middle middle middle right'
-    'footer footer footer footer footer footer';
-    /* grid-column-gap: 10px; - if you want gap between the columns */
 }
 
-.left,
-.middle,
-.right {
-    padding: 10px;
-    /*height: 300px; !* Should be removed. Only for demonstration *!*/
-}
-
-/* Style the left column */
-.left {
-    grid-area: left;
-}
-
-/* Style the middle column */
-.middle {
-    grid-area: middle;
-}
-
-/* Style the right column */
-.right {
-    grid-area: right;
-}
-
-/* Style the footer */
-.footer {
-    grid-area: footer;
-    font-size: smaller;
-    background-color: #f1f1f1;
-    padding: 10px;
+/*Skapar en box 30% av maxbredden, centrerar texten. Redig padding. Vit färg på text*/
+.home-view-game-display-box {
+    width: 30%;
+    margin: auto;
     text-align: center;
+    padding: 60px 0;
+    color:white;
 }
 
-/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-@media (max-width: 600px) {
-    .grid-container  {
-        grid-template-areas:
-      'header header header header header header'
-      'left left left left left left'
-      'middle middle middle middle middle middle'
-      'right right right right right right'
-      'footer footer footer footer footer footer';
-    }
+/*Verkar inte göra allt för mycket*/
+.outerDiv {
+    height: auto;
+    max-height: available;
 }
 
-
+/*For styling login*/
+/*input[type = text], input[type = password] {*/
+/*    width: 75%;*/
+/*    max-width: 560px;*/
+/*    padding: 12px 20px;*/
+/*    margin: 8px 0;*/
+/*    display: inline-block;*/
+/*    border: 1px solid #ccc;*/
+/*    box-sizing: border-box;*/
+/*}*/

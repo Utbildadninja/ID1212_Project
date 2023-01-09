@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Setup</title>
+    <style><%@include file="/WEB-INF/style.css"%></style>
 </head>
 <body>
 <%
