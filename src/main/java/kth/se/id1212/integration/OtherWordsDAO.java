@@ -1,10 +1,13 @@
 package kth.se.id1212.integration;
 
+import kth.se.id1212.model.LanguageBean;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Class for handling communication with hur duthe database
@@ -38,6 +41,10 @@ public class OtherWordsDAO {
         } catch (ClassNotFoundException | SQLException e){
             System.out.println("Couldn't connect to db, " + e.getMessage());
         }
+    }
+
+    public ArrayList<LanguageBean> findLanguages(){
+
     }
 
     private void connectToDB() throws ClassNotFoundException, SQLException {
