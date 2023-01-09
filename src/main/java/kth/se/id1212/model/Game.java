@@ -62,6 +62,7 @@ public class Game {
         currentWordCounter++;
         int score = currentTeam.getScore();
         currentTeam.setScore(score + 10);
+        addCorrectGuess(currentWord);
         setCurrentWord();
     }
 
@@ -83,6 +84,12 @@ public class Game {
             startTimer();
         }
 
+    }
+
+    public void addCorrectGuess(String word) {
+        ArrayList<String> correctGuesses = currentTeam.getCorrectGuesses();
+        correctGuesses.add(word);
+        currentTeam.setCorrectGuesses(correctGuesses);
     }
 
     public void gameOver() {

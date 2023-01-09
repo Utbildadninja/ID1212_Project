@@ -17,6 +17,12 @@ All of the scores, teams, words etc
 %>
 <p>Team name: <%= team.getName() %>, Score: <%= team.getScore() %></p>
 <%
+    for (String guess : team.getCorrectGuesses()) {
+%>
+<%= guess %>
+<br>
+<%
+            }
         }
     }
 %>
