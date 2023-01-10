@@ -27,8 +27,8 @@ button[disabled] {
     border-color: darkgoldenrod;
     text-align: center;
     display: inline-block;
-    /*margin-right: 10px;*/
-    /*margin-left: 10px;*/
+    margin-right: 10px;
+    margin-left: 10px;
     margin-top: 10px;
 }
 .home-view-btn[disabled] {
