@@ -36,8 +36,12 @@ public class OtherWordsDAO {
     public OtherWordsDAO(){
         try{
             connectToDB();
+            System.out.println("after connection in OtherwordsDao");
+            prepareStatements();
+            System.out.println("after prepared statements");
         } catch (ClassNotFoundException | SQLException e){
             System.out.println("Couldn't connect to db, " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

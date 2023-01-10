@@ -1,22 +1,18 @@
 package kth.se.id1212.controller;
-
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-
+import kth.se.id1212.integration.OtherWordsDAO;
 import kth.se.id1212.model.*;
-
 import java.io.IOException;
 import java.util.*;
-
 import kth.se.id1212.model.Game;
-
 import java.sql.DriverManager;
 
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
-    //OtherWordsDAO db = new OtherWordsDAO();
+    OtherWordsDAO db = new OtherWordsDAO();
     Map<HttpSession, Game> activeSessions = new HashMap<>();
 
     @Override
@@ -54,27 +50,29 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
 
-            // Checks the parameter "jspFile" to point the request to correct method
-            String jspFile = request.getParameter("jspFile");
-            //System.out.println("jspFile from Controller: " + jspFile);
-            if (jspFile == null) {
-                System.out.println("Seems the jspFile is null");
-            } else if (jspFile.endsWith("/gameView.jsp")) {
-                doGameView(request, response, session);
-            } else if (jspFile.endsWith("/pauseView.jsp")) {
-                doPauseView(request, response, session);
-            } else if (jspFile.endsWith("/setUpView.jsp")) {
-                doSetUpView(request, response, session);
-            } else if (jspFile.endsWith("/settingsView.jsp")) {
-                doSettingsView(request, response, session);
-            } else if (jspFile.endsWith("/resultsView.jsp")) {
-                doResultsView(request, response, session);
-            } else if (jspFile.endsWith("/testView.jsp")) {
-                doTestView(request, response, session);
-            } else {
-                //System.out.println("That jspFile is not handled");
-                doIndex(request, response, session);
-            }
+        // Checks the parameter "jspFile" to point the request to correct method
+        String jspFile = request.getParameter("jspFile");
+        //System.out.println("jspFile from Controller: " + jspFile);
+        if (jspFile == null) {
+            System.out.println("Seems the jspFile is null");
+        } else if (jspFile.endsWith("/gameView.jsp")) {
+            doGameView(request, response, session);
+        } else if (jspFile.endsWith("/pauseView.jsp")) {
+            doPauseView(request, response, session);
+        } else if (jspFile.endsWith("/setUpView.jsp")) {
+            doSetUpView(request, response, session);
+        } else if (jspFile.endsWith("/settingsView.jsp")) {
+            doSettingsView(request, response, session);
+        } else if (jspFile.endsWith("/resultsView.jsp")) {
+            doResultsView(request, response, session);
+        } else if (jspFile.endsWith("/testView.jsp")) {
+            doTestView(request, response, session);
+        } else if (jspFile.endsWith("/loginView.jsp")) {
+            doLoginView(request, response, session);
+        } else {
+            //System.out.println("That jspFile is not handled");
+            doIndex(request, response, session);
+        }
 
     }
 
@@ -175,6 +173,28 @@ public class ControllerServlet extends HttpServlet {
 
     }
 
+    private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (username != null && password != null){
+            UserBean currentUser;
+            currentUser = db.findUser(username, password);
+            if (currentUser != null) {
+                //Login succeded! TODO do stuff
+
+            } else {
+                System.out.println("Login failed");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+            }
+
+        } else {
+            System.out.println("either username or password was null");
+        }
+
+        response.sendRedirect("index.jsp");
+    }
+
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
 //        SettingsBean settingsBean = new SettingsBean(); // TODO Get from DB if user logged in
 //        int roundTimeFromDB = settingsBean.getRoundTime();
@@ -229,6 +249,9 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "test":
                 response.sendRedirect("testView.jsp");
+                break;
+            case "login":
+                response.sendRedirect("loginView.jsp");
                 break;
             default:
                 System.out.println("Action was " + action + ". That was unexpected. Sending to Index");

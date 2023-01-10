@@ -29,6 +29,11 @@
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
                 <button class="home-view-btn" type="submit">TESTING</button>
             </form>
+            <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                <input type="hidden" name="action" value="login">
+                <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                <button class="home-view-btn" type="submit">LOG IN</button>
+            </form>
         </div>
     </div>
 </div>
