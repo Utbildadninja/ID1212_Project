@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+import kth.se.id1212.integration.OtherWordsDAO;
 import kth.se.id1212.model.*;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.sql.DriverManager;
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
-    //OtherWordsDAO db = new OtherWordsDAO();
+    OtherWordsDAO db = new OtherWordsDAO();
     Map<HttpSession, Game> activeSessions = new HashMap<>();
 
     @Override
@@ -71,11 +72,35 @@ public class ControllerServlet extends HttpServlet {
                 doResultsView(request, response, session);
             } else if (jspFile.endsWith("/testView.jsp")) {
                 doTestView(request, response, session);
+            } else if (jspFile.endsWith("/loginView.jsp")) {
+                doLoginView(request, response, session);
             } else {
                 //System.out.println("That jspFile is not handled");
                 doIndex(request, response, session);
             }
 
+    }
+
+    private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        if (username != null && password != null) {
+            UserBean user;
+            user = db.findUser(username, password);
+
+            if (user != null) {
+                session.setAttribute("userBean", user);
+                System.out.println("User: " + user.getUsername() + " logged in");
+                response.sendRedirect("index.jsp");
+
+            } else {
+                System.out.println("Login failed");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+            }
+        } else {
+            System.out.println("Username or password was null");
+        }
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -182,13 +207,12 @@ public class ControllerServlet extends HttpServlet {
 //        int roundTime = Integer.parseInt(request.getParameter("roundTimeSlider"));
         response.sendRedirect("settingsView.jsp");
 
+        // TODO När man landar här vill man redan ha settings från DB laddade, om man är inloggad
         /*
         Användaren har precis laddat sidan... Inga requests har gjorts. So... Om användaren loggar in...
         DÅ sätter vi settings från DB.
         Då kommer "rätt" settings att visas när användaren trycker sig in på settings.
-        Om användaren inte har loggat in... Då vill vi visa default settings... Men då görs det inget request innan användaren kan se settings...
-        Hmm...
-        Kanske gör att köra en onload request och sen en if (parameter.request) do settings
+        Om användaren inte har loggat in... Då vill vi visa default settings...
 
         Eh, det måste ju bara vara att... Skapa ny settingsBean, finns det en användare inloggad. Hämta från DB. Annars standard.
         Sen när det
@@ -225,10 +249,14 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "settings":
+                // TODO Set settings from DB if logged in. Default if not
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":
                 response.sendRedirect("testView.jsp");
+                break;
+            case "login":
+                response.sendRedirect("loginView.jsp");
                 break;
             default:
                 System.out.println("Action was " + action + ". That was unexpected. Sending to Index");

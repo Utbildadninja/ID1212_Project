@@ -36,7 +36,9 @@ public class OtherWordsDAO {
     public OtherWordsDAO(){
         try{
             connectToDB();
+            prepareStatements();
         } catch (ClassNotFoundException | SQLException e){
+            e.printStackTrace();
             System.out.println("Couldn't connect to db, " + e.getMessage());
         }
     }
@@ -207,63 +209,63 @@ public class OtherWordsDAO {
     }
 
     private void prepareStatements() throws SQLException {
-        findLanguagesStmt = connection.prepareStatement(
-                "SELECT * FROM languages"
-        );
-        findReportsStmt = connection.prepareStatement(
-                "SELECT * FROM reports"
-        );
+//        findLanguagesStmt = connection.prepareStatement(
+//                "SELECT * FROM languages"
+//        );
+//        findReportsStmt = connection.prepareStatement(
+//                "SELECT * FROM reports"
+//        );
         findSettingsStmt = connection.prepareStatement(                 //TODO join with table languages to get name
                 "SELECT * FROM user_settings WHERE CASE user_id = ?"
         );
-        findUsersStmt = connection.prepareStatement(
-                "SELECT username, gamesPlayed FROM users ORDER BY gamesPlayed"
-        );
+//        findUsersStmt = connection.prepareStatement(
+//                "SELECT username, gamesPlayed FROM users ORDER BY gamesPlayed"
+//        );
         findUserStmt = connection.prepareStatement(
                 "SELECT id, username, admin, gamesPlayed FROM users " +
                         "WHERE username = ? AND password = ?"
         );
-        findNoOfWordsStmt = connection.prepareStatement(        //Could theoretically yield problems if someone
-                "SELECT COUNT(*) FROM words"
-        );
-        findWordsStmt = connection.prepareStatement(            //TODO take language as parameter
-                "SELECT id, word, clue FROM words WHERE id in ?"
-        );
-        updateWordCorrectStmt = connection.prepareStatement(
-                "UPDATE words SET correctlyGuessed = correctlyGuessed +1 " +
-                        "WHERE id = ?"
-        );
-        updateWordSkippedStmt = connection.prepareStatement(
-                "UPDATE words SET skipped = skipped +1 " +
-                        "WHERE id = ?"
-        );
-        createReportStmt = connection.prepareStatement(
-                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason)" +
-                        "VALUES (now(), ?, ?, ?)"
-        );
-        updateSettingsStmt = connection.prepareStatement(
-                "UPDATE user_settings " +
-                        "SET language_id = ?, secondsPerRound = ?, roundsPerGame = ?" +
-                        "WHERE user_id = ?"
-        );
-        updateUserGamesStmt = connection.prepareStatement(
-                "UPDATE user SET gamesPlayed = gamesPlayed + 1" +
-                        "WHERE id = ?"
-        );
-        createUserStmt = connection.prepareStatement(
-                "INSERT INTO users (username, password, admin, gamesplayed)" +
-                        "VALUES (?, ?, false, 0)"
-        );
-        createWordStmt = connection.prepareStatement(
-                "INSERT INTO words (word, clue, correctlyGuessed, skipped, flags)" +
-                        "VALUES (?, ?, 0, 0, 0)"
-        );
-        deleteUserStmt = connection.prepareStatement(
-                "DELETE FROM users WHERE id = ?"
-        );
-        deleteWordStmt = connection.prepareStatement(
-                "DELETE FROM words WHERE id = ?"
-        );
+//        findNoOfWordsStmt = connection.prepareStatement(        //Could theoretically yield problems if someone
+//                "SELECT COUNT(*) FROM words"
+//        );
+//        findWordsStmt = connection.prepareStatement(            //TODO take language as parameter
+//                "SELECT id, word, clue FROM words WHERE id in ?"
+//        );
+//        updateWordCorrectStmt = connection.prepareStatement(
+//                "UPDATE words SET correctlyGuessed = correctlyGuessed +1 " +
+//                        "WHERE id = ?"
+//        );
+//        updateWordSkippedStmt = connection.prepareStatement(
+//                "UPDATE words SET skipped = skipped +1 " +
+//                        "WHERE id = ?"
+//        );
+//        createReportStmt = connection.prepareStatement(
+//                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason)" +
+//                        "VALUES (now(), ?, ?, ?)"
+//        );
+//        updateSettingsStmt = connection.prepareStatement(
+//                "UPDATE user_settings " +
+//                        "SET language_id = ?, secondsPerRound = ?, roundsPerGame = ?" +
+//                        "WHERE user_id = ?"
+//        );
+//        updateUserGamesStmt = connection.prepareStatement(
+//                "UPDATE users SET gamesPlayed = gamesPlayed + 1" +
+//                        "WHERE id = ?"
+//        );
+//        createUserStmt = connection.prepareStatement(
+//                "INSERT INTO users (username, password, admin, gamesplayed)" +
+//                        "VALUES (?, ?, false, 0)"
+//        );
+//        createWordStmt = connection.prepareStatement(
+//                "INSERT INTO words (word, clue, correctlyGuessed, skipped, flags)" +
+//                        "VALUES (?, ?, 0, 0, 0)"
+//        );
+//        deleteUserStmt = connection.prepareStatement(
+//                "DELETE FROM users WHERE id = ?"
+//        );
+//        deleteWordStmt = connection.prepareStatement(
+//                "DELETE FROM words WHERE id = ?"
+//        );
     }
 
     private void closeResult(ResultSet result){
