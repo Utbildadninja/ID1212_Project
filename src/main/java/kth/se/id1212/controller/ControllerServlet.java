@@ -82,6 +82,7 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        // TODO Skapa Logout, terminate session vid utloggning
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -208,6 +209,9 @@ public class ControllerServlet extends HttpServlet {
         response.sendRedirect("settingsView.jsp");
 
         // TODO När man landar här vill man redan ha settings från DB laddade, om man är inloggad
+        // TODO När man bankar Submit så ska det skrivas in i DB, om användaren är inloggad. Även set för session
+        // TODO Om inte inloggad, enbart session
+        // Redirect tillbaka till Settings
         /*
         Användaren har precis laddat sidan... Inga requests har gjorts. So... Om användaren loggar in...
         DÅ sätter vi settings från DB.
@@ -250,6 +254,8 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "settings":
                 // TODO Set settings from DB if logged in. Default if not
+                // Anvädaren kan ha null SettingsBean om den inte finns i databasen. Dvs om det är första gången man spelar.
+                // Om användaren inte är inloggad, men har satt settings tidigare. Ladda från
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":

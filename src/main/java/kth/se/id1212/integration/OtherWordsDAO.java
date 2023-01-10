@@ -89,7 +89,7 @@ public class OtherWordsDAO {
 
     /**
      * Takes UserID and find what settings that user has saved in the database
-     * //TODO could be switched to username? since we might want to fetch the settings on login
+     *
      * @param userID the ID of the logged-in user
      * @return list of
      */
@@ -99,7 +99,7 @@ public class OtherWordsDAO {
         try {
             findSettingsStmt.setInt(1, userID);
             resultSet = findSettingsStmt.executeQuery();
-            while (resultSet.next()){
+            if(resultSet.next()){
                 userSettings = new SettingsBean(
                         resultSet.getInt("language_id"), resultSet.getInt("secondsPerRound"),
                         resultSet.getInt("roundsPerGame")
@@ -201,6 +201,16 @@ public class OtherWordsDAO {
         return words;
     }
 
+    /**
+     * If a logged-in user updates their settings, this should be updated in the db as well
+     * @param userID The user for whom to change personal sessions
+     */
+    public void updateSettings(int userID, SettingsBean newSettings){
+
+
+    }
+
+
     private void connectToDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.apache.derby.jdbc.ClientDriver");
         connection = DriverManager.getConnection("jdbc:derby://localhost:1527/maoDB",
@@ -209,9 +219,9 @@ public class OtherWordsDAO {
     }
 
     private void prepareStatements() throws SQLException {
-//        findLanguagesStmt = connection.prepareStatement(
-//                "SELECT * FROM languages"
-//        );
+        findLanguagesStmt = connection.prepareStatement(
+                "SELECT * FROM languages"
+        );
 //        findReportsStmt = connection.prepareStatement(
 //                "SELECT * FROM reports"
 //        );
@@ -243,11 +253,11 @@ public class OtherWordsDAO {
 //                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason)" +
 //                        "VALUES (now(), ?, ?, ?)"
 //        );
-//        updateSettingsStmt = connection.prepareStatement(
-//                "UPDATE user_settings " +
-//                        "SET language_id = ?, secondsPerRound = ?, roundsPerGame = ?" +
-//                        "WHERE user_id = ?"
-//        );
+        updateSettingsStmt = connection.prepareStatement(
+                "UPDATE user_settings " +
+                        "SET language_id = ?, secondsPerRound = ?, roundsPerGame = ?" +
+                        "WHERE user_id = ?"
+        );
 //        updateUserGamesStmt = connection.prepareStatement(
 //                "UPDATE users SET gamesPlayed = gamesPlayed + 1" +
 //                        "WHERE id = ?"
