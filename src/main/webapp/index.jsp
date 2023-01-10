@@ -9,9 +9,11 @@
 </head>
 <body>
 <div class="outerDiv">
+
     <div class="home-view-game-display-box">
-        <h1>Med egna ord</h1>
+
         <div class="home-view-btn-container">
+            <h1>Med egna ord</h1>
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="play">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">

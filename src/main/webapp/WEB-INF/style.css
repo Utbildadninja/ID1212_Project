@@ -1,6 +1,6 @@
 body {
     margin: 0px;
-    background-color: rgba(95, 211, 250, 0.568);
+    background-color: rgba(92, 245, 16, 0.56);
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -18,7 +18,7 @@ button[disabled] {
 /*Button on home view*/
 .home-view-btn {
     width: 100%; /*Forms tvingar oss att sätta bredd på stylade knappar*/
-    background-color: greenyellow;
+    background-color: darkgreen;
     color: white;
     font-weight: bolder;
     font-size: 24px;
@@ -44,14 +44,16 @@ button[disabled] {
     width: 30%;
     margin: auto;
     text-align: center;
-    padding: 60px 0;
-    color:white;
+    padding: 60px 60px 60px 60px;
+    color: darkgreen;
 }
 
 /*Verkar inte göra allt för mycket*/
 .outerDiv {
     height: auto;
     max-height: available;
+    text-align: center;
+    /*font-weight: bold;*/
 }
 
 /*For styling login*/

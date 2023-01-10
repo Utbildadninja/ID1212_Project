@@ -80,7 +80,7 @@ public class Game {
             currentRound++;
             nextTeam = teamsPlaying.get(currentRound%teamsPlaying.size());
             System.out.println("Current round is: " + currentRound + " current Team is: " + currentTeam.getName());
-            setTimeLeft(settingsBean.getRoundTime());
+            setTimeLeft(settingsBean.getSecondsPerRound());
             startTimer();
         }
 

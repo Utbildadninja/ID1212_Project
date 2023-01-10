@@ -158,7 +158,7 @@ public class ControllerServlet extends HttpServlet {
                 session.setAttribute("score", score);
                 session.setAttribute("currentWord", currentWord);
 
-                int timeLeft = settingsBean.getRoundTime();
+                int timeLeft = settingsBean.getSecondsPerRound();
                 session.setAttribute("timeLeft", timeLeft);
                 session.setAttribute("currentTeamBean", game.getCurrentTeam());
 

@@ -1,18 +1,26 @@
 package kth.se.id1212.model;
 
 public class SettingsBean {
-    private int roundTime = 10;
+    private int secondsPerRound = 10;
     private int languageID;
-    private String languageName;
+    private String languageName; //TODO change sql to also fetch language name (join)
     private int roundsPerGame = 2;
     private String wordSource = "free";
 
-    public int getRoundTime() {
-        return roundTime;
+    public SettingsBean() {}
+
+    public SettingsBean(int languageID, int secondsPerRound, int roundsPerGame){
+        this.languageID = languageID;
+        this.secondsPerRound = secondsPerRound;
+        this.roundsPerGame = roundsPerGame;
     }
 
-    public void setRoundTime(int roundTime) {
-        this.roundTime = roundTime;
+    public int getSecondsPerRound() {
+        return secondsPerRound;
+    }
+
+    public void setSecondsPerRound(int secondsPerRound) {
+        this.secondsPerRound = secondsPerRound;
     }
 
     public int getRoundsPerGame() {
