@@ -19,7 +19,7 @@ import java.sql.DriverManager;
 public class ControllerServlet extends HttpServlet {
     OtherWordsDAO db = new OtherWordsDAO();
     // WeakHashMap allows the Java Garbage collector to remove invalidated sessions
-    // containsKey() can be used to check if the key is still in place, to avoid any NullPointerExpection errors
+    // containsKey() can be used to check if the key is still in place, to avoid any NullPointerException errors
     Map<HttpSession, Game> activeSessions = new WeakHashMap<>(); // TODO If any issues with HashMap arrive, change back to regular from Weak
 
     @Override

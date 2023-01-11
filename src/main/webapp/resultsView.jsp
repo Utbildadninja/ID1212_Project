@@ -12,22 +12,30 @@
     </style>
 </head>
 <body>
-<div class="outerDiv">
+<div class="container">
 
-    All of the scores, teams, words etc
+    <h1>Game over!</h1>
     <%
         if (teamsPlaying != null) {
             for (TeamBean team : teamsPlaying) {
     %>
-    <p>Team name: <%= team.getName() %>, Score: <%= team.getScore() %>
-    </p>
-    <%
-        for (String guess : team.getCorrectGuesses()) {
-    %>
-    <%= guess %>
+    <div class="resultsViewDiv">
+        <h2>Team name: <%= team.getName() %>
+        </h2>
+        <h3>Score: <%= team.getScore() %>
+        </h3>
+        <h3>Correct guesses:</h3>
+        <%
+            for (String guess : team.getCorrectGuesses()) {
+        %>
+        <%=guess%>
+        <br>
+        <%
+            }
+        %>
+    </div>
     <br>
     <%
-                }
             }
         }
     %>

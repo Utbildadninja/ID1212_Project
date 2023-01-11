@@ -4,10 +4,6 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.settingsViewDiv{
-    text-align: center;
-}
-
 /*Changes cursor when using buttons*/
 button {
     cursor: pointer;
@@ -58,6 +54,20 @@ button[disabled] {
 
 #hidden {
     display: none
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.resultsViewDiv {
+    background-color: whitesmoke;
+    border-style: solid;
+    border-width: thick;
+    border-color: yellowgreen;
 }
 
 /*For styling login*/

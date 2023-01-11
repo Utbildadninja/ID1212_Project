@@ -17,8 +17,6 @@
     if (userBean == null) {
         reverseSneaky = "";
     } else reverseSneaky = "hidden";
-
-
 %>
 
 <html>
@@ -33,7 +31,9 @@
 <div class="outerDiv">
     <noscript>JavaScript is disabled. Website might not work as intended.<br></noscript>
     <h2>Settings</h2>
-    Logged in as: <%=username%>
+
+    <p id=<%=reverseSneaky%>>Not logged in</p>
+    <p id=<%=sneaky%>>Logged in as: <%=username%></p>
 
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label for="roundTimeSlider">Round time:</label>
