@@ -18,7 +18,9 @@ import java.sql.DriverManager;
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
     OtherWordsDAO db = new OtherWordsDAO();
-    Map<HttpSession, Game> activeSessions = new HashMap<>();
+    // WeakHashMap allows the Java Garbage collector to remove invalidated sessions
+    // containsKey() can be used to check if the key is still in place, to avoid any NullPointerExpection errors
+    Map<HttpSession, Game> activeSessions = new WeakHashMap<>(); // TODO If any issues with HashMap arrive, change back to regular from Weak
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -263,6 +265,11 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "login":
                 response.sendRedirect("loginView.jsp");
+                break;
+            case "logout":
+                // TODO Check if invalidating is enough
+                session.invalidate();
+                response.sendRedirect("index.jsp");
                 break;
             default:
                 System.out.println("Action was " + action + ". That was unexpected. Sending to Index");

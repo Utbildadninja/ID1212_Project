@@ -56,6 +56,10 @@ button[disabled] {
     /*font-weight: bold;*/
 }
 
+#hidden {
+    display: none
+}
+
 /*For styling login*/
 /*input[type = text], input[type = password] {*/
 /*    width: 75%;*/
