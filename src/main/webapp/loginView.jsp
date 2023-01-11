@@ -21,6 +21,16 @@
             <button type="submit">Submit</button>
         </label>
     </form>
+
+    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+        <label>
+            <input type="hidden" name="action" value="createAccount">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <button type="submit">Create account</button>
+        </label>
+    </form>
+
+
 </div>
 </body>
 </html>

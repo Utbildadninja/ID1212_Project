@@ -56,52 +56,84 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
 
-            // Checks the parameter "jspFile" to point the request to correct method
-            String jspFile = request.getParameter("jspFile");
-            //System.out.println("jspFile from Controller: " + jspFile);
-            if (jspFile == null) {
-                System.out.println("Seems the jspFile is null");
-            } else if (jspFile.endsWith("/gameView.jsp")) {
-                doGameView(request, response, session);
-            } else if (jspFile.endsWith("/pauseView.jsp")) {
-                doPauseView(request, response, session);
-            } else if (jspFile.endsWith("/setUpView.jsp")) {
-                doSetUpView(request, response, session);
-            } else if (jspFile.endsWith("/settingsView.jsp")) {
-                doSettingsView(request, response, session);
-            } else if (jspFile.endsWith("/resultsView.jsp")) {
-                doResultsView(request, response, session);
-            } else if (jspFile.endsWith("/testView.jsp")) {
-                doTestView(request, response, session);
-            } else if (jspFile.endsWith("/loginView.jsp")) {
-                doLoginView(request, response, session);
-            } else {
-                //System.out.println("That jspFile is not handled");
-                doIndex(request, response, session);
-            }
+        // Checks the parameter "jspFile" to point the request to correct method
+        String jspFile = request.getParameter("jspFile");
+        //System.out.println("jspFile from Controller: " + jspFile);
+        if (jspFile == null) {
+            System.out.println("Seems the jspFile is null");
+        } else if (jspFile.endsWith("/gameView.jsp")) {
+            doGameView(request, response, session);
+        } else if (jspFile.endsWith("/pauseView.jsp")) {
+            doPauseView(request, response, session);
+        } else if (jspFile.endsWith("/setUpView.jsp")) {
+            doSetUpView(request, response, session);
+        } else if (jspFile.endsWith("/settingsView.jsp")) {
+            doSettingsView(request, response, session);
+        } else if (jspFile.endsWith("/resultsView.jsp")) {
+            doResultsView(request, response, session);
+        } else if (jspFile.endsWith("/loginView.jsp")) {
+            doLoginView(request, response, session);
+        } else if (jspFile.endsWith("/createAccountView.jsp")) {
+            doCreateAccountView(request, response, session);
+        } else if (jspFile.endsWith("/testView.jsp")) {
+            doTestView(request, response, session);
+        } else {
+            doIndex(request, response, session);
+        }
+
+    }
+
+    private void doCreateAccountView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String confirm_password = request.getParameter("confirm_password");
+
+        if (username != null && password != null && password.equals(confirm_password)) {
+            // TODO Create account in Database
+            System.out.println("Account created");
+            response.sendRedirect("index.jsp");
+        } else {
+            // TODO Add HTML5 form validation to client side or something
+            System.out.println("Password mismatch");
+            response.sendRedirect("createAccountView.jsp");
+        }
 
     }
 
     private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String action = request.getParameter("action");
 
-        if (username != null && password != null) {
-            UserBean user;
-            user = db.findUser(username, password);
+        switch (action) {
+            case "login":
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
 
-            if (user != null) {
-                session.setAttribute("userBean", user);
-                System.out.println("User: " + user.getUsername() + " logged in");
-                response.sendRedirect("index.jsp");
+                if (username != null && password != null) {
+                    UserBean user;
+                    user = db.findUser(username, password);
 
-            } else {
-                System.out.println("Login failed");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
-            }
-        } else {
-            System.out.println("Username or password was null");
+                    if (user != null) {
+                        session.setAttribute("userBean", user);
+                        System.out.println("User: " + user.getUsername() + " logged in");
+                        response.sendRedirect("index.jsp");
+
+                    } else {
+                        System.out.println("Login failed");
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+                    }
+                } else {
+                    System.out.println("Username or password was null");
+                }
+                break;
+            case "createAccount":
+                response.sendRedirect("createAccountView.jsp");
+                break;
+            default:
+                System.out.println("Action was " + action + ". That was unexpected. Sending to login again.");
+                response.sendRedirect("loginView.jsp");
+                break;
         }
+
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
