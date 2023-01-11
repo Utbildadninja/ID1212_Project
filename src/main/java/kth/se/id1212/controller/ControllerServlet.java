@@ -19,7 +19,7 @@ import java.sql.DriverManager;
 public class ControllerServlet extends HttpServlet {
     OtherWordsDAO db = new OtherWordsDAO();
     // WeakHashMap allows the Java Garbage collector to remove invalidated sessions
-    // containsKey() can be used to check if the key is still in place, to avoid any NullPointerExpection errors
+    // containsKey() can be used to check if the key is still in place, to avoid any NullPointerException errors
     Map<HttpSession, Game> activeSessions = new WeakHashMap<>(); // TODO If any issues with HashMap arrive, change back to regular from Weak
 
     @Override
@@ -38,7 +38,6 @@ public class ControllerServlet extends HttpServlet {
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // TODO Invalidate old sessions after certain time, if planning to actually run the server for other than project
         HttpSession session = request.getSession(true);
         Game game = (Game) session.getAttribute("gameModel");
         if (game == null) {
@@ -57,53 +56,84 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
 
-            // Checks the parameter "jspFile" to point the request to correct method
-            String jspFile = request.getParameter("jspFile");
-            //System.out.println("jspFile from Controller: " + jspFile);
-            if (jspFile == null) {
-                System.out.println("Seems the jspFile is null");
-            } else if (jspFile.endsWith("/gameView.jsp")) {
-                doGameView(request, response, session);
-            } else if (jspFile.endsWith("/pauseView.jsp")) {
-                doPauseView(request, response, session);
-            } else if (jspFile.endsWith("/setUpView.jsp")) {
-                doSetUpView(request, response, session);
-            } else if (jspFile.endsWith("/settingsView.jsp")) {
-                doSettingsView(request, response, session);
-            } else if (jspFile.endsWith("/resultsView.jsp")) {
-                doResultsView(request, response, session);
-            } else if (jspFile.endsWith("/testView.jsp")) {
-                doTestView(request, response, session);
-            } else if (jspFile.endsWith("/loginView.jsp")) {
-                doLoginView(request, response, session);
-            } else {
-                //System.out.println("That jspFile is not handled");
-                doIndex(request, response, session);
-            }
+        // Checks the parameter "jspFile" to point the request to correct method
+        String jspFile = request.getParameter("jspFile");
+        //System.out.println("jspFile from Controller: " + jspFile);
+        if (jspFile == null) {
+            System.out.println("Seems the jspFile is null");
+        } else if (jspFile.endsWith("/gameView.jsp")) {
+            doGameView(request, response, session);
+        } else if (jspFile.endsWith("/pauseView.jsp")) {
+            doPauseView(request, response, session);
+        } else if (jspFile.endsWith("/setUpView.jsp")) {
+            doSetUpView(request, response, session);
+        } else if (jspFile.endsWith("/settingsView.jsp")) {
+            doSettingsView(request, response, session);
+        } else if (jspFile.endsWith("/resultsView.jsp")) {
+            doResultsView(request, response, session);
+        } else if (jspFile.endsWith("/loginView.jsp")) {
+            doLoginView(request, response, session);
+        } else if (jspFile.endsWith("/createAccountView.jsp")) {
+            doCreateAccountView(request, response, session);
+        } else if (jspFile.endsWith("/testView.jsp")) {
+            doTestView(request, response, session);
+        } else {
+            doIndex(request, response, session);
+        }
+
+    }
+
+    private void doCreateAccountView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String confirm_password = request.getParameter("confirm_password");
+
+        if (username != null && password != null && password.equals(confirm_password)) {
+            // TODO Create account in Database
+            System.out.println("Account created");
+            response.sendRedirect("index.jsp");
+        } else {
+            // TODO Add HTML5 form validation to client side or something
+            System.out.println("Password mismatch");
+            response.sendRedirect("createAccountView.jsp");
+        }
 
     }
 
     private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // TODO Skapa Logout, terminate session vid utloggning
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+        String action = request.getParameter("action");
 
-        if (username != null && password != null) {
-            UserBean user;
-            user = db.findUser(username, password);
+        switch (action) {
+            case "login":
+                String username = request.getParameter("username");
+                String password = request.getParameter("password");
 
-            if (user != null) {
-                session.setAttribute("userBean", user);
-                System.out.println("User: " + user.getUsername() + " logged in");
-                response.sendRedirect("index.jsp");
+                if (username != null && password != null) {
+                    UserBean user;
+                    user = db.findUser(username, password);
 
-            } else {
-                System.out.println("Login failed");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
-            }
-        } else {
-            System.out.println("Username or password was null");
+                    if (user != null) {
+                        session.setAttribute("userBean", user);
+                        System.out.println("User: " + user.getUsername() + " logged in");
+                        response.sendRedirect("index.jsp");
+
+                    } else {
+                        System.out.println("Login failed");
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+                    }
+                } else {
+                    System.out.println("Username or password was null");
+                }
+                break;
+            case "createAccount":
+                response.sendRedirect("createAccountView.jsp");
+                break;
+            default:
+                System.out.println("Action was " + action + ". That was unexpected. Sending to login again.");
+                response.sendRedirect("loginView.jsp");
+                break;
         }
+
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -130,7 +160,6 @@ public class ControllerServlet extends HttpServlet {
 //                response.sendRedirect("pauseView.jsp");
 //                break;
             case "results":
-                // TODO Call results or something
                 response.sendRedirect("resultsView.jsp");
                 break;
             default:
@@ -159,7 +188,16 @@ public class ControllerServlet extends HttpServlet {
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
-        SettingsBean settingsBean = new SettingsBean(); // TODO Probably get from DB
+        UserBean userBean = (UserBean) session.getAttribute("userBean");
+        SettingsBean settingsBean;
+        if (userBean != null) {
+            settingsBean = db.findUserSettings(userBean.getID());
+        } else {
+            settingsBean = (SettingsBean) session.getAttribute("sessionBean");
+        }
+
+        if (settingsBean == null)
+            settingsBean = new SettingsBean();
 
         String action = request.getParameter("action");
         switch (action) {
@@ -204,30 +242,26 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-//        SettingsBean settingsBean = new SettingsBean(); // TODO Get from DB if user logged in
-//        int roundTimeFromDB = settingsBean.getRoundTime();
-//        session.setAttribute("roundTime", roundTimeFromDB);
-//        int roundTime = Integer.parseInt(request.getParameter("roundTimeSlider"));
+        UserBean userBean = (UserBean) session.getAttribute("userBean");
+        // Always set when hitting Settings, so should never be null.
+        SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+        if (userBean != null ) {
+            System.out.println("A logged in user tried to update settings");
+            // TODO Set settings to DB.
+            // TODO Set settings to session.settingsBean
+
+        } else {
+            System.out.println("A logged out user tried to update settings");
+            // TODO Set settings to session.settingsBean
+        }
+
         response.sendRedirect("settingsView.jsp");
-
-        // TODO När man landar här vill man redan ha settings från DB laddade, om man är inloggad
-        // TODO När man bankar Submit så ska det skrivas in i DB, om användaren är inloggad. Även set för session
-        // TODO Om inte inloggad, enbart session
-        // Redirect tillbaka till Settings
-        /*
-        Användaren har precis laddat sidan... Inga requests har gjorts. So... Om användaren loggar in...
-        DÅ sätter vi settings från DB.
-        Då kommer "rätt" settings att visas när användaren trycker sig in på settings.
-        Om användaren inte har loggat in... Då vill vi visa default settings...
-
-        Eh, det måste ju bara vara att... Skapa ny settingsBean, finns det en användare inloggad. Hämta från DB. Annars standard.
-        Sen när det
-         */
     }
 
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // TODO Fix settingsBean, this can only lead to confusion
-        SettingsBean settingsBean = new SettingsBean();
+        // SettingsBean is always checked for != null when starting a new game
+        SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+
         Game game = activeSessions.get(session);
 
         // TODO Could probably get rid of nextTeam by moving the setAttribute around. For example, set it after redirect... Possibly.
@@ -255,9 +289,25 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "settings":
-                // TODO Set settings from DB if logged in. Default if not
-                // Anvädaren kan ha null SettingsBean om den inte finns i databasen. Dvs om det är första gången man spelar.
-                // Om användaren inte är inloggad, men har satt settings tidigare. Ladda från
+                UserBean userBean = (UserBean) session.getAttribute("userBean");
+                SettingsBean settingsBean;
+                if (userBean != null ) {
+                    System.out.println("A logged in user entered Settings");
+                    settingsBean = db.findUserSettings(userBean.getID());
+                    if(settingsBean != null) {
+                        System.out.println("That user has previous saved settings");
+                        session.setAttribute("settingsBean", settingsBean);
+                    } else {
+                        System.out.println("That user has no stored settings");
+                        settingsBean = new SettingsBean();
+                        session.setAttribute("settingsBean", settingsBean);
+                    }
+                } else {
+                    System.out.println("This user was not logged in");
+                    settingsBean = new SettingsBean();
+                    session.setAttribute("settingsBean", settingsBean);
+                }
+
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":
@@ -267,7 +317,6 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("loginView.jsp");
                 break;
             case "logout":
-                // TODO Check if invalidating is enough
                 session.invalidate();
                 response.sendRedirect("index.jsp");
                 break;

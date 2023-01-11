@@ -1,5 +1,24 @@
-        <%@ page import="kth.se.id1212.model.UserBean" %>
+<%@ page import="kth.se.id1212.model.UserBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    //    int roundTime = (int) session.getAttribute("roundTimeSlider");
+    UserBean userBean = (UserBean) session.getAttribute("userBean");
+    String username = "default";
+    if (userBean != null) {
+        username = userBean.getUsername();
+    }
+
+    String sneaky;
+    if (userBean != null) {
+        sneaky = "";
+    } else sneaky = "hidden";
+
+    String reverseSneaky;
+    if (userBean == null) {
+        reverseSneaky = "";
+    } else reverseSneaky = "hidden";
+%>
+
 <html>
 <head>
     <title>Settings</title>
@@ -8,19 +27,13 @@
     </style>
 </head>
 <body>
-<%
-    //    int roundTime = (int) session.getAttribute("roundTimeSlider");
-    UserBean userBean = (UserBean) session.getAttribute("userBean");
-    String username = "default";
-    if (userBean != null) {
-        username = userBean.getUsername();
-    }
-%>
 
+<div class="outerDiv">
+    <noscript>JavaScript is disabled. Website might not work as intended.<br></noscript>
+    <h2>Settings</h2>
 
-<div class="settingsViewDiv">
-    Choose API, Database, round time etc
-    Logged in as: <%=username%>
+    <p id=<%=reverseSneaky%>>Not logged in</p>
+    <p id=<%=sneaky%>>Logged in as: <%=username%></p>
 
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label for="roundTimeSlider">Round time:</label>

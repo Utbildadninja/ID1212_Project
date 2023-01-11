@@ -1,5 +1,20 @@
 <%@ page import="kth.se.id1212.model.UserBean" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%
+    UserBean userBean = (UserBean) session.getAttribute("userBean");
+
+    String sneaky;
+    if (userBean != null) {
+        sneaky = "";
+    }
+    else sneaky = "hidden";
+
+    String reverseSneaky;
+    if (userBean == null) {
+        reverseSneaky = "";
+    }
+    else reverseSneaky = "hidden";
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,29 +23,10 @@
         <%@include file="/WEB-INF/style.css" %>
     </style>
 </head>
-<%
-    UserBean userBean = (UserBean) session.getAttribute("userBean");
-
-    String sneaky;
-    if (userBean == null) {
-        sneaky = "";
-    }
-    else sneaky = "hidden";
-
-    String reverseSneaky;
-    if (userBean != null) {
-        reverseSneaky = "";
-    }
-    else reverseSneaky = "hidden";
-%>
-
-
 
 <body>
-
-
-
 <div class="outerDiv">
+    <noscript>JavaScript is disabled. Website might not work as intended.</noscript>
 
     <div class="home-view-game-display-box">
 
@@ -54,12 +50,12 @@
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <button id="<%=sneaky%>" class="home-view-btn" type="submit">LOGIN</button>
+                <button id="<%=reverseSneaky%>" class="home-view-btn" type="submit">LOGIN</button>
             </form>
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="logout">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <button id= "<%=reverseSneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
+                <button id= "<%=sneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
             </form>
         </div>
     </div>
