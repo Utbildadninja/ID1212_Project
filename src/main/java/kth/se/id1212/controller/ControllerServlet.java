@@ -38,7 +38,6 @@ public class ControllerServlet extends HttpServlet {
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // TODO Invalidate old sessions after certain time, if planning to actually run the server for other than project
         HttpSession session = request.getSession(true);
         Game game = (Game) session.getAttribute("gameModel");
         if (game == null) {
@@ -84,7 +83,6 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // TODO Skapa Logout, terminate session vid utloggning
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 

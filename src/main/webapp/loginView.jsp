@@ -7,16 +7,20 @@
     </style>
 </head>
 <body>
-Please enter credentials:
-
-<form action="${pageContext.request.contextPath}/ControllerServlet" method="post">Sign in:
-    <label>
-        <input type="hidden" name="action" value="login">
-        <input type="text" name="username">
-        <input type="password" name="password">
-        <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button type="submit">Submit</button>
-    </label>
-</form>
+<div class="outerDiv">
+    Please enter credentials:
+    <br>
+    <form action="${pageContext.request.contextPath}/ControllerServlet" method="post">
+        <label>
+            <input type="hidden" name="action" value="login">
+            <input type="text" name="username" placeholder="Enter username">
+            <br>
+            <input type="password" name="password" placeholder="Enter password">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <br>
+            <button type="submit">Submit</button>
+        </label>
+    </form>
+</div>
 </body>
 </html>

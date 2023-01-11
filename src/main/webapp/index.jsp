@@ -1,13 +1,5 @@
 <%@ page import="kth.se.id1212.model.UserBean" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Med egna ord</title>
-    <style>
-        <%@include file="/WEB-INF/style.css" %>
-    </style>
-</head>
 <%
     UserBean userBean = (UserBean) session.getAttribute("userBean");
 
@@ -23,14 +15,18 @@
     }
     else reverseSneaky = "hidden";
 %>
-
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Med egna ord</title>
+    <style>
+        <%@include file="/WEB-INF/style.css" %>
+    </style>
+</head>
 
 <body>
-
-
-
 <div class="outerDiv">
+    <noscript>JavaScript is disabled. Website might not work as intended.</noscript>
 
     <div class="home-view-game-display-box">
 
