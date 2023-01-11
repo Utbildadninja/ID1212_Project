@@ -2,7 +2,6 @@
 <%@ page import="kth.se.id1212.model.SettingsBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    //    int roundTime = (int) session.getAttribute("roundTimeSlider");
     SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
     UserBean userBean = (UserBean) session.getAttribute("userBean");
     String username = "default";
@@ -10,7 +9,8 @@
         username = userBean.getUsername();
     }
 
-    int roundTime = settingsBean.getSecondsPerRound();
+    int secondsPerRound = settingsBean.getSecondsPerRound();
+    int roundsPerGame = settingsBean.getRoundsPerGame();
 
     String sneaky;
     if (userBean != null) {
@@ -41,14 +41,14 @@
 
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label for="roundTimeSlider">Round time:</label>
-        <input name="roundTimeSlider" type="range" min="10" max="120" value="<%=roundTime%>" step="5" class="slider"
+        <input name="roundTimeSlider" type="range" min="10" max="120" value="<%=secondsPerRound%>" step="5" class="slider"
                id="roundTimeSlider" oninput="roundTimeOutput.value = roundTimeSlider.value">
-        <output name="roundTimeOutput" id="roundTimeOutput"><%=roundTime%></output>
+        <output name="roundTimeOutput" id="roundTimeOutput"><%=secondsPerRound%></output>
         <br>
         <label for="numberOfRounds">Number of Rounds:</label>
-        <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="3" step="1"
+        <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="<%=roundsPerGame%>" step="1"
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
-        <output name="numberOfRoundsValue" id="numberOfRoundsValue">3</output>
+        <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%></output>
         <br>
         Choose source of words:
         <br>

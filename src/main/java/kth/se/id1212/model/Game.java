@@ -14,7 +14,6 @@ public class Game {
     String currentWord = null;
     int currentWordCounter = -1;
     String[] wordList;
-    //int score = 0;
     int timeLeft = 25; // TODO Could be set to null, set to another value before starting a game anyway
     List<TeamBean> teamsPlaying = new ArrayList<>();
     TeamBean currentTeam;
@@ -30,7 +29,7 @@ public class Game {
         this.gameOver = false;
         currentRound = 0;
         currentTeam = teamsPlaying.get(0);
-        for (TeamBean team:teamsPlaying) {
+        for (TeamBean team : teamsPlaying) {
             team.setScore(0);
         }
         setCurrentWord();
@@ -50,7 +49,7 @@ public class Game {
         if (this.currentWordCounter >= wordList.length) {
             getNewArray();
             this.currentWordCounter = 0;
-        } else if (this.currentWordCounter >= wordList.length -1) {
+        } else if (this.currentWordCounter >= wordList.length - 1) {
             System.out.println("One word remaining in list");
         }
 
@@ -58,7 +57,7 @@ public class Game {
         this.currentWord = wordList[currentWordCounter];
     }
 
-    public void correct () throws IOException {
+    public void correct() throws IOException {
         currentWordCounter++;
         int score = currentTeam.getScore();
         currentTeam.setScore(score + 10);
@@ -74,11 +73,10 @@ public class Game {
     public void nextRound(SettingsBean settingsBean) {
         if (this.currentRound == this.totalRounds * teamsPlaying.size()) {
             gameOver();
-        }
-        else {
-            currentTeam = teamsPlaying.get(currentRound%teamsPlaying.size());
+        } else {
+            currentTeam = teamsPlaying.get(currentRound % teamsPlaying.size());
             currentRound++;
-            nextTeam = teamsPlaying.get(currentRound%teamsPlaying.size());
+            nextTeam = teamsPlaying.get(currentRound % teamsPlaying.size());
             System.out.println("Current round is: " + currentRound + " current Team is: " + currentTeam.getName());
             setTimeLeft(settingsBean.getSecondsPerRound());
             startTimer();
@@ -129,7 +127,6 @@ public class Game {
         }
     }
 
-    // TODO Fix remove, probalby with ID, but then change the addTeam logic first. Or loop trough and remove the name
     public void removeTeam(String name) {
         teamsPlaying.removeIf(team -> team.getName().equals(name));
     }
@@ -172,5 +169,9 @@ public class Game {
 
     public TeamBean getNextTeam() {
         return nextTeam;
+    }
+
+    public void setTotalRounds(int totalRounds) {
+        this.totalRounds = totalRounds;
     }
 }

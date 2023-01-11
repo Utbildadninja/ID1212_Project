@@ -191,12 +191,16 @@ public class ControllerServlet extends HttpServlet {
         SettingsBean settingsBean;
         // Makes sure there's always a settingsBean, even if user never bothered to check the settings
         if (userBean != null) {
+            System.out.println("Getting settingsBean from DB, in case user never entered settings");
             settingsBean = db.findUserSettings(userBean.getID());
         } else {
-            settingsBean = (SettingsBean) session.getAttribute("sessionBean");
+            System.out.println("Getting settingsBean from session");
+            settingsBean = (SettingsBean) session.getAttribute("settingsBean");
         }
-        if (settingsBean == null)
+        if (settingsBean == null) {
             settingsBean = new SettingsBean();
+            System.out.println("Created a new settingsBean and set it to that, god knows why");
+        }
 
         String action = request.getParameter("action");
         switch (action) {
@@ -220,17 +224,23 @@ public class ControllerServlet extends HttpServlet {
                 game.newGame();
                 int score = game.getScore();
                 String currentWord = game.getCurrentWord();
+                int timeLeft = settingsBean.getSecondsPerRound();
+                int roundsPerGame = settingsBean.getRoundsPerGame();
+
+                System.out.println("Time left when starting: " + timeLeft);
                 session.setAttribute("score", score);
                 session.setAttribute("currentWord", currentWord);
-
-                int timeLeft = settingsBean.getSecondsPerRound();
-                session.setAttribute("timeLeft", timeLeft);
                 session.setAttribute("currentTeamBean", game.getCurrentTeam());
+                session.setAttribute("timeLeft", timeLeft);
+
+                game.setTimeLeft(timeLeft);
+                game.setTotalRounds(roundsPerGame);
 
                 game.nextRound(settingsBean);
 
                 session.setAttribute("nextTeamBean", game.getNextTeam()); // TODO Probably a better solution to this
 
+                System.out.println("Time left when really starting: " + timeLeft);
                 response.sendRedirect("gameView.jsp");
                 break;
             default:
@@ -254,7 +264,9 @@ public class ControllerServlet extends HttpServlet {
 
         } else {
             System.out.println("A logged out user tried to update settings");
-            // TODO Set settings to session.settingsBean
+            settingsBean.setSecondsPerRound(roundTimeSlider);
+            settingsBean.setRoundsPerGame(numberOfRounds);
+            session.setAttribute("settingsBean", settingsBean);
         }
 
         response.sendRedirect("settingsView.jsp");
