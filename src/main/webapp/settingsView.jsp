@@ -1,12 +1,16 @@
 <%@ page import="kth.se.id1212.model.UserBean" %>
+<%@ page import="kth.se.id1212.model.SettingsBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     //    int roundTime = (int) session.getAttribute("roundTimeSlider");
+    SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
     UserBean userBean = (UserBean) session.getAttribute("userBean");
     String username = "default";
     if (userBean != null) {
         username = userBean.getUsername();
     }
+
+    int roundTime = settingsBean.getSecondsPerRound();
 
     String sneaky;
     if (userBean != null) {
@@ -37,9 +41,9 @@
 
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label for="roundTimeSlider">Round time:</label>
-        <input name="roundTimeSlider" type="range" min="10" max="120" value="30" step="5" class="slider"
+        <input name="roundTimeSlider" type="range" min="10" max="120" value="<%=roundTime%>" step="5" class="slider"
                id="roundTimeSlider" oninput="roundTimeOutput.value = roundTimeSlider.value">
-        <output name="roundTimeOutput" id="roundTimeOutput">30</output>
+        <output name="roundTimeOutput" id="roundTimeOutput"><%=roundTime%></output>
         <br>
         <label for="numberOfRounds">Number of Rounds:</label>
         <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="3" step="1"
