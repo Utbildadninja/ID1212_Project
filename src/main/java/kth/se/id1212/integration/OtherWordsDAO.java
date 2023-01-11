@@ -228,6 +228,33 @@ public class OtherWordsDAO {
         }
     }
 
+    /**
+     * Creates a new user entry in the DB when a user wants to create an account.
+     * Will fail if username is already in use.
+     * @param username the username as entered by the aspiring user
+     * @param password the suggested password from the user
+     */
+    public int createAccount(String username, String password){
+        int affectedRows = 0;
+        try {
+            createUserStmt.setString(1, username);
+            createUserStmt.setString(2, password);
+            affectedRows = createUserStmt.executeUpdate();
+            if (affectedRows != 1) {
+                exceptionHandler("Couldn't create new user, maybe username already exists ", null);
+                connection.rollback();
+                return -1;
+            }
+            else
+                connection.commit();
+        } catch (SQLException e) {
+            exceptionHandler("Couldn't execute create user query, " +
+                    "maybe username already in use? ", e);
+            return -1;
+        }
+        return 0;
+    }
+
     private void connectToDB() throws ClassNotFoundException, SQLException {
         Class.forName("org.apache.derby.jdbc.ClientDriver");
         connection = DriverManager.getConnection("jdbc:derby://localhost:1527/maoDB",
