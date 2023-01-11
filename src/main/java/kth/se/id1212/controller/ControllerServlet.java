@@ -14,7 +14,6 @@ import kth.se.id1212.model.Game;
 
 import java.sql.DriverManager;
 
-
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
     OtherWordsDAO db = new OtherWordsDAO();
@@ -190,12 +189,12 @@ public class ControllerServlet extends HttpServlet {
         Game game = activeSessions.get(session);
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         SettingsBean settingsBean;
+        // Makes sure there's always a settingsBean, even if user never bothered to check the settings
         if (userBean != null) {
             settingsBean = db.findUserSettings(userBean.getID());
         } else {
             settingsBean = (SettingsBean) session.getAttribute("sessionBean");
         }
-
         if (settingsBean == null)
             settingsBean = new SettingsBean();
 
@@ -242,6 +241,9 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+        int roundTimeSlider = Integer.parseInt(request.getParameter("roundTimeSlider"));
+        int numberOfRounds = Integer.parseInt(request.getParameter("numberOfRounds"));
+
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");

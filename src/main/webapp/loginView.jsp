@@ -22,6 +22,9 @@
         </label>
     </form>
 
+    <br>
+    Are you not yet part of our growing empire? Sign up now!
+    <br>
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label>
             <input type="hidden" name="action" value="createAccount">
