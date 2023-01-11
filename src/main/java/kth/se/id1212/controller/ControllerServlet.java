@@ -260,7 +260,10 @@ public class ControllerServlet extends HttpServlet {
         if (userBean != null ) {
             System.out.println("A logged in user tried to update settings");
             // TODO Set settings to DB.
-            // TODO Set settings to session.settingsBean
+
+            settingsBean.setSecondsPerRound(roundTimeSlider);
+            settingsBean.setRoundsPerGame(numberOfRounds);
+            session.setAttribute("settingsBean", settingsBean);
 
         } else {
             System.out.println("A logged out user tried to update settings");
