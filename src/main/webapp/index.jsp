@@ -12,13 +12,13 @@
     UserBean userBean = (UserBean) session.getAttribute("userBean");
 
     String sneaky;
-    if (userBean == null) {
+    if (userBean != null) {
         sneaky = "";
     }
     else sneaky = "hidden";
 
     String reverseSneaky;
-    if (userBean != null) {
+    if (userBean == null) {
         reverseSneaky = "";
     }
     else reverseSneaky = "hidden";
@@ -54,12 +54,12 @@
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="login">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <button id="<%=sneaky%>" class="home-view-btn" type="submit">LOGIN</button>
+                <button id="<%=reverseSneaky%>" class="home-view-btn" type="submit">LOGIN</button>
             </form>
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="logout">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <button id= "<%=reverseSneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
+                <button id= "<%=sneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
             </form>
         </div>
     </div>
