@@ -2,8 +2,8 @@ package kth.se.id1212.model;
 
 public class SettingsBean {
     private int secondsPerRound = 10;
-    private int languageID;
-    private String languageName; //TODO change sql to also fetch language name (join)
+    private int languageID = 1;
+    private String languageName = "testing";
     private int roundsPerGame = 2;
     private String wordSource = "free";
 

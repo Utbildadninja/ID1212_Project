@@ -1,10 +1,9 @@
 package kth.se.id1212.integration;
 
 import kth.se.id1212.model.*;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Set;
+
 
 /**
  * Class for handling communication with hur duthe database
@@ -177,28 +176,25 @@ public class OtherWordsDAO {
     }
 
     /**
-     * Will return noOfWords words from the database based on randomised wordIDs..
-     * TODO a bit fishy not sure it will work, problematic if we have removed words etc,
-     * ie some IDs are missing from the DB...
-     *
-     * @param noOfWords
-     * @param languageID
-     * @return
+     * Fetches ALL the words in a certain language from the database. For Swedish about 1.2k.
+     * @param languageID the language in which the user wants to play
+     * @return list of WordBeans, one per word in the bd, with id word and clue
      */
-    public ArrayList<WordBean> words(int noOfWords, int languageID) {
+    public ArrayList<WordBean> findAllWords(int languageID) {
         ArrayList<WordBean> words = new ArrayList<>();
-        ResultSet resultSetAmount = null;
-        ResultSet resultSetWords = null;
+        ResultSet resultSet = null;
         try {
-            resultSetAmount = findNoOfWordsStmt.executeQuery();
-            //int[] of size noOfWords, with random values(1, resultSetAmount) //very problematic if there are removed words
-            //convert to String
-            //TODO test if idea works at all
-//            findWordsStmt.setString("(1,2,3)");
-            resultSetWords = findWordsStmt.executeQuery();
-            //while hasNext add to words
+            findWordsStmt.setInt(1, languageID);
+            resultSet = findWordsStmt.executeQuery();
+            while(resultSet.next()){
+                words.add(new WordBean(resultSet.getInt(1),
+                        resultSet.getString(2), resultSet.getString(3)));
+            }
+            connection.commit();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            exceptionHandler("Couldn't fetch words from the database for language " + languageID, e);
+        } finally {
+            closeResult(resultSet);
         }
         return words;
     }
@@ -220,8 +216,7 @@ public class OtherWordsDAO {
             if (affectedRows != 1) {
                 exceptionHandler("Couldn't update user settings ", null);
                 connection.rollback();
-            }
-            else
+            } else
                 connection.commit();
         } catch (SQLException e) {
             exceptionHandler("Couldn't execute update user settings query: ", e);
@@ -231,10 +226,11 @@ public class OtherWordsDAO {
     /**
      * Creates a new user entry in the DB when a user wants to create an account.
      * Will fail if username is already in use.
+     *
      * @param username the username as entered by the aspiring user
      * @param password the suggested password from the user
      */
-    public int createAccount(String username, String password){
+    public int createAccount(String username, String password) {
         int affectedRows = 0;
         try {
             createUserStmt.setString(1, username);
@@ -244,8 +240,7 @@ public class OtherWordsDAO {
                 exceptionHandler("Couldn't create new user, maybe username already exists ", null);
                 connection.rollback();
                 return -1;
-            }
-            else
+            } else
                 connection.commit();
         } catch (SQLException e) {
             exceptionHandler("Couldn't execute create user query, " +
@@ -263,10 +258,10 @@ public class OtherWordsDAO {
     }
 
     private void prepareStatements() throws SQLException {
-//        findLanguagesStmt = connection.prepareStatement(
-//                "SELECT * FROM languages " +
-//                        "WHERE NOT (languagename='testing' OR languagename='english_api'"
-//        );
+        findLanguagesStmt = connection.prepareStatement(
+                "SELECT * FROM languages " +
+                        "WHERE NOT (languagename='testing' OR languagename='english_api')"
+        );
         findReportsStmt = connection.prepareStatement(
                 "SELECT * FROM reports"
         );
@@ -283,12 +278,12 @@ public class OtherWordsDAO {
         findNoOfWordsStmt = connection.prepareStatement(        //Could theoretically yield problems if someone
                 "SELECT COUNT(*) FROM words"
         );
-//        findWordsStmt = connection.prepareStatement(            //TODO take language as parameter
-//                "SELECT id, word, clue FROM words WHERE id in ?"
-//        );
+        findWordsStmt = connection.prepareStatement(
+                "SELECT id, word, clue FROM words WHERE language_id = ? "
+        );
         updateWordCorrectStmt = connection.prepareStatement(
                 "UPDATE words SET correctlyGuessed = correctlyGuessed +1 " +
-                        "WHERE id = ?"
+                        "WHERE id = ? "
         );
         updateWordSkippedStmt = connection.prepareStatement(
                 "UPDATE words SET skipped = skipped +1 " +
@@ -303,6 +298,10 @@ public class OtherWordsDAO {
                 "UPDATE users SET gamesPlayed = gamesPlayed + 1 " +
                         "WHERE id = ?"
         );
+//        updateUserGamesStmt = connection.prepareStatement(
+//                "UPDATE users SET gamesPlayed = gamesPlayed + 1 " +
+//                        "WHERE id = ?"
+//        );
 //        createReportStmt = connection.prepareStatement(
 //                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason) " +
 //                        "VALUES (now(), ?, ?, ?)"
@@ -311,16 +310,16 @@ public class OtherWordsDAO {
                 "INSERT INTO users (username, password, admin, gamesplayed) " +
                         "VALUES (?, ?, false, 0)"
         );
-        createWordStmt = connection.prepareStatement(
-                "INSERT INTO words (word, clue, correctlyGuessed, skipped, flags) " +
-                        "VALUES (?, ?, 0, 0, 0)"
-        );
-        deleteUserStmt = connection.prepareStatement(
-                "DELETE FROM users WHERE id = ?"
-        );
-        deleteWordStmt = connection.prepareStatement(
-                "DELETE FROM words WHERE id = ?"
-        );
+//        createWordStmt = connection.prepareStatement(
+//                "INSERT INTO words (word, clue, correctlyGuessed, skipped, flags) " +
+//                        "VALUES (?, ?, 0, 0, 0)"
+//        );
+//        deleteUserStmt = connection.prepareStatement(
+//                "DELETE FROM users WHERE id = ?"
+//        );
+//        deleteWordStmt = connection.prepareStatement(
+//                "DELETE FROM words WHERE id = ?"
+//        );
     }
 
     private void closeResult(ResultSet result) {
@@ -332,7 +331,7 @@ public class OtherWordsDAO {
         }
     }
 
-    private void exceptionHandler(String failMsg, Exception exception) {
+    private void exceptionHandler(String failMsg, Exception exception) {    //TODO account for null exception
         System.out.println(failMsg + exception.getMessage());
         try {
             connection.rollback();
