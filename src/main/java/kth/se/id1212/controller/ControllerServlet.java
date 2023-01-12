@@ -89,6 +89,7 @@ public class ControllerServlet extends HttpServlet {
 
         if (username != null && password != null && password.equals(confirm_password)) {
             // TODO Create account in Database
+            db.createAccount(username, password);
             System.out.println("Account created");
             response.sendRedirect("index.jsp");
         } else {

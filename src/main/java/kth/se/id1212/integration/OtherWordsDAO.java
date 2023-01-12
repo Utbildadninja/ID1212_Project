@@ -263,10 +263,10 @@ public class OtherWordsDAO {
     }
 
     private void prepareStatements() throws SQLException {
-        findLanguagesStmt = connection.prepareStatement(
-                "SELECT * FROM languages " +
-                        "WHERE NOT (languagename='testing' OR languagename='english_api'"
-        );
+//        findLanguagesStmt = connection.prepareStatement(
+//                "SELECT * FROM languages " +
+//                        "WHERE NOT (languagename='testing' OR languagename='english_api'"
+//        );
         findReportsStmt = connection.prepareStatement(
                 "SELECT * FROM reports"
         );
@@ -283,9 +283,9 @@ public class OtherWordsDAO {
         findNoOfWordsStmt = connection.prepareStatement(        //Could theoretically yield problems if someone
                 "SELECT COUNT(*) FROM words"
         );
-        findWordsStmt = connection.prepareStatement(            //TODO take language as parameter
-                "SELECT id, word, clue FROM words WHERE id in ?"
-        );
+//        findWordsStmt = connection.prepareStatement(            //TODO take language as parameter
+//                "SELECT id, word, clue FROM words WHERE id in ?"
+//        );
         updateWordCorrectStmt = connection.prepareStatement(
                 "UPDATE words SET correctlyGuessed = correctlyGuessed +1 " +
                         "WHERE id = ?"
@@ -303,10 +303,10 @@ public class OtherWordsDAO {
                 "UPDATE users SET gamesPlayed = gamesPlayed + 1 " +
                         "WHERE id = ?"
         );
-        createReportStmt = connection.prepareStatement(
-                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason) " +
-                        "VALUES (now(), ?, ?, ?)"
-        );
+//        createReportStmt = connection.prepareStatement(
+//                "INSERT INTO reports (timeOfReport, reportingUser, reportedWord, reason) " +
+//                        "VALUES (now(), ?, ?, ?)"
+//        );
         createUserStmt = connection.prepareStatement(
                 "INSERT INTO users (username, password, admin, gamesplayed) " +
                         "VALUES (?, ?, false, 0)"

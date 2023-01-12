@@ -71,7 +71,7 @@ public class ApiCalls {
         }
 
         //System.out.println("Some kind of array: " + wordBeans);
-
+        //System.out.println("Number of words that was returned from API: " + wordListStringArray.length);
         return wordListStringArray;
     }
 
@@ -92,7 +92,7 @@ public class ApiCalls {
 //        for (String word : wordListStringArray) {
 //            System.out.println(word);
 //        }
-
+        //System.out.println("Number of words that was returned from API: " + wordListStringArray.length);
         return wordListStringArray;
     }
 
