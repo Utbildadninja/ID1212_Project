@@ -105,7 +105,7 @@ public class Game {
                     //System.out.println("Time remaining: " + timeLeft + " seconds");
                     timeLeft--;
                 } else {
-                    System.out.println("Time's up!");
+//                    System.out.println("Time's up!");
                     executor.shutdown();
                     // send update to controller
                 }
@@ -116,15 +116,13 @@ public class Game {
     public void addTeam(String teamToAdd) {
         TeamBean teamBean = new TeamBean();
         teamBean.setName(teamToAdd);
-        //teamBean.setId(teamsPlaying.size());
         teamsPlaying.add(teamBean);
-        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId() + " ID will always be 0 for now");
-
-        System.out.println("Teams in list:");
-        for (TeamBean bean : teamsPlaying) {
-            //System.out.println("Team ID: " + bean.getId());
-            System.out.println("Team Name: " + bean.getName());
-        }
+//        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId() + " ID will always be 0 for now");
+//        System.out.println("Teams in list:");
+//        for (TeamBean bean : teamsPlaying) {
+//            System.out.println("Team ID: " + bean.getId());
+//            System.out.println("Team Name: " + bean.getName());
+//        }
     }
 
     public void removeTeam(String name) {
