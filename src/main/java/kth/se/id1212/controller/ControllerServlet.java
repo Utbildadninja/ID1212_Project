@@ -194,12 +194,18 @@ public class ControllerServlet extends HttpServlet {
         if (userBean != null) {
             System.out.println("Getting settingsBean from DB, in case user never entered settings");
             settingsBean = db.findUserSettings(userBean.getID());
+            if (settingsBean != null)
+                session.setAttribute("settingsBean", settingsBean);
+            else
+                System.out.println("A logged in user tried to start a new game with no stored settings");
+
         } else {
-            System.out.println("Getting settingsBean from session");
+            System.out.println("Getting settingsBean from session for logged out user");
             settingsBean = (SettingsBean) session.getAttribute("settingsBean");
         }
         if (settingsBean == null) {
             settingsBean = new SettingsBean();
+            session.setAttribute("settingsBean", settingsBean);
             System.out.println("Created a new settingsBean and set it to that, god knows why");
         }
 

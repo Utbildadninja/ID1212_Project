@@ -3,6 +3,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<TeamBean> teamsPlaying = (List<TeamBean>) session.getAttribute("teamsPlaying");
+    boolean disabled = true;
+    if (teamsPlaying != null)
+        disabled = teamsPlaying.size() == 0;
 %>
 <html>
 <head>
@@ -43,7 +46,7 @@
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <input type="hidden" name="action" value="start">
         <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button type="submit">Start Game</button>
+        <button type="submit" <%= disabled ? "disabled" : "" %>>Start Game</button>
     </form>
 </div>
 </body>
