@@ -1,6 +1,7 @@
 package kth.se.id1212.integration;
 
 import kth.se.id1212.model.*;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -17,11 +18,13 @@ public class OtherWordsDAO {
     private PreparedStatement findUserStmt;
     private PreparedStatement findNoOfWordsStmt;
     private PreparedStatement findWordsStmt;
+    private PreparedStatement findRandomWordStmt;
 
     private PreparedStatement createReportStmt;
     private PreparedStatement updateSettingsStmt;
     private PreparedStatement createUserStmt;
     private PreparedStatement createWordStmt;
+    private PreparedStatement createSettingsStmt;
     private PreparedStatement updateWordCorrectStmt;
     private PreparedStatement updateWordSkippedStmt;
     private PreparedStatement updateUserGamesStmt;
@@ -177,6 +180,7 @@ public class OtherWordsDAO {
 
     /**
      * Fetches ALL the words in a certain language from the database. For Swedish about 1.2k.
+     *
      * @param languageID the language in which the user wants to play
      * @return list of WordBeans, one per word in the bd, with id word and clue
      */
@@ -186,7 +190,7 @@ public class OtherWordsDAO {
         try {
             findWordsStmt.setInt(1, languageID);
             resultSet = findWordsStmt.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 words.add(new WordBean(resultSet.getInt(1),
                         resultSet.getString(2), resultSet.getString(3)));
             }
@@ -200,9 +204,39 @@ public class OtherWordsDAO {
     }
 
     /**
-     * If a logged-in user updates their settings, this should be updated in the db as well
+     * Returns one word, with the offset given as parameter
      *
-     * @param userID The user for whom to change personal sessions
+     * @param languageID the language which the word is in
+     * @param offset     how many words to skip; simulated randomness
+     * @return a WordBean with a random word and it's related info from the database
+     */
+    public WordBean findRandomWord(int languageID, int offset) {
+        WordBean word = null;
+        ResultSet resultSet = null;
+        try {
+            findRandomWordStmt.setInt(1, languageID);
+            findRandomWordStmt.setInt(3, languageID);
+            findRandomWordStmt.setInt(2, offset);
+            resultSet = findRandomWordStmt.executeQuery();
+            if (resultSet.next()) {
+                word = new WordBean(resultSet.getInt(1),
+                        resultSet.getString(2), resultSet.getString(3));
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            exceptionHandler("Couldn't fetch a random word from the database for language " + languageID, e);
+        } finally {
+            closeResult(resultSet);
+        }
+        return word;
+    }
+
+    /**
+     * A user goes to settings and changes the settings. If user already had settings associated with them,
+     * overwrite/update these with the new ones. If they had none, create a new entry in the database for this user.
+     *
+     * @param userID the user for whom to update stored settings
+     * @param newSettings SettingsBean with the new settings as chosen by the user
      */
     public void updateSettings(int userID, SettingsBean newSettings) {
         System.out.println("user wants to update the settings");
@@ -213,13 +247,30 @@ public class OtherWordsDAO {
             updateSettingsStmt.setInt(3, newSettings.getRoundsPerGame());
             updateSettingsStmt.setInt(4, userID);
             affectedRows = updateSettingsStmt.executeUpdate();
-            if (affectedRows != 1) {
-                exceptionHandler("Couldn't update user settings ", null);
-                connection.rollback();
-            } else
+            if (affectedRows == 0) {
+                //the user didn't have any saved settings since before so nothing was updated.
+                //instead create new row for this user.
+                createSettingsStmt.setInt(1, userID);
+                createSettingsStmt.setInt(2, newSettings.getLanguageID());
+                createSettingsStmt.setInt(3, newSettings.getSecondsPerRound());
+                createSettingsStmt.setInt(4, newSettings.getRoundsPerGame());
+                int createdRows = createSettingsStmt.executeUpdate();
+                if (createdRows == 1){
+                    connection.commit();
+                }
+                else{
+                    connection.rollback();
+                    throw new SQLException("Couldn't create user settings");
+                }
+            }
+            else if (affectedRows == 1) {
                 connection.commit();
+            } else {
+                connection.rollback();
+                throw new SQLException("Couldn't update user settings");
+            }
         } catch (SQLException e) {
-            exceptionHandler("Couldn't execute update user settings query: ", e);
+            exceptionHandler("Couldn't execute update/create user settings query: ", e);
         }
     }
 
@@ -281,6 +332,11 @@ public class OtherWordsDAO {
         findWordsStmt = connection.prepareStatement(
                 "SELECT id, word, clue FROM words WHERE language_id = ? "
         );
+        findRandomWordStmt = connection.prepareStatement(       //TODO check whether mod() is supported (not by ij)
+                "SELECT * FROM words WHERE language_id = ? " +
+                        "OFFSET mod(?, (SELECT COUNT(*) FROM words WHERE language_id = ? )) ROWS " +
+                        "FETCH NEXT ROW ONLY "
+        );
         updateWordCorrectStmt = connection.prepareStatement(
                 "UPDATE words SET correctlyGuessed = correctlyGuessed +1 " +
                         "WHERE id = ? "
@@ -292,7 +348,7 @@ public class OtherWordsDAO {
         updateSettingsStmt = connection.prepareStatement(
                 "UPDATE user_settings " +
                         "SET language_id = ?, secondsPerRound = ?, roundsPerGame = ? " +
-                        "WHERE user_id = ?"
+                        "WHERE user_id = ? "
         );
         updateUserGamesStmt = connection.prepareStatement(
                 "UPDATE users SET gamesPlayed = gamesPlayed + 1 " +
@@ -309,6 +365,10 @@ public class OtherWordsDAO {
         createUserStmt = connection.prepareStatement(
                 "INSERT INTO users (username, password, admin, gamesplayed) " +
                         "VALUES (?, ?, false, 0)"
+        );
+        createSettingsStmt = connection.prepareStatement(
+                "INSERT INTO user_settings (user_id, language_id, secondsPerRound, roundsPerGame)" +
+                        "VALUES (?, ?, ?, ?) "
         );
 //        createWordStmt = connection.prepareStatement(
 //                "INSERT INTO words (word, clue, correctlyGuessed, skipped, flags) " +
