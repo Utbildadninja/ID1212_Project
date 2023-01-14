@@ -81,7 +81,7 @@
                 <option value="English_API">English API</option>
                 <c:if test="${not empty languages}">
                     <c:forEach var="language" items="${languages}">
-                        <option value="${language.languageID}">${language.languageName}</option>
+                        <option value="${language.languageName}">${language.languageName}</option>
                     </c:forEach>
                 </c:if>
             </select>

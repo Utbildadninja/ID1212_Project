@@ -237,6 +237,7 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "start":
+                game.setSettingsBean(settingsBean);
                 game.newGame();
                 int score = game.getScore();
                 String currentWord = game.getCurrentWord();

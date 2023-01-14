@@ -20,6 +20,7 @@ public class Game {
     int totalRounds = 2;
     boolean gameOver = false;
     TeamBean nextTeam;
+    SettingsBean settingsBean;
 
     public void newGame() throws IOException {
         if (wordList == null) {
@@ -40,9 +41,27 @@ public class Game {
     }
 
     public void fetchNewArray() throws IOException {
-        // TODO Add logic to choose where to get the words from
-        //wordList = apiCalls.getNewArrayPremium();
-        wordList = apiCalls.getNewArrayFree();
+        String language = settingsBean.getLanguageName();
+
+        switch (language) {
+            case "Test_API":
+                System.out.println("Array set to Test_API");
+                wordList = apiCalls.getNewArrayFree();
+                break;
+            case "English_API":
+                System.out.println("Array set to English_API");
+                wordList = apiCalls.getNewArrayPremium();
+                break;
+            case "Svenska":
+                System.out.println("Array set to Svenska");
+                // TODO replace wordList to a String[] from DB.
+                wordList = apiCalls.getNewArrayFree();
+                break;
+            default:
+                System.out.println("Language choice was " + language + ". Unhandled.");
+                wordList = apiCalls.getNewArrayFree();
+                break;
+        }
     }
 
     public void setCurrentWord() throws IOException {
@@ -171,5 +190,13 @@ public class Game {
 
     public void setTotalRounds(int totalRounds) {
         this.totalRounds = totalRounds;
+    }
+
+    public void setSettingsBean(SettingsBean settingsBean) {
+        this.settingsBean = settingsBean;
+    }
+
+    public SettingsBean getSettingsBean() {
+        return settingsBean;
     }
 }
