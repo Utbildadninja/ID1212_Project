@@ -3,7 +3,7 @@ package kth.se.id1212.model;
 public class SettingsBean {
     private int secondsPerRound = 10;
     private int languageID = 1;
-    private String languageName = "testing";
+    private String languageName = "Test_API";
     private int roundsPerGame = 2;
     private String wordSource = "free";
 

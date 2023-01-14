@@ -1,7 +1,11 @@
 <%@ page import="kth.se.id1212.model.UserBean" %>
 <%@ page import="kth.se.id1212.model.SettingsBean" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="kth.se.id1212.model.LanguageBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%
+    ArrayList<LanguageBean> languages = (ArrayList) session.getAttribute("languages");
     SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
     UserBean userBean = (UserBean) session.getAttribute("userBean");
     String username = "default";
@@ -50,19 +54,37 @@
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
         <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%></output>
         <br>
-        Choose source of words:
+        Source of words: <%=settingsBean.getLanguageName()%>
         <br>
-        <label for="freeApi">Free API</label>
-        <input type="radio" id="freeApi" name="wordSource" value="free" checked>
 
-        <label for="premiumApi">Premium API</label>
-        <input type="radio" id="premiumApi" name="wordSource" value="premium">
+
+        <label>
+            <select name="language">
+                <option value="" disabled selected>Select a Language</option>
+                <option value="Test_API">Test API</option>
+                <option value="English_API">English API</option>
+                <%
+                    if(languages != null){
+                        for (LanguageBean language : languages) {
+                %>
+                <option value="<%=language.getLanguageID()%>"><%=language.getLanguageName()%></option>
+                <%
+                        }
+                    }
+                %>
+            </select>
+        </label>
+        <br>
 
         <input type="hidden" name="action" value="submit">
         <input type="hidden" name="jspFile" value="<%=request.getRequestURI()%>">
-        <br>
         <button type="submit">Submit</button>
     </form>
+
+    <form action="index.jsp">
+        <button type="submit">Back to menu</button>
+    </form>
+
 </div>
 
 </body>
