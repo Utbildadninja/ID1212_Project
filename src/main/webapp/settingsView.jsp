@@ -3,6 +3,8 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="kth.se.id1212.model.LanguageBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%--<%@ page session="true" %>--%>
 
 <%
     ArrayList<LanguageBean> languages = (ArrayList) session.getAttribute("languages");
@@ -75,6 +77,14 @@
             </select>
         </label>
         <br>
+
+        Tramstesting
+        <br>
+        <c:forEach var="language" items="${languages}">
+            <div>Name: ${language.languageName}</div>
+        </c:forEach>
+        <br>
+
 
         <input type="hidden" name="action" value="submit">
         <input type="hidden" name="jspFile" value="<%=request.getRequestURI()%>">
