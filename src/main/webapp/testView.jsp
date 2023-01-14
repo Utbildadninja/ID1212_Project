@@ -10,10 +10,15 @@
 <head>
   <title>TestView</title>
   <style><%@include file="/WEB-INF/style.css"%></style>
+  <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 </head>
 <body>
 WRITE SOMETHING PLZ
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+  <c:forEach var="language" items="${languages}">
+    <div>Name: ${language.name}</div>
+    <div>Code: ${language.code}</div>
+  </c:forEach>
 
   <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
   <button type="submit">Send HTTP Request</button>

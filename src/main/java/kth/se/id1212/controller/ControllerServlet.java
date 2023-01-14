@@ -148,7 +148,7 @@ public class ControllerServlet extends HttpServlet {
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         String action = request.getParameter("action");
         Game game = activeSessions.get(session);
-        // TODO Probably check logic, I should have been in bed
+        //TODO Probably check logic, I should have been in bed
         switch (action) {
             case "correct":
                 System.out.println("Action was: " + action);
