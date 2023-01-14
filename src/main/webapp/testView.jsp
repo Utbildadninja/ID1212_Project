@@ -15,8 +15,9 @@
 <body>
 WRITE SOMETHING PLZ
 <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-  <c:forEach var="language" items="${languages}">
-    <div>Name: ${language.name}</div>
+
+  <c:forEach var="j" begin="1" end="3">
+    Item <c:out value="${j}"/><p>
   </c:forEach>
 
   <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">

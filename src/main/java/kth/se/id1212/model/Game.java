@@ -7,23 +7,23 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class Game {
-    // TODO Add a Team object, containing name, score etc
     ApiCalls apiCalls = new ApiCalls();
     WordBean wordBean = null;
+    ArrayList<WordBean> wordBeanArrayList = null;
     int currentRound = -1;
     String currentWord = null;
     int currentWordCounter = -1;
     String[] wordList;
-    int timeLeft = 25; // TODO Could be set to null, set to another value before starting a game anyway
+    int timeLeft = 25;
     List<TeamBean> teamsPlaying = new ArrayList<>();
     TeamBean currentTeam;
-    int totalRounds = 2; // TODO Set with settings
+    int totalRounds = 2;
     boolean gameOver = false;
     TeamBean nextTeam;
 
     public void newGame() throws IOException {
         if (wordList == null) {
-            getNewArray();
+            fetchNewArray();
             this.currentWordCounter = 0;
         }
         this.gameOver = false;
@@ -39,7 +39,7 @@ public class Game {
 //            nextTeam = currentTeam;
     }
 
-    public void getNewArray() throws IOException {
+    public void fetchNewArray() throws IOException {
         // TODO Add logic to choose where to get the words from
         //wordList = apiCalls.getNewArrayPremium();
         wordList = apiCalls.getNewArrayFree();
@@ -47,7 +47,7 @@ public class Game {
 
     public void setCurrentWord() throws IOException {
         if (this.currentWordCounter >= wordList.length) {
-            getNewArray();
+            fetchNewArray();
             this.currentWordCounter = 0;
         } else if (this.currentWordCounter >= wordList.length - 1) {
             System.out.println("One word remaining in list");
