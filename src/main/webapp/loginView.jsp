@@ -23,15 +23,17 @@
     </form>
 
     <br>
-    Are you not yet part of our growing empire? Sign up now!
+    Are you not yet part of our growing empire?
     <br>
-    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-        <label>
-            <input type="hidden" name="action" value="createAccount">
-            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-            <button type="submit">Create account</button>
-        </label>
-    </form>
+    <a href="createAccountView.jsp">Sign up now!</a>
+    <br>
+<%--    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
+<%--        <label>--%>
+<%--            <input type="hidden" name="action" value="createAccount">--%>
+<%--            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
+<%--            <button type="submit">Create account</button>--%>
+<%--        </label>--%>
+<%--    </form>--%>
 
 
 </div>
