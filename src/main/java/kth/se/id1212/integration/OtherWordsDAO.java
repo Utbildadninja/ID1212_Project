@@ -68,6 +68,30 @@ public class OtherWordsDAO {
     }
 
     /**
+     * Finds the number of words in the db for certain language
+     *
+     * @param languageID the chosen language
+     * @return number of words
+     */
+    public int findNoOfWords(int languageID) {
+        int noOfWords = 0;
+        ResultSet resultSet = null;
+        try {
+            findNoOfWordsStmt.setInt(1, languageID);
+            resultSet = findNoOfWordsStmt.executeQuery();
+            if (resultSet.next()) {
+                noOfWords = resultSet.getInt(1);
+            }
+            connection.commit();
+        } catch (SQLException e) {
+            exceptionHandler("Couldn't execute query: ", e);
+        } finally {
+            closeResult(resultSet);
+        }
+        return noOfWords;
+    }
+
+    /**
      * Find the user reports about inappropriate words
      *
      * @return list of ReportBeans, one per user report
@@ -215,12 +239,12 @@ public class OtherWordsDAO {
         ResultSet resultSet = null;
         try {
             findRandomWordStmt.setInt(1, languageID);
-            findRandomWordStmt.setInt(3, languageID);
             findRandomWordStmt.setInt(2, offset);
             resultSet = findRandomWordStmt.executeQuery();
             if (resultSet.next()) {
-                word = new WordBean(resultSet.getInt(1),
-                        resultSet.getString(2), resultSet.getString(3));
+                word = new WordBean(resultSet.getInt("id"),
+                        resultSet.getString("word"), resultSet.getString("clue"));
+                System.out.println("Ord from DAO: " + word.getWord());
             }
             connection.commit();
         } catch (SQLException e) {
@@ -311,7 +335,7 @@ public class OtherWordsDAO {
     private void prepareStatements() throws SQLException {
         findLanguagesStmt = connection.prepareStatement(
                 "SELECT * FROM languages " +
-                        "WHERE NOT (languagename='testing' OR languagename='english_api')"
+                        "WHERE NOT (languagename='testing' OR languagename='English_API')"
         );
         findReportsStmt = connection.prepareStatement(
                 "SELECT * FROM reports"
@@ -327,14 +351,14 @@ public class OtherWordsDAO {
                         "WHERE username = ? AND password = ?"
         );
         findNoOfWordsStmt = connection.prepareStatement(        //Could theoretically yield problems if someone
-                "SELECT COUNT(*) FROM words"
+                "SELECT COUNT(*) FROM words WHERE language_id = ? "
         );
         findWordsStmt = connection.prepareStatement(
                 "SELECT id, word, clue FROM words WHERE language_id = ? "
         );
         findRandomWordStmt = connection.prepareStatement(       //TODO check whether mod() is supported (not by ij)
                 "SELECT * FROM words WHERE language_id = ? " +
-                        "OFFSET 10 ROWS " +
+                        "OFFSET ? ROWS " +     // TODO change to question mark
                         "FETCH NEXT ROW ONLY "
         );
         updateWordCorrectStmt = connection.prepareStatement(

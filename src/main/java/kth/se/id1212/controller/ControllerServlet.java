@@ -40,7 +40,7 @@ public class ControllerServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         Game game = (Game) session.getAttribute("gameModel");
         if (game == null) {
-            game = new Game();
+            game = new Game(db); // TODO watch out
             session.setAttribute("gameModel", game);
         }
         activeSessions.put(session, game);

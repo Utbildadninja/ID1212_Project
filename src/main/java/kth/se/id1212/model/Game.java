@@ -1,8 +1,11 @@
 package kth.se.id1212.model;
 
+import kth.se.id1212.integration.OtherWordsDAO;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +24,15 @@ public class Game {
     boolean gameOver = false;
     TeamBean nextTeam;
     SettingsBean settingsBean;
+    OtherWordsDAO db = new OtherWordsDAO(); // TODO see if we can send from controller instead (see unary constructor)
+
+    public Game(){
+
+    }
+
+    public Game(OtherWordsDAO dbConnection){
+        this.db = dbConnection;
+    }
 
     public void newGame() throws IOException {
         if (wordList == null) {
@@ -40,6 +52,10 @@ public class Game {
 //            nextTeam = currentTeam;
     }
 
+    /**
+     * When we start a new game, we get words from either API or database.
+     * @throws IOException
+     */
     public void fetchNewArray() throws IOException {
         String language = settingsBean.getLanguageName();
 
@@ -55,13 +71,38 @@ public class Game {
             case "Svenska":
                 System.out.println("Array set to Svenska");
                 // TODO replace wordList to a String[] from DB.
-                wordList = apiCalls.getNewArrayFree();
+//                wordList = apiCalls.getNewArrayFree();
+                this.wordBeanArrayList = fetchWordBeansFromDB(103);
+                String[] onlyWords = new String[wordBeanArrayList.size()];
+                for (int i = 0; i < wordBeanArrayList.size(); i++) {
+                    onlyWords[i] = wordBeanArrayList.get(i).getWord();
+                    System.out.println(onlyWords[i]);
+                }
+                this.wordList = onlyWords;
                 break;
             default:
                 System.out.println("Language choice was " + language + ". Unhandled.");
                 wordList = apiCalls.getNewArrayFree();
                 break;
         }
+    }
+
+    //helper method to get random words from the bd (sadly one at a time)
+    private ArrayList<WordBean> fetchWordBeansFromDB(int languageID ){
+        int noOfWordsToFetch = 10;
+        int totalNoOfWordsInDB = db.findNoOfWords(languageID);
+        System.out.println(
+                "the total number of words in the db of language " + languageID + " was " + totalNoOfWordsInDB);
+        ArrayList<WordBean> wordBeans = new ArrayList<>();
+        Random rand = new Random();
+        int[] offsets = new int[noOfWordsToFetch];
+        for (int i =0; i < noOfWordsToFetch ; i++){
+            offsets[i] = rand.nextInt(totalNoOfWordsInDB);
+        }
+        for (int i =0; i < noOfWordsToFetch ; i++){
+            wordBeans.add(db.findRandomWord(languageID, offsets[i]));
+        }
+        return wordBeans;
     }
 
     public void setCurrentWord() throws IOException {
