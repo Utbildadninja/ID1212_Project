@@ -19,7 +19,7 @@ public class ControllerServlet extends HttpServlet {
     OtherWordsDAO db = new OtherWordsDAO();
     // WeakHashMap allows the Java Garbage collector to remove invalidated sessions
     // containsKey() can be used to check if the key is still in place, to avoid any NullPointerException errors
-    Map<HttpSession, Game> activeSessions = new WeakHashMap<>(); // TODO If any issues with HashMap arrive, change back to regular from Weak
+    Map<HttpSession, Game> activeSessions = new WeakHashMap<>();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,19 +31,22 @@ public class ControllerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println("Received POST request");
-        System.out.println(DriverManager.getDrivers().getClass().getName()); //TODO remove
+        //System.out.println(DriverManager.getDrivers().getClass().getName()); //TODO remove
         handleRequest(request, response);
     }
 
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
-        Game game = (Game) session.getAttribute("gameModel");
-        if (game == null) {
-            game = new Game(db); // TODO watch out
-            session.setAttribute("gameModel", game);
+
+        Object gameRunning = session.getAttribute("gameRunning");
+        if (gameRunning == null) {
+            System.out.println("gameRunning was null");
+            Game game = new Game(db);
+            gameRunning = "running";
+            session.setAttribute("gameRunning", gameRunning);
+            activeSessions.put(session, game);
         }
-        activeSessions.put(session, game);
 
         // Prints all parameters for the request, simply for debugging
         System.out.println("Printing parameters in this request");

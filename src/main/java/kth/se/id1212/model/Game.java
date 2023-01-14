@@ -44,12 +44,9 @@ public class Game {
         currentTeam = teamsPlaying.get(0);
         for (TeamBean team : teamsPlaying) {
             team.setScore(0);
+            team.setCorrectGuesses(new ArrayList<>());
         }
         setCurrentWord();
-//        if (teamsPlaying.size() > 1)
-//            nextTeam = teamsPlaying.get(1);
-//        else
-//            nextTeam = currentTeam;
     }
 
     /**
@@ -157,18 +154,13 @@ public class Game {
 
     public void startTimer() {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-        executor.scheduleAtFixedRate(new Runnable() {
-
-            @Override
-            public void run() {
-                if (timeLeft > 0) {
-                    //System.out.println("Time remaining: " + timeLeft + " seconds");
-                    timeLeft--;
-                } else {
+        executor.scheduleAtFixedRate(() -> {
+            if (timeLeft > 0) {
+                //System.out.println("Time remaining: " + timeLeft + " seconds");
+                timeLeft--;
+            } else {
 //                    System.out.println("Time's up!");
-                    executor.shutdown();
-                    // send update to controller
-                }
+                executor.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS);
     }

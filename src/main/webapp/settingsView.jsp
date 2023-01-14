@@ -89,14 +89,6 @@
 
         <br>
 
-        Tramstesting
-        <br>
-        <c:forEach var="language" items="${languages}">
-            <div>Name: ${language.languageName}</div>
-        </c:forEach>
-        <br>
-
-
         <input type="hidden" name="action" value="submit">
         <input type="hidden" name="jspFile" value="<%=request.getRequestURI()%>">
         <button type="submit">Submit</button>
