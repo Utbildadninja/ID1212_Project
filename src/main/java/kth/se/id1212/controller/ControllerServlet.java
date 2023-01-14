@@ -334,11 +334,15 @@ public class ControllerServlet extends HttpServlet {
                         session.setAttribute("settingsBean", settingsBean);
                     }
                 } else {
+                    settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+                    if (settingsBean == null)
+                        settingsBean = new SettingsBean();
                     System.out.println("This user was not logged in");
-                    settingsBean = new SettingsBean();
                     session.setAttribute("settingsBean", settingsBean);
                 }
 
+                ArrayList<LanguageBean> languages = db.findLanguages();
+                session.setAttribute("languages", languages);
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":
