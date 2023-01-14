@@ -88,25 +88,36 @@ public class ControllerServlet extends HttpServlet {
         String confirm_password = request.getParameter("confirm_password");
 
         if (username != null && password != null && password.equals(confirm_password)) {
-            // TODO Create account in Database
-            db.createAccount(username, password);
+            int createStatus = db.createAccount(username, password);
             System.out.println("Account created");
-            UserBean user;
-            user = db.findUser(username, password);
-            if (user != null) {
-                session.setAttribute("userBean", user);
-                System.out.println("User: " + user.getUsername() + " logged in");
-                response.sendRedirect("index.jsp");
+
+            // Login with new account and send to index
+            if(createStatus == 0) {
+                login(response, session, username, password);
             } else {
-                System.out.println("Login failed");
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+                System.out.println("Create account failed, status not 0");
+                response.sendRedirect("createAccountView.jsp");
             }
+
         } else {
             // TODO Add HTML5 form validation to client side or something
             System.out.println("Password mismatch");
             response.sendRedirect("createAccountView.jsp");
         }
 
+    }
+
+    private void login(HttpServletResponse response, HttpSession session, String username, String password) throws IOException {
+        UserBean user;
+        user = db.findUser(username, password);
+        if (user != null) {
+            session.setAttribute("userBean", user);
+            System.out.println("User: " + user.getUsername() + " logged in");
+            response.sendRedirect("index.jsp");
+        } else {
+            System.out.println("Login failed");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+        }
     }
 
     private void doLoginView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -118,18 +129,7 @@ public class ControllerServlet extends HttpServlet {
                 String password = request.getParameter("password");
 
                 if (username != null && password != null) {
-                    UserBean user;
-                    user = db.findUser(username, password);
-
-                    if (user != null) {
-                        session.setAttribute("userBean", user);
-                        System.out.println("User: " + user.getUsername() + " logged in");
-                        response.sendRedirect("index.jsp");
-
-                    } else {
-                        System.out.println("Login failed");
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
-                    }
+                    login(response, session, username, password);
                 } else {
                     System.out.println("Username or password was null");
                 }
