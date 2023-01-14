@@ -235,7 +235,7 @@ public class OtherWordsDAO {
      * A user goes to settings and changes the settings. If user already had settings associated with them,
      * overwrite/update these with the new ones. If they had none, create a new entry in the database for this user.
      *
-     * @param userID the user for whom to update stored settings
+     * @param userID      the user for whom to update stored settings
      * @param newSettings SettingsBean with the new settings as chosen by the user
      */
     public void updateSettings(int userID, SettingsBean newSettings) {
@@ -255,15 +255,13 @@ public class OtherWordsDAO {
                 createSettingsStmt.setInt(3, newSettings.getSecondsPerRound());
                 createSettingsStmt.setInt(4, newSettings.getRoundsPerGame());
                 int createdRows = createSettingsStmt.executeUpdate();
-                if (createdRows == 1){
+                if (createdRows == 1) {
                     connection.commit();
-                }
-                else{
+                } else {
                     connection.rollback();
                     throw new SQLException("Couldn't create user settings");
                 }
-            }
-            else if (affectedRows == 1) {
+            } else if (affectedRows == 1) {
                 connection.commit();
             } else {
                 connection.rollback();
@@ -274,12 +272,14 @@ public class OtherWordsDAO {
         }
     }
 
+
     /**
      * Creates a new user entry in the DB when a user wants to create an account.
      * Will fail if username is already in use.
      *
      * @param username the username as entered by the aspiring user
      * @param password the suggested password from the user
+     * @return status code: 0 if everything went well, otherwise -1
      */
     public int createAccount(String username, String password) {
         int affectedRows = 0;
@@ -288,7 +288,7 @@ public class OtherWordsDAO {
             createUserStmt.setString(2, password);
             affectedRows = createUserStmt.executeUpdate();
             if (affectedRows != 1) {
-                exceptionHandler("Couldn't create new user, maybe username already exists ", null);
+                exceptionHandler("Couldn't create new user, maybe username already exists ", new SQLException());
                 connection.rollback();
                 return -1;
             } else
@@ -334,7 +334,7 @@ public class OtherWordsDAO {
         );
         findRandomWordStmt = connection.prepareStatement(       //TODO check whether mod() is supported (not by ij)
                 "SELECT * FROM words WHERE language_id = ? " +
-                        "OFFSET mod(?, (SELECT COUNT(*) FROM words WHERE language_id = ? )) ROWS " +
+                        "OFFSET 10 ROWS " +
                         "FETCH NEXT ROW ONLY "
         );
         updateWordCorrectStmt = connection.prepareStatement(
@@ -391,7 +391,7 @@ public class OtherWordsDAO {
         }
     }
 
-    private void exceptionHandler(String failMsg, Exception exception) {    //TODO account for null exception
+    private void exceptionHandler(String failMsg, Exception exception) {
         System.out.println(failMsg + exception.getMessage());
         try {
             connection.rollback();

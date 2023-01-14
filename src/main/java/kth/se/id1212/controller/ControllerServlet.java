@@ -91,7 +91,16 @@ public class ControllerServlet extends HttpServlet {
             // TODO Create account in Database
             db.createAccount(username, password);
             System.out.println("Account created");
-            response.sendRedirect("index.jsp");
+            UserBean user;
+            user = db.findUser(username, password);
+            if (user != null) {
+                session.setAttribute("userBean", user);
+                System.out.println("User: " + user.getUsername() + " logged in");
+                response.sendRedirect("index.jsp");
+            } else {
+                System.out.println("Login failed");
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+            }
         } else {
             // TODO Add HTML5 form validation to client side or something
             System.out.println("Password mismatch");
