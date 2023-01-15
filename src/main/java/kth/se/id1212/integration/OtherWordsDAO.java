@@ -344,7 +344,7 @@ public class OtherWordsDAO {
         findReportsStmt = connection.prepareStatement(
                 "SELECT * FROM reports"
         );
-        findSettingsStmt = connection.prepareStatement(                 //TODO join with table languages to get name
+        findSettingsStmt = connection.prepareStatement(
                 "SELECT * FROM user_settings JOIN languages ON user_settings.language_id = languages.id WHERE user_id = ? "
         );
         findUsersStmt = connection.prepareStatement(

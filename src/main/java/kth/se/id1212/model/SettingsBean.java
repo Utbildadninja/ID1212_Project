@@ -4,7 +4,7 @@ public class SettingsBean {
     private int secondsPerRound = 10;
     private int languageID = 1;
     private String languageName = "Test_API";
-    private LanguageBean languageBean;
+    private LanguageBean languageBean = new LanguageBean(languageID, languageName);
     private int roundsPerGame = 2;
     private String wordSource = "free";
 
