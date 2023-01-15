@@ -22,15 +22,13 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("Received GET request");
+        //System.out.println("Received GET request");
         handleRequest(request, response);
     }
 
-    // Handles all POST requests
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println("Received POST request");
-        //System.out.println(DriverManager.getDrivers().getClass().getName()); //TODO remove
+        //System.out.println("Received POST request");
         handleRequest(request, response);
     }
 
@@ -44,6 +42,7 @@ public class ControllerServlet extends HttpServlet {
         }
 
         // Prints all parameters for the request, simply for debugging
+        /*
         System.out.println("Printing parameters in this request");
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
@@ -52,6 +51,7 @@ public class ControllerServlet extends HttpServlet {
             System.out.println(parameterName + ": " + Arrays.toString(parameterValues));
         }
         System.out.println("Parameters printed, below this is other stuff");
+         */
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
@@ -146,7 +146,6 @@ public class ControllerServlet extends HttpServlet {
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         String action = request.getParameter("action");
         Game game = activeSessions.get(session);
-        //TODO Probably check logic, I should have been in bed
         switch (action) {
             case "correct":
                 System.out.println("Action was: " + action);
@@ -158,14 +157,6 @@ public class ControllerServlet extends HttpServlet {
                 game.skip();
                 doGameViewProgress(request, response, session);
                 break;
-//            case "finalGuessSkip":
-//                // TODO Call finalSkip or something
-//                response.sendRedirect("pauseView.jsp");
-//                break;
-//            case "finalGuessCorrect":
-//                // TODO Call finalCorrect or something
-//                response.sendRedirect("pauseView.jsp");
-//                break;
             case "results":
                 response.sendRedirect("resultsView.jsp");
                 break;
@@ -173,20 +164,20 @@ public class ControllerServlet extends HttpServlet {
                 System.out.println("Action was " + action + ". That was unexpected");
                 break;
         }
-
     }
 
     private void doGameViewProgress(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
         int score = game.getScore();
         String currentWord = game.getCurrentWord();
-        System.out.println("Setting current word from doGameViewProgress: " + currentWord);
+        //System.out.println("Setting current word from doGameViewProgress: " + currentWord);
 
         session.setAttribute("score", score);
         session.setAttribute("currentWord", currentWord);
         int timeLeft = game.getTimeLeft();
         session.setAttribute("timeLeft", timeLeft);
 
+        // TODO Possibly add game over boolean instead
         if (timeLeft <= 0) {
             response.sendRedirect("pauseView.jsp");
         } else
@@ -198,6 +189,7 @@ public class ControllerServlet extends HttpServlet {
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         SettingsBean settingsBean;
         // Makes sure there's always a settingsBean, even if user never bothered to check the settings
+        // Maybe combine with loadSettings
         if (userBean != null) {
             System.out.println("Getting settingsBean from DB, in case user never entered settings");
             settingsBean = db.findUserSettings(userBean.getID());
@@ -210,10 +202,12 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("Getting settingsBean from session for logged out user");
             settingsBean = (SettingsBean) session.getAttribute("settingsBean");
         }
+
+        // Always checked, user MUST have settings before starting a game
         if (settingsBean == null) {
             settingsBean = new SettingsBean();
             session.setAttribute("settingsBean", settingsBean);
-            System.out.println("Created a new settingsBean and set it to that, god knows why");
+            System.out.println("Set default settings from setUpView");
         }
 
         String action = request.getParameter("action");
@@ -235,6 +229,7 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "start":
+
                 game.setSettingsBean(settingsBean);
                 game.newGame();
                 int score = game.getScore();
@@ -248,12 +243,13 @@ public class ControllerServlet extends HttpServlet {
                 session.setAttribute("currentTeamBean", game.getCurrentTeam());
                 session.setAttribute("timeLeft", timeLeft);
 
+                // TODO Could probably change some of this, since game now has settingsBean access
                 game.setTimeLeft(timeLeft);
                 game.setTotalRounds(roundsPerGame);
 
                 game.nextRound(settingsBean);
 
-                session.setAttribute("nextTeamBean", game.getNextTeam()); // TODO Probably a better solution to this
+                session.setAttribute("nextTeamBean", game.getNextTeam());
 
                 System.out.println("Time left when really starting: " + timeLeft);
                 response.sendRedirect("gameView.jsp");
@@ -269,7 +265,6 @@ public class ControllerServlet extends HttpServlet {
         int roundTimeSlider = Integer.parseInt(request.getParameter("roundTimeSlider"));
         int numberOfRounds = Integer.parseInt(request.getParameter("numberOfRounds"));
         String language = request.getParameter("language");
-//        LanguageBean languageBean = request.getParameter()
 
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
@@ -278,14 +273,16 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("A logged in user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
-            settingsBean.setLanguageName(language);
+            if (language != null)
+                settingsBean.setLanguageName(language);
             session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);
         } else {
             System.out.println("A logged out user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
-            settingsBean.setLanguageName(language);
+            if (language != null)
+                settingsBean.setLanguageName(language);
             session.setAttribute("settingsBean", settingsBean);
         }
 
@@ -293,12 +290,11 @@ public class ControllerServlet extends HttpServlet {
     }
 
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // SettingsBean is always checked for != null when starting a new game
+        // SettingsBean always exists at this stage
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
 
         Game game = activeSessions.get(session);
 
-        // TODO Could probably get rid of nextTeam by moving the setAttribute around. For example, set it after redirect... Possibly.
         game.nextRound(settingsBean);
         session.setAttribute("timeLeft", game.getTimeLeft());
         session.setAttribute("currentTeamBean", game.getCurrentTeam());
@@ -323,26 +319,7 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "settings":
-                UserBean userBean = (UserBean) session.getAttribute("userBean");
-                SettingsBean settingsBean;
-                if (userBean != null ) {
-                    System.out.println("A logged in user entered Settings");
-                    settingsBean = db.findUserSettings(userBean.getID());
-                    if(settingsBean != null) {
-                        System.out.println("That user has previous saved settings");
-                        session.setAttribute("settingsBean", settingsBean);
-                    } else {
-                        System.out.println("That user has no stored settings");
-                        settingsBean = new SettingsBean();
-                        session.setAttribute("settingsBean", settingsBean);
-                    }
-                } else {
-                    settingsBean = (SettingsBean) session.getAttribute("settingsBean");
-                    if (settingsBean == null)
-                        settingsBean = new SettingsBean();
-                    System.out.println("This user was not logged in");
-                    session.setAttribute("settingsBean", settingsBean);
-                }
+                loadSettings(session);
 
                 ArrayList<LanguageBean> languages = db.findLanguages();
                 session.setAttribute("languages", languages);
@@ -364,6 +341,29 @@ public class ControllerServlet extends HttpServlet {
                 break;
         }
 
+    }
+
+    private void loadSettings(HttpSession session) {
+        UserBean userBean = (UserBean) session.getAttribute("userBean");
+        SettingsBean settingsBean;
+        if (userBean != null ) {
+            System.out.println("A logged in user entered Settings");
+            settingsBean = db.findUserSettings(userBean.getID());
+            if(settingsBean != null) {
+                System.out.println("That user has previous saved settings");
+                session.setAttribute("settingsBean", settingsBean);
+            } else {
+                System.out.println("That user has no stored settings");
+                settingsBean = new SettingsBean();
+                session.setAttribute("settingsBean", settingsBean);
+            }
+        } else {
+            settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+            if (settingsBean == null)
+                settingsBean = new SettingsBean();
+            System.out.println("This user was not logged in");
+            session.setAttribute("settingsBean", settingsBean);
+        }
     }
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
