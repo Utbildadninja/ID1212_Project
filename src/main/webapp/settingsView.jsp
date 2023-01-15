@@ -54,31 +54,16 @@
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
         <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%></output>
         <br>
-        Source of words: ${settingsBean.languageName}
+        Current source of words: ${settingsBean.languageName}
         <br>
 
-
-<%--        <label>--%>
-<%--            <select name="language">--%>
-<%--                <option value="" disabled selected>Select a Language</option>--%>
-<%--                <option value="Test_API">Test API</option>--%>
-<%--                <option value="English_API">English API</option>--%>
-<%--                <%--%>
-<%--                    if(languages != null){--%>
-<%--                        for (LanguageBean language : languages) {--%>
-<%--                %>--%>
-<%--                <option value="<%=language.getLanguageID()%>"><%=language.getLanguageName()%></option>--%>
-<%--                <%--%>
-<%--                        }--%>
-<%--                    }--%>
-<%--                %>--%>
-<%--            </select>--%>
-<%--        </label>--%>
         <label>
             <select name="language">
                 <option value="" disabled selected>Select a Language</option>
-                <option value="Test_API">Test API</option>
-                <option value="English_API">English API</option>
+                <c:if test="${empty languages}">
+                    <option value="Test_API">Test API</option>
+                    <option value="English_API">English API</option>
+                </c:if>
                 <c:if test="${not empty languages}">
                     <c:forEach var="language" items="${languages}">
                         <option value="${language.languageName}">${language.languageName}</option>

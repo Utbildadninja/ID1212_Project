@@ -2,6 +2,7 @@ package kth.se.id1212.model;
 
 import kth.se.id1212.integration.OtherWordsDAO;
 
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,8 @@ public class Game {
     boolean gameOver = false;
     TeamBean nextTeam;
     SettingsBean settingsBean;
-    OtherWordsDAO db = new OtherWordsDAO(); // TODO see if we can send from controller instead (see unary constructor)
+    OtherWordsDAO db;
+//    OtherWordsDAO db = new OtherWordsDAO(); // TODO db sent from controller, keep in mind might cause problems
 
     public Game(){
 
@@ -54,37 +56,32 @@ public class Game {
      * @throws IOException
      */
     public void fetchNewArray() throws IOException {
-        String language = settingsBean.getLanguageName();
-
-        switch (language) {
-            case "Test_API":
-                System.out.println("Array set to Test_API");
-                wordList = apiCalls.getNewArrayFree();
-                break;
-            case "English_API":
-                System.out.println("Array set to English_API");
-                wordList = apiCalls.getNewArrayPremium();
-                break;
-            case "Svenska":
-                System.out.println("Array set to Svenska");
-                // TODO replace wordList to a String[] from DB.
-//                wordList = apiCalls.getNewArrayFree();
-                this.wordBeanArrayList = fetchWordBeansFromDB(1); // Was 103
-                String[] onlyWords = new String[wordBeanArrayList.size()];
-                for (int i = 0; i < wordBeanArrayList.size(); i++) {
-                    onlyWords[i] = wordBeanArrayList.get(i).getWord();
-                    System.out.println(onlyWords[i]);
-                }
-                this.wordList = onlyWords;
-                break;
-            default:
-                System.out.println("Language choice was " + language + ". Unhandled.");
-                wordList = apiCalls.getNewArrayFree();
-                break;
+        LanguageBean languageBean = settingsBean.getLanguageBean();
+        String languageName = settingsBean.getLanguageName();
+        int languageID = settingsBean.getLanguageID();
+        System.out.println("language set to " + languageBean.getLanguageName());
+        if(languageName.equals("Test_API")){
+            wordList = apiCalls.getNewArrayFree();
+            //for (String word : wordList){}        TODO convert to WordBean if reports are to be implemented
+        }
+        else if(languageName.equals("English_API")){
+            wordList = apiCalls.getNewArrayPremium();
+        }
+        else if(languageID!=0){
+            this.wordBeanArrayList = fetchWordBeansFromDB(languageID);
+            String[] onlyWords = new String[wordBeanArrayList.size()];
+            for (int i = 0; i < wordBeanArrayList.size(); i++) {        //Converts Beans to Strings
+                onlyWords[i] = wordBeanArrayList.get(i).getWord();
+                System.out.println(onlyWords[i]);
+            }
+            this.wordList = onlyWords;
+        }
+        else {
+            System.out.println("The language/word source setting is not behaving as expected. ");
         }
     }
 
-    //helper method to get random words from the bd (sadly one at a time)
+    //helper method to get random words (WordBeans) from the bd (sadly one at a time)
     private ArrayList<WordBean> fetchWordBeansFromDB(int languageID ){
         int noOfWordsToFetch = 10;
         int totalNoOfWordsInDB = db.findNoOfWords(languageID);

@@ -247,7 +247,7 @@ public class ControllerServlet extends HttpServlet {
         int roundTimeSlider = Integer.parseInt(request.getParameter("roundTimeSlider"));
         int numberOfRounds = Integer.parseInt(request.getParameter("numberOfRounds"));
         String language = request.getParameter("language");
-
+        ArrayList<LanguageBean> languageBeans = (ArrayList<LanguageBean>) session.getAttribute("languages");
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
@@ -255,8 +255,15 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("A logged in user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
-            if (language != null)
+            if (language != null){
                 settingsBean.setLanguageName(language);
+                for (LanguageBean languageBean: languageBeans) {
+                    if(languageBean.getLanguageName().equals(language)){
+                        settingsBean.setLanguageID(languageBean.getLanguageID());
+                        settingsBean.setLanguageBean(languageBean);
+                    }
+                }
+            }
             System.out.println("settingsBean language sent to DB: " + settingsBean.getLanguageName());
             session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);
@@ -303,9 +310,14 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "settings":
                 loadSettings(session);
-
-                ArrayList<LanguageBean> languages = db.findLanguages();
-                session.setAttribute("languages", languages);
+                try {
+                    ArrayList<LanguageBean> languages = db.findLanguages();
+                    session.setAttribute("languages", languages);
+                } catch (NullPointerException e){
+                    loadSettings(session);
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":
@@ -355,7 +367,7 @@ public class ControllerServlet extends HttpServlet {
         // Makes sure there's always a settingsBean, even if user never bothered to check the settings
         // Maybe combine with loadSettings
         if (userBean != null) {
-            System.out.println("Getting settingsBean from DB, in case user never entered settings");
+            System.out.println("Getting settingsBean from DB, in case user never entered settings"); //TODO vad menas här?
             settingsBean = db.findUserSettings(userBean.getID());
 
 

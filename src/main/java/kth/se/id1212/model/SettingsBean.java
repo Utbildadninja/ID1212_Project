@@ -4,6 +4,7 @@ public class SettingsBean {
     private int secondsPerRound = 10;
     private int languageID = 1;
     private String languageName = "Test_API";
+    private LanguageBean languageBean = new LanguageBean(languageID, languageName);
     private int roundsPerGame = 2;
     private String wordSource = "free";
 
@@ -13,6 +14,18 @@ public class SettingsBean {
         this.languageID = languageID;
         this.secondsPerRound = secondsPerRound;
         this.roundsPerGame = roundsPerGame;
+    }
+
+    public SettingsBean(int languageID, String languageName, int secondsPerRound, int roundsPerGame){
+        this.languageID = languageID;
+        this.languageName = languageName;
+        this.secondsPerRound = secondsPerRound;
+        this.roundsPerGame = roundsPerGame;
+        this.languageBean = new LanguageBean(languageID, languageName);
+    }
+
+    public LanguageBean getLanguageBean() {
+        return languageBean;
     }
 
     public int getSecondsPerRound() {
@@ -45,6 +58,10 @@ public class SettingsBean {
 
     public void setLanguageID(int languageID) {
         this.languageID = languageID;
+    }
+
+    public void setLanguageBean(LanguageBean languageBean) {
+        this.languageBean = languageBean;
     }
 
     public String getLanguageName() {
