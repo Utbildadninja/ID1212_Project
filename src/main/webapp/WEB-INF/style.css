@@ -96,11 +96,22 @@ input[type = text], input[type = password] {
 }
 
 .removeButton {
-
     background-color:darkred;
     width: 30px;
     height: 30px;
     color: white;
     padding: 0px;
     margin-right: 10px;
+}
+
+.gameViewWord {
+    width: 370px;
+    height: 250px;
+    background-color:whitesmoke;
+    text-align: center;
+    display: inline-block;
+}
+
+.gameActualWord {
+    margin-top: 25%;
 }

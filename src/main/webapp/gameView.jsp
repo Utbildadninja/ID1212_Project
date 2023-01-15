@@ -1,5 +1,6 @@
 <%@ page import="kth.se.id1212.model.TeamBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%
     String currentWord = session.getAttribute("currentWord").toString();
     int score = (int) session.getAttribute("score");
@@ -18,14 +19,26 @@
 <div class="outerDiv">
     <noscript>JavaScript is disabled. Website might not work as intended.</noscript>
 
-    <p>Current word: <%=currentWord%>
-    </p>
+<%--    <h1><span id="timer"><%=timeLeft%></span> seconds</h1>--%>
+    <h1>
+        <c:choose>
+            <c:when test="${timeLeft <= 0}">
+                Time's up!
+            </c:when>
+            <c:otherwise>
+                <span id="timer">${timeLeft}</span> seconds
+            </c:otherwise>
+        </c:choose>
+    </h1>
+
+    <div class="gameViewWord"><h1 class="gameActualWord"><%=currentWord%></h1>
+    </div>
     <p>Current score: <%=score%>
     </p>
     <p>Current team: <%=teamBean.getName()%>
     </p>
 
-    <p>Time remaining: <span id="timer"><%=timeLeft%></span> seconds</p>
+
 
     <script>
         let timeLeft = <%=timeLeft%>;
