@@ -138,8 +138,11 @@ public class OtherWordsDAO {
         } finally {
             closeResult(resultSet);
         }
-        System.out.println("current/new settings for user " + userID + ": " +
+        try{System.out.println("current/new settings for user " + userID + ": " +
                 userSettings.getLanguageID() + " " + userSettings.getLanguageName());
+        } catch(NullPointerException e){
+            System.out.println("no prev settings for user");
+        }
         return userSettings;
     }
 

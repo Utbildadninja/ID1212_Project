@@ -314,7 +314,6 @@ public class ControllerServlet extends HttpServlet {
                     ArrayList<LanguageBean> languages = db.findLanguages();
                     session.setAttribute("languages", languages);
                 } catch (NullPointerException e){
-                    loadSettings(session);
                     System.out.println(e.getMessage());
                     e.printStackTrace();
                 }
