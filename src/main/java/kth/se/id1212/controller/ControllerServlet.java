@@ -35,6 +35,8 @@ public class ControllerServlet extends HttpServlet {
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
+        // No flash session without Spring MVC
+        session.removeAttribute("errorMessage");
 
         if (!activeSessions.containsKey(session)) {
             Game game = new Game(db);
@@ -52,6 +54,7 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
          */
+
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
@@ -94,12 +97,14 @@ public class ControllerServlet extends HttpServlet {
                 login(response, session, username, password);
             } else {
                 System.out.println("Create account failed, status not 0");
+                session.setAttribute("errorMessage", "Database error, account already exists");
                 response.sendRedirect("createAccountView.jsp");
             }
 
         } else {
             // TODO Add HTML5 form validation to client side or something
             System.out.println("Password mismatch");
+            session.setAttribute("errorMessage", "Passwords do not match.");
             response.sendRedirect("createAccountView.jsp");
         }
 
@@ -193,8 +198,14 @@ public class ControllerServlet extends HttpServlet {
         if (userBean != null) {
             System.out.println("Getting settingsBean from DB, in case user never entered settings");
             settingsBean = db.findUserSettings(userBean.getID());
-            if (settingsBean != null)
+
+
+            if (settingsBean != null) {
+                System.out.println("Language in settingsBean from DB: " + settingsBean.getLanguageName());
                 session.setAttribute("settingsBean", settingsBean);
+                System.out.println("Set settingsBean in session, from doSetUpView");
+            }
+
             else
                 System.out.println("A logged in user tried to start a new game with no stored settings");
 
@@ -275,6 +286,7 @@ public class ControllerServlet extends HttpServlet {
             settingsBean.setRoundsPerGame(numberOfRounds);
             if (language != null)
                 settingsBean.setLanguageName(language);
+            System.out.println("settingsBean language sent to DB: " + settingsBean.getLanguageName());
             session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);
         } else {

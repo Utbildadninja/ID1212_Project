@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
     <title>Create Account</title>
@@ -10,6 +11,10 @@
 <div class="outerDiv">
     Enter new account credentials:
     <br>
+    <c:if test="${not empty errorMessage}">
+        <p class="errorMessage">${errorMessage}</p>
+    </c:if>
+
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="post">
         <label>
             <input type="hidden" name="action" value="createAccount">
