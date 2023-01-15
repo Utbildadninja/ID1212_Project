@@ -56,8 +56,8 @@ public class Game {
      */
     public void fetchNewArray() throws IOException {
         LanguageBean languageBean = settingsBean.getLanguageBean();
-        String languageName = languageBean.getLanguageName();
-        int languageID = languageBean.getLanguageID();
+        String languageName = settingsBean.getLanguageName();
+        int languageID = settingsBean.getLanguageID();
         System.out.println("language set to " + languageBean.getLanguageName());
         if(languageName.equals("Test_API")){
             wordList = apiCalls.getNewArrayFree();

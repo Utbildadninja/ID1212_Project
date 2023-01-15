@@ -54,7 +54,7 @@
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
         <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%></output>
         <br>
-        Current source of words: ${settingsBean.languageBean.languageName}
+        Current source of words: ${settingsBean.languageName}
         <br>
 
         <label>

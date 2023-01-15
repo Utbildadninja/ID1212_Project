@@ -310,9 +310,14 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "settings":
                 loadSettings(session);
-
-                ArrayList<LanguageBean> languages = db.findLanguages();
-                session.setAttribute("languages", languages);
+                try {
+                    ArrayList<LanguageBean> languages = db.findLanguages();
+                    session.setAttribute("languages", languages);
+                } catch (NullPointerException e){
+                    loadSettings(session);
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                }
                 response.sendRedirect("settingsView.jsp");
                 break;
             case "test":
@@ -362,7 +367,7 @@ public class ControllerServlet extends HttpServlet {
         // Makes sure there's always a settingsBean, even if user never bothered to check the settings
         // Maybe combine with loadSettings
         if (userBean != null) {
-            System.out.println("Getting settingsBean from DB, in case user never entered settings");
+            System.out.println("Getting settingsBean from DB, in case user never entered settings"); //TODO vad menas här?
             settingsBean = db.findUserSettings(userBean.getID());
 
 

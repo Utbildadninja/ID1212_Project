@@ -321,7 +321,7 @@ public class OtherWordsDAO {
                 return -1;
             } else
                 connection.commit();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             exceptionHandler("Couldn't execute create user query, " +
                     "maybe username already in use? ", e);
             return -1;
@@ -413,9 +413,9 @@ public class OtherWordsDAO {
     private void closeResult(ResultSet result) {
         try {
             result.close();
-        } catch (SQLException e) {
+        } catch (SQLException | NullPointerException e) {
             System.out.println("Could not close result");
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 
@@ -424,10 +424,10 @@ public class OtherWordsDAO {
         try {
             connection.rollback();
             exception.printStackTrace();
-        } catch (SQLException e) {
+        } catch (SQLException  | NullPointerException e) {
             System.out.println("Could not rollback: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException(e);
+//            throw new RuntimeException(e);
         }
     }
 
