@@ -69,7 +69,7 @@ public class Game {
                 System.out.println("Array set to Svenska");
                 // TODO replace wordList to a String[] from DB.
 //                wordList = apiCalls.getNewArrayFree();
-                this.wordBeanArrayList = fetchWordBeansFromDB(103);
+                this.wordBeanArrayList = fetchWordBeansFromDB(1); // Was 103
                 String[] onlyWords = new String[wordBeanArrayList.size()];
                 for (int i = 0; i < wordBeanArrayList.size(); i++) {
                     onlyWords[i] = wordBeanArrayList.get(i).getWord();
@@ -166,15 +166,19 @@ public class Game {
     }
 
     public void addTeam(String teamToAdd) {
-        TeamBean teamBean = new TeamBean();
-        teamBean.setName(teamToAdd);
-        teamsPlaying.add(teamBean);
-//        System.out.println("Added team: " + teamBean.getName() + " with ID " + teamBean.getId() + " ID will always be 0 for now");
-//        System.out.println("Teams in list:");
-//        for (TeamBean bean : teamsPlaying) {
-//            System.out.println("Team ID: " + bean.getId());
-//            System.out.println("Team Name: " + bean.getName());
-//        }
+        boolean exists = false;
+        for (TeamBean team:teamsPlaying) {
+            if (team.getName().equals(teamToAdd)) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            TeamBean teamBean = new TeamBean();
+            teamBean.setName(teamToAdd);
+            teamsPlaying.add(teamBean);
+        } else System.out.println("Tried to add duplicate teams");
+
     }
 
     public void removeTeam(String name) {

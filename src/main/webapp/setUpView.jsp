@@ -28,28 +28,34 @@
             </label>
             <input type="hidden" name="action" value="add">
             <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-            <button class="square_button" type="submit">Add Team</button>
+            <button class="squareButton" type="submit">Add Team</button>
         </form>
 
-        <ul>
+        <table>
+            <tbody>
             <%
                 if (teamsPlaying != null) {
                     for (TeamBean teamBean : teamsPlaying) {
             %>
-            <li>
-                <%=teamBean.getName()%>
-                <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-                    <input type="hidden" name="action" value="remove">
-                    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                    <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
-                    <button type="submit">Remove</button>
-                </form>
-            </li>
-            <%
-                    }
-                }
-            %>
-        </ul>
+                <tr>
+                    <td>
+                        <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                            <input type="hidden" name="action" value="remove">
+                            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                            <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
+                            <button class="removeButton" type="submit">X</button>
+                        </form>
+                    </td>
+                    <td>
+                        <%=teamBean.getName()%>
+                    </td>
+                    <%
+                            }
+                        }
+                    %>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

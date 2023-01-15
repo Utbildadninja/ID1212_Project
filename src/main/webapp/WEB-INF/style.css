@@ -85,7 +85,7 @@ input[type = text], input[type = password] {
     box-sizing: border-box;
 }
 
-.square_button {
+.squareButton {
     background-color: rgb(54, 192, 54);;
     padding: 8px;
     color: white;
@@ -93,4 +93,14 @@ input[type = text], input[type = password] {
     height: 42px;
     width: 97px;
     font-size: 13px;
+}
+
+.removeButton {
+
+    background-color:darkred;
+    width: 30px;
+    height: 30px;
+    color: white;
+    padding: 0px;
+    margin-right: 10px;
 }
