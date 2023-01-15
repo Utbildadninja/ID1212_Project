@@ -60,8 +60,10 @@
         <label>
             <select name="language">
                 <option value="" disabled selected>Select a Language</option>
-                <option value="Test_API">Test API</option>
-                <option value="English_API">English API</option>
+                <c:if test="${empty languages}">
+                    <option value="Test_API">Test API</option>
+                    <option value="English_API">English API</option>
+                </c:if>
                 <c:if test="${not empty languages}">
                     <c:forEach var="language" items="${languages}">
                         <option value="${language.languageName}">${language.languageName}</option>

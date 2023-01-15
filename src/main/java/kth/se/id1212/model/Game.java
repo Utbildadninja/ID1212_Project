@@ -25,7 +25,8 @@ public class Game {
     boolean gameOver = false;
     TeamBean nextTeam;
     SettingsBean settingsBean;
-    OtherWordsDAO db = new OtherWordsDAO(); // TODO see if we can send from controller instead (see unary constructor)
+    OtherWordsDAO db;
+//    OtherWordsDAO db = new OtherWordsDAO(); // TODO db sent from controller, keep in mind might cause problems
 
     public Game(){
 
