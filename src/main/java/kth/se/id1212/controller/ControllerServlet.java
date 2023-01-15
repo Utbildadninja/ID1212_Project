@@ -191,35 +191,7 @@ public class ControllerServlet extends HttpServlet {
 
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
-        UserBean userBean = (UserBean) session.getAttribute("userBean");
-        SettingsBean settingsBean;
-        // Makes sure there's always a settingsBean, even if user never bothered to check the settings
-        // Maybe combine with loadSettings
-        if (userBean != null) {
-            System.out.println("Getting settingsBean from DB, in case user never entered settings");
-            settingsBean = db.findUserSettings(userBean.getID());
 
-
-            if (settingsBean != null) {
-                System.out.println("Language in settingsBean from DB: " + settingsBean.getLanguageName());
-                session.setAttribute("settingsBean", settingsBean);
-                System.out.println("Set settingsBean in session, from doSetUpView");
-            }
-
-            else
-                System.out.println("A logged in user tried to start a new game with no stored settings");
-
-        } else {
-            System.out.println("Getting settingsBean from session for logged out user");
-            settingsBean = (SettingsBean) session.getAttribute("settingsBean");
-        }
-
-        // Always checked, user MUST have settings before starting a game
-        if (settingsBean == null) {
-            settingsBean = new SettingsBean();
-            session.setAttribute("settingsBean", settingsBean);
-            System.out.println("Set default settings from setUpView");
-        }
 
         String action = request.getParameter("action");
         switch (action) {
@@ -240,6 +212,7 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "start":
+                SettingsBean settingsBean = preventNullSettingsBean(session);
 
                 game.setSettingsBean(settingsBean);
                 game.newGame();
@@ -248,7 +221,6 @@ public class ControllerServlet extends HttpServlet {
                 int timeLeft = settingsBean.getSecondsPerRound();
                 int roundsPerGame = settingsBean.getRoundsPerGame();
 
-                System.out.println("Time left when starting: " + timeLeft);
                 session.setAttribute("score", score);
                 session.setAttribute("currentWord", currentWord);
                 session.setAttribute("currentTeamBean", game.getCurrentTeam());
@@ -262,7 +234,6 @@ public class ControllerServlet extends HttpServlet {
 
                 session.setAttribute("nextTeamBean", game.getNextTeam());
 
-                System.out.println("Time left when really starting: " + timeLeft);
                 response.sendRedirect("gameView.jsp");
                 break;
             default:
@@ -376,6 +347,39 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("This user was not logged in");
             session.setAttribute("settingsBean", settingsBean);
         }
+    }
+
+    private SettingsBean preventNullSettingsBean(HttpSession session) {
+        UserBean userBean = (UserBean) session.getAttribute("userBean");
+        SettingsBean settingsBean;
+        // Makes sure there's always a settingsBean, even if user never bothered to check the settings
+        // Maybe combine with loadSettings
+        if (userBean != null) {
+            System.out.println("Getting settingsBean from DB, in case user never entered settings");
+            settingsBean = db.findUserSettings(userBean.getID());
+
+
+            if (settingsBean != null) {
+                System.out.println("Language in settingsBean from DB: " + settingsBean.getLanguageName());
+                session.setAttribute("settingsBean", settingsBean);
+                System.out.println("Set settingsBean in session, from doSetUpView");
+            }
+
+            else
+                System.out.println("A logged in user tried to start a new game with no stored settings");
+
+        } else {
+            System.out.println("Getting settingsBean from session for logged out user");
+            settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+        }
+
+        // Final check to really make sure, for example when a new session simply clicks play
+        if (settingsBean == null) {
+            settingsBean = new SettingsBean();
+            session.setAttribute("settingsBean", settingsBean);
+            System.out.println("Set default settings from preventNullSettingsBean");
+        }
+        return settingsBean;
     }
 
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
