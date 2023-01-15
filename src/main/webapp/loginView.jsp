@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
     <title>Log In</title>
@@ -9,6 +10,9 @@
 <body>
 <div class="outerDiv">
     Please enter credentials:
+    <c:if test="${not empty errorMessage}">
+        <p class="errorMessage">${errorMessage}</p>
+    </c:if>
     <br>
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="post">
         <label>

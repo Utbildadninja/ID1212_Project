@@ -119,7 +119,8 @@ public class ControllerServlet extends HttpServlet {
             response.sendRedirect("index.jsp");
         } else {
             System.out.println("Login failed");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid username or password");
+            session.setAttribute("errorMessage", "Incorrect username or password.");
+            response.sendRedirect("loginView.jsp");
         }
     }
 
