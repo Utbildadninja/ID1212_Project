@@ -247,7 +247,7 @@ public class ControllerServlet extends HttpServlet {
         int roundTimeSlider = Integer.parseInt(request.getParameter("roundTimeSlider"));
         int numberOfRounds = Integer.parseInt(request.getParameter("numberOfRounds"));
         String language = request.getParameter("language");
-
+        ArrayList<LanguageBean> languageBeans = (ArrayList<LanguageBean>) session.getAttribute("languages");
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
@@ -255,8 +255,15 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("A logged in user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
-            if (language != null)
+            if (language != null){
                 settingsBean.setLanguageName(language);
+                for (LanguageBean languageBean: languageBeans) {
+                    if(languageBean.getLanguageName().equals(language)){
+                        settingsBean.setLanguageID(languageBean.getLanguageID());
+                        settingsBean.setLanguageBean(languageBean);
+                    }
+                }
+            }
             System.out.println("settingsBean language sent to DB: " + settingsBean.getLanguageName());
             session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);

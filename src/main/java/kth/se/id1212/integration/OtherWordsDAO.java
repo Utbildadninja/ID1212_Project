@@ -128,7 +128,7 @@ public class OtherWordsDAO {
             resultSet = findSettingsStmt.executeQuery();
             if (resultSet.next()) {
                 userSettings = new SettingsBean(
-                        resultSet.getInt("language_id"), resultSet.getInt("secondsPerRound"),
+                        resultSet.getInt("language_id"), resultSet.getString("languagename"), resultSet.getInt("secondsPerRound"),
                         resultSet.getInt("roundsPerGame")
                 );
             }
@@ -138,6 +138,8 @@ public class OtherWordsDAO {
         } finally {
             closeResult(resultSet);
         }
+        System.out.println("current/new settings for user " + userID + ": " +
+                userSettings.getLanguageID() + " " + userSettings.getLanguageName());
         return userSettings;
     }
 
@@ -190,7 +192,7 @@ public class OtherWordsDAO {
                 user = new UserBean(resultSet.getInt("id"), resultSet.getString("username"),
                         resultSet.getBoolean("admin"), resultSet.getInt("gamesPlayed")
                 );
-                System.out.println(user.getID() + user.getUsername());
+                System.out.println("user: " + user.getID() + user.getUsername() + "logged in. (DAO)");
             }
             connection.commit();
         } catch (Exception e) {
@@ -242,9 +244,10 @@ public class OtherWordsDAO {
             findRandomWordStmt.setInt(2, offset);
             resultSet = findRandomWordStmt.executeQuery();
             if (resultSet.next()) {
+                System.out.println("Ord from DAO föööre wordbean: " + resultSet.getString("word"));
                 word = new WordBean(resultSet.getInt("id"),
                         resultSet.getString("word"), resultSet.getString("clue"));
-                System.out.println("Ord from DAO: " + word.getWord());
+                System.out.println("Ord from DAO efter wordbean: " + word.getWord());
             }
             connection.commit();
         } catch (SQLException e) {
@@ -263,7 +266,8 @@ public class OtherWordsDAO {
      * @param newSettings SettingsBean with the new settings as chosen by the user
      */
     public void updateSettings(int userID, SettingsBean newSettings) {
-        System.out.println("user wants to update the settings");
+        System.out.println("user wants to update the settings. language setting requested: " +
+                newSettings.getLanguageID() + " " + newSettings.getLanguageName());
         int affectedRows = 0;
         try {
             updateSettingsStmt.setInt(1, newSettings.getLanguageID());
@@ -330,18 +334,18 @@ public class OtherWordsDAO {
         connection = DriverManager.getConnection("jdbc:derby://localhost:1527/maoDB",
                 System.getenv("dbuser"), System.getenv("dbpassword"));
         connection.setAutoCommit(false);
+        System.out.println("Connected to database.");
     }
 
     private void prepareStatements() throws SQLException {
         findLanguagesStmt = connection.prepareStatement(
-                "SELECT * FROM languages " +
-                        "WHERE NOT (languagename='testing' OR languagename='English_API')"
+                "SELECT * FROM languages "
         );
         findReportsStmt = connection.prepareStatement(
                 "SELECT * FROM reports"
         );
         findSettingsStmt = connection.prepareStatement(                 //TODO join with table languages to get name
-                "SELECT * FROM user_settings WHERE user_id = ?"
+                "SELECT * FROM user_settings JOIN languages ON user_settings.language_id = languages.id WHERE user_id = ? "
         );
         findUsersStmt = connection.prepareStatement(
                 "SELECT username, gamesPlayed FROM users ORDER BY gamesPlayed"
@@ -356,9 +360,9 @@ public class OtherWordsDAO {
         findWordsStmt = connection.prepareStatement(
                 "SELECT id, word, clue FROM words WHERE language_id = ? "
         );
-        findRandomWordStmt = connection.prepareStatement(       //TODO check whether mod() is supported (not by ij)
+        findRandomWordStmt = connection.prepareStatement(
                 "SELECT * FROM words WHERE language_id = ? " +
-                        "OFFSET ? ROWS " +     // TODO change to question mark
+                        "OFFSET ? ROWS " +
                         "FETCH NEXT ROW ONLY "
         );
         updateWordCorrectStmt = connection.prepareStatement(
