@@ -102,7 +102,6 @@ public class ControllerServlet extends HttpServlet {
             }
 
         } else {
-            // TODO Add HTML5 form validation to client side or something
             System.out.println("Password mismatch");
             session.setAttribute("errorMessage", "Passwords do not match.");
             response.sendRedirect("createAccountView.jsp");

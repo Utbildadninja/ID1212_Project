@@ -74,13 +74,23 @@ button[disabled] {
     color: red;
 }
 
-/*For styling login*/
-/*input[type = text], input[type = password] {*/
-/*    width: 75%;*/
-/*    max-width: 560px;*/
-/*    padding: 12px 20px;*/
-/*    margin: 8px 0;*/
-/*    display: inline-block;*/
-/*    border: 1px solid #ccc;*/
-/*    box-sizing: border-box;*/
-/*}*/
+/*All input fields*/
+input[type = text], input[type = password] {
+    width: 75%;
+    max-width: 560px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.square_button {
+    background-color: rgb(54, 192, 54);;
+    padding: 8px;
+    color: white;
+    margin-left: 13px;
+    height: 42px;
+    width: 97px;
+    font-size: 13px;
+}

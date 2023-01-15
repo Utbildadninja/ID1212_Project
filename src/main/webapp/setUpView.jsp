@@ -16,38 +16,41 @@
 </head>
 <body>
 <div class="outerDiv">
-    <ul>
-        <%
-            if (teamsPlaying != null) {
-                for (TeamBean teamBean : teamsPlaying) {
-        %>
-        <li>
-            <%=teamBean.getName()%>
-            <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-                <input type="hidden" name="action" value="remove">
-                <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
-                <button type="submit">Remove</button>
-            </form>
-        </li>
-        <%
+    <div class="container">
+        <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+            <input type="hidden" name="action" value="start">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <button class="home-view-btn" type="submit" <%= disabled ? "disabled" : "" %>>Start Game</button>
+        </form>
+        <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+            <label>
+                <input type="text" name="team" placeholder="Enter team name">
+            </label>
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <button class="square_button" type="submit">Add Team</button>
+        </form>
+
+        <ul>
+            <%
+                if (teamsPlaying != null) {
+                    for (TeamBean teamBean : teamsPlaying) {
+            %>
+            <li>
+                <%=teamBean.getName()%>
+                <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                    <input type="hidden" name="action" value="remove">
+                    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                    <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
+                    <button type="submit">Remove</button>
+                </form>
+            </li>
+            <%
+                    }
                 }
-            }
-        %>
-    </ul>
-    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-        <label>
-            <input type="text" name="team" placeholder="Enter team name">
-        </label>
-        <input type="hidden" name="action" value="add">
-        <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button type="submit">Add Team</button>
-    </form>
-    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-        <input type="hidden" name="action" value="start">
-        <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button type="submit" <%= disabled ? "disabled" : "" %>>Start Game</button>
-    </form>
+            %>
+        </ul>
+    </div>
 </div>
 </body>
 </html>
