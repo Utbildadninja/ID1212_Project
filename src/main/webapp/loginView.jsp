@@ -29,16 +29,13 @@
     <br>
     Are you not yet part of our growing empire?
     <br>
-    <a href="createAccountView.jsp">Sign up now!</a>
-    <br>
-<%--    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
-<%--        <label>--%>
-<%--            <input type="hidden" name="action" value="createAccount">--%>
-<%--            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
-<%--            <button type="submit">Create account</button>--%>
-<%--        </label>--%>
-<%--    </form>--%>
-
+    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+        <label>
+            <input type="hidden" name="action" value="createAccount">
+            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+            <button class="signUpButton" type="submit">Sign up now!</button>
+        </label>
+    </form>
 
 </div>
 </body>

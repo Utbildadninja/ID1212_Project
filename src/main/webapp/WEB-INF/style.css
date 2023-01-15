@@ -115,3 +115,15 @@ input[type = text], input[type = password] {
 .gameActualWord {
     margin-top: 25%;
 }
+
+.signUpButton {
+    background-color: transparent;
+    color: blue;
+    border: none;
+    text-decoration: underline;
+    font-size: 1.5em;
+}
+
+.signUpButton:hover {
+    color: purple;
+}
