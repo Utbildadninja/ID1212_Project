@@ -23,6 +23,6 @@ The program can be run completely without connecting to the DB, but then no acco
 
 
 ## Authors
-Niclas 
-Tove 
-Contributors names and contact info
+Niclas Damström
+Tove Verner-Carlsson
+
