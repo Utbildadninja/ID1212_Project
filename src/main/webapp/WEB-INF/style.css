@@ -160,6 +160,11 @@ input[type = text], input[type = password] {
     color: purple;
 }
 
+.timeUpInfo {
+    color: red;
+    font-size: x-large;
+}
+
 @media (max-width: 750px) {
     .home-view-game-display-box {
         width: 80%;

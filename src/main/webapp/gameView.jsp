@@ -37,12 +37,10 @@
     </div>
 
     <c:if test="${timeLeft <= 0}">
-        <p>No more talking! Make a final guess!</p>
+        <p class="timeUpInfo">No more talking! Make a final guess!
+        </p>
     </c:if>
-    <p>Current score: <%=score%>
-    </p>
-    <p>Current team: <%=teamBean.getName()%>
-    </p>
+
 
     <script>
         let timeLeft = <%=timeLeft%>;
@@ -68,6 +66,10 @@
         <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
         <button class="skipButton" type="submit">Skip</button>
     </form>
+    <h3>Current score: <%=score%>
+    </h3>
+    <h3>Current team: <%=teamBean.getName()%>
+    </h3>
 </div>
 <form id="timerUpForm" action="${pageContext.request.contextPath}/ControllerServlet" method="get">
     <input type="hidden" name="action" value="timer_up">
