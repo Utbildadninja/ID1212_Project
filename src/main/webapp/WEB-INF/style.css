@@ -158,3 +158,8 @@ input[type = text], input[type = password] {
 .signUpButton:hover {
     color: purple;
 }
+
+.timeUpInfo {
+    color: red;
+    font-size: x-large;
+}
