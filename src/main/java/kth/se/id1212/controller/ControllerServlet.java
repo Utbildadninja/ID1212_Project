@@ -214,30 +214,27 @@ public class ControllerServlet extends HttpServlet {
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
+        applySettingsToSession(session, roundTimeSlider, numberOfRounds, language, languageBeans, settingsBean);
         if (userBean != null) {
-            System.out.println("A logged in user tried to update settings");
-            settingsBean.setSecondsPerRound(roundTimeSlider);
-            settingsBean.setRoundsPerGame(numberOfRounds);
-            if (language != null) {
-                settingsBean.setLanguageName(language);
-                for (LanguageBean languageBean : languageBeans) {
-                    if (languageBean.getLanguageName().equals(language)) {
-                        settingsBean.setLanguageID(languageBean.getLanguageID());
-                        settingsBean.setLanguageBean(languageBean);
-                    }
-                }
-            }
-            session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);
-        } else {
-            settingsBean.setSecondsPerRound(roundTimeSlider);
-            settingsBean.setRoundsPerGame(numberOfRounds);
-            if (language != null)
-                settingsBean.setLanguageName(language);
-            session.setAttribute("settingsBean", settingsBean);
         }
 
         response.sendRedirect("settingsView.jsp");
+    }
+
+    private void applySettingsToSession(HttpSession session, int roundTimeSlider, int numberOfRounds, String language, ArrayList<LanguageBean> languageBeans, SettingsBean settingsBean) {
+        settingsBean.setSecondsPerRound(roundTimeSlider);
+        settingsBean.setRoundsPerGame(numberOfRounds);
+        if (language != null) {
+            settingsBean.setLanguageName(language);
+            for (LanguageBean languageBean : languageBeans) {
+                if (languageBean.getLanguageName().equals(language)) {
+                    settingsBean.setLanguageID(languageBean.getLanguageID());
+                    settingsBean.setLanguageBean(languageBean);
+                }
+            }
+        }
+        session.setAttribute("settingsBean", settingsBean);
     }
 
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {

@@ -35,10 +35,8 @@ public class Game {
     }
 
     public void newGame() throws IOException {
-        if (wordList == null) {
-            fetchNewArray();
-            this.currentWordCounter = 0;
-        }
+        fetchNewArray();
+        this.currentWordCounter = 0;
         this.gameOver = false;
         currentRound = 0;
         currentTeam = teamsPlaying.get(0);
@@ -53,10 +51,8 @@ public class Game {
     }
 
     private void fetchNewArray() throws IOException {
-        LanguageBean languageBean = settingsBean.getLanguageBean();
         String languageName = settingsBean.getLanguageName();
         int languageID = settingsBean.getLanguageID();
-//        System.out.println("language set to " + languageBean.getLanguageName());
         if (languageName.equals("Test_API")) {
             wordList = apiCalls.getNewArrayFree();
         } else if (languageName.equals("English_API")) {
@@ -64,13 +60,13 @@ public class Game {
         } else if (languageID != 0) {
             this.wordBeanArrayList = fetchWordBeansFromDB(languageID);
             String[] onlyWords = new String[wordBeanArrayList.size()];
-            for (int i = 0; i < wordBeanArrayList.size(); i++) {        //Converts Beans to Strings
+            //Converts Beans to Strings
+            for (int i = 0; i < wordBeanArrayList.size(); i++) {
                 onlyWords[i] = wordBeanArrayList.get(i).getWord();
-//                System.out.println(onlyWords[i]);
             }
             this.wordList = onlyWords;
         } else {
-            System.out.println("The language/word source setting is not behaving as expected. ");
+            System.out.println("The language/word source setting is not behaving as expected.");
         }
     }
 
