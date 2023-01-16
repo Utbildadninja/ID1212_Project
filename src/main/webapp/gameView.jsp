@@ -49,7 +49,7 @@
             document.getElementById("timer").innerHTML = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(timer);
-                // Take action
+                document.getElementById("timerUpForm").submit();
             }
         }, 1000);
     </script>
@@ -65,15 +65,9 @@
         <button type="submit">Skip</button>
     </form>
 </div>
-<%--<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
-<%--    <input type="hidden" name="action" value="finalGuessSkip">--%>
-<%--    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
-<%--    <button type="submit">FinalGuessSkip</button>--%>
-<%--</form>--%>
-<%--<form action="${pageContext.request.contextPath}/ControllerServlet" method="get">--%>
-<%--    <input type="hidden" name="action" value="results">--%>
-<%--    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">--%>
-<%--    <button type="submit">Results</button>--%>
-<%--</form>--%>
+<form id="timerUpForm" action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+    <input type="hidden" name="action" value="timer_up">
+    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+</form>
 </body>
 </html>

@@ -43,7 +43,7 @@ public class ControllerServlet extends HttpServlet {
         }
 
         // Prints all parameters for the request, simply for debugging
-        /*
+
         System.out.println("Printing parameters in this request");
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
@@ -52,7 +52,7 @@ public class ControllerServlet extends HttpServlet {
             System.out.println(parameterName + ": " + Arrays.toString(parameterValues));
         }
         System.out.println("Parameters printed, below this is other stuff");
-         */
+
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
@@ -162,6 +162,10 @@ public class ControllerServlet extends HttpServlet {
                 break;
             case "results":
                 response.sendRedirect("resultsView.jsp");
+                break;
+            case "timer_up":
+                session.setAttribute("timeLeft", game.getTimeLeft());
+                response.sendRedirect("gameView.jsp");
                 break;
             default:
                 System.out.println("Action was " + action + ". That was unexpected");
