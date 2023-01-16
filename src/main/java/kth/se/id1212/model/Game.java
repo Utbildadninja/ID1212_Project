@@ -119,7 +119,7 @@ public class Game {
             currentTeam = teamsPlaying.get(currentRound % teamsPlaying.size());
             currentRound++;
             nextTeam = teamsPlaying.get(currentRound % teamsPlaying.size());
-            System.out.println("Current round is: " + currentRound + " current Team is: " + currentTeam.getName());
+//            System.out.println("Current round is: " + currentRound + " current Team is: " + currentTeam.getName());
             setTimeLeft(settingsBean.getSecondsPerRound());
             startTimer();
         }
@@ -134,6 +134,10 @@ public class Game {
     public void gameOver() {
         System.out.println("Game is finished");
         this.gameOver = true;
+    }
+
+    public boolean isLastRoundPlayed() {
+        return this.currentRound == this.totalRounds * teamsPlaying.size();
     }
 
     private void startTimer() {

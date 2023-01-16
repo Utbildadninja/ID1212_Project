@@ -1,5 +1,6 @@
 <%@ page import="kth.se.id1212.model.TeamBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%TeamBean nextTeamBean = (TeamBean) session.getAttribute("nextTeamBean");%>
 <html>
 <head>
@@ -12,14 +13,26 @@
 <div class="outerDiv">
     <div class="container">
 
-    <h1>Get ready!</h1>
-    <p>Team <%=nextTeamBean.getName()%> you're up!</p>
-    <p>Make sure the person guessing can't see the screen!</p>
+        <c:choose>
+            <c:when test="${sessionScope.gameOver == true}">
+                That was the last round!
 
-    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-        <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button class="home-view-btn" type="submit">Next Round</button>
-    </form>
+                <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                    <button class="home-view-btn" type="submit">Show Results</button>
+                </form>
+            </c:when>
+            <c:otherwise>
+                <h1>Get ready!</h1>
+                <p>Team <%=nextTeamBean.getName()%> you're up!</p>
+                <p>Make sure the person guessing can't see the screen!</p>
+
+                <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                    <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                    <button class="home-view-btn" type="submit">Next Round</button>
+                </form>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 </body>

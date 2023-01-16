@@ -132,7 +132,6 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("loginView.jsp");
                 break;
         }
-
     }
 
     private void doGameView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -168,6 +167,7 @@ public class ControllerServlet extends HttpServlet {
         session.setAttribute("timeLeft", timeLeft);
 
         if (game.roundOver()) {
+            session.setAttribute("gameOver", game.isLastRoundPlayed());
             response.sendRedirect("pauseView.jsp");
         } else
             response.sendRedirect("gameView.jsp");
@@ -196,6 +196,7 @@ public class ControllerServlet extends HttpServlet {
                 SettingsBean settingsBean = preventNullSettingsBean(session);
                 game.setSettingsBean(settingsBean);
                 game.newGame();
+                session.setAttribute("gameOver", game.isGameOver());
                 session.setAttribute("nextTeamBean", game.getNextTeam());
 
                 response.sendRedirect("pauseView.jsp");
