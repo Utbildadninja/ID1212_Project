@@ -171,12 +171,8 @@ public class ControllerServlet extends HttpServlet {
 
     private void doGameViewProgress(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
-        int score = game.getScore();
-        String currentWord = game.getCurrentWord();
-        //System.out.println("Setting current word from doGameViewProgress: " + currentWord);
-
-        session.setAttribute("score", score);
-        session.setAttribute("currentWord", currentWord);
+        session.setAttribute("score", game.getScore());
+        session.setAttribute("currentWord", game.getCurrentWord());
         int timeLeft = game.getTimeLeft();
         session.setAttribute("timeLeft", timeLeft);
 
@@ -190,13 +186,11 @@ public class ControllerServlet extends HttpServlet {
     private void doSetUpView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         Game game = activeSessions.get(session);
 
-
         String action = request.getParameter("action");
         switch (action) {
             case "add":
                 String teamToAdd = request.getParameter("team");
                 game.addTeam(teamToAdd);
-
                 session.setAttribute("teamsPlaying", game.getTeamsPlaying());
 
                 response.sendRedirect("setUpView.jsp");
@@ -204,35 +198,17 @@ public class ControllerServlet extends HttpServlet {
             case "remove":
                 String teamToRemove = request.getParameter("teamToRemove");
                 game.removeTeam(teamToRemove);
-
                 session.setAttribute("teamsPlaying", game.getTeamsPlaying());
 
                 response.sendRedirect("setUpView.jsp");
                 break;
             case "start":
                 SettingsBean settingsBean = preventNullSettingsBean(session);
-
                 game.setSettingsBean(settingsBean);
                 game.newGame();
-                int score = game.getScore();
-                String currentWord = game.getCurrentWord();
-                int timeLeft = settingsBean.getSecondsPerRound();
-                int roundsPerGame = settingsBean.getRoundsPerGame();
-
-                session.setAttribute("score", score);
-                session.setAttribute("currentWord", currentWord);
-                session.setAttribute("currentTeamBean", game.getCurrentTeam());
-                session.setAttribute("timeLeft", timeLeft);
-
-                // TODO Could probably change some of this, since game now has settingsBean access
-                game.setTimeLeft(timeLeft);
-                game.setTotalRounds(roundsPerGame);
-
-                game.nextRound(settingsBean);
-
                 session.setAttribute("nextTeamBean", game.getNextTeam());
 
-                response.sendRedirect("gameView.jsp");
+                response.sendRedirect("pauseView.jsp");
                 break;
             default:
                 System.out.println("Action was " + action + ". That was unexpected");
@@ -284,6 +260,7 @@ public class ControllerServlet extends HttpServlet {
         Game game = activeSessions.get(session);
 
         game.nextRound(settingsBean);
+        session.setAttribute("currentWord", game.getCurrentWord());
         session.setAttribute("timeLeft", game.getTimeLeft());
         session.setAttribute("currentTeamBean", game.getCurrentTeam());
         session.setAttribute("nextTeamBean", game.getNextTeam());

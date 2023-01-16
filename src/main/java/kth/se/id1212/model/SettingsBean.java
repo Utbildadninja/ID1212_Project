@@ -1,20 +1,13 @@
 package kth.se.id1212.model;
 
 public class SettingsBean {
-    private int secondsPerRound = 10;
+    private int secondsPerRound = 30;
     private int languageID = 1;
     private String languageName = "Test_API";
     private LanguageBean languageBean = new LanguageBean(languageID, languageName);
-    private int roundsPerGame = 2;
-    private String wordSource = "free";
+    private int roundsPerGame = 3;
 
     public SettingsBean() {}
-
-    public SettingsBean(int languageID, int secondsPerRound, int roundsPerGame){
-        this.languageID = languageID;
-        this.secondsPerRound = secondsPerRound;
-        this.roundsPerGame = roundsPerGame;
-    }
 
     public SettingsBean(int languageID, String languageName, int secondsPerRound, int roundsPerGame){
         this.languageID = languageID;
@@ -42,14 +35,6 @@ public class SettingsBean {
 
     public void setRoundsPerGame(int roundsPerGame) {
         this.roundsPerGame = roundsPerGame;
-    }
-
-    public String getWordSource() {
-        return wordSource;
-    }
-
-    public void setWordSource(String wordSource) {
-        this.wordSource = wordSource;
     }
 
     public int getLanguageID() {

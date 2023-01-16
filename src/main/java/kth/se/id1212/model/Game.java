@@ -44,11 +44,14 @@ public class Game {
         this.gameOver = false;
         currentRound = 0;
         currentTeam = teamsPlaying.get(0);
+        nextTeam = teamsPlaying.get(0);
         for (TeamBean team : teamsPlaying) {
             team.setScore(0);
             team.setCorrectGuesses(new ArrayList<>());
         }
         setCurrentWord();
+        setTotalRounds(settingsBean.getRoundsPerGame());
+        setTimeLeft(settingsBean.getSecondsPerRound());
     }
 
     /**
