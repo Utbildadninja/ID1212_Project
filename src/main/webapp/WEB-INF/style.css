@@ -50,8 +50,16 @@ div div h1 {
     text-transform: uppercase;
 }
 
-/*Skapar en box 30% av maxbredden, centrerar texten. Redig padding. Vit färg på text*/
+/*Skapar en box 30% av maxbredden, centrerar texten. Redig padding. */
 .home-view-game-display-box {
+    width: 30%;
+    margin: auto;
+    text-align: center;
+    padding: 60px 60px 60px 60px;
+    color: darkgreen;
+}
+
+.instructions-view{
     width: 30%;
     margin: auto;
     text-align: center;

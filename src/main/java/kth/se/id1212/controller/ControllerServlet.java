@@ -3,16 +3,10 @@ package kth.se.id1212.controller;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-
 import kth.se.id1212.integration.OtherWordsDAO;
 import kth.se.id1212.model.*;
-
 import java.io.IOException;
 import java.util.*;
-
-import kth.se.id1212.model.Game;
-
-import java.sql.DriverManager;
 
 @WebServlet(name = "ControllerServlet", value = "/ControllerServlet")
 public class ControllerServlet extends HttpServlet {
@@ -73,7 +67,7 @@ public class ControllerServlet extends HttpServlet {
             doLoginView(request, response, session);
         } else if (jspFile.endsWith("/createAccountView.jsp")) {
             doCreateAccountView(request, response, session);
-        } else if (jspFile.endsWith("/testView.jsp")) {
+        } else if (jspFile.endsWith("/instructionsView.jsp")) {
             doTestView(request, response, session);
         } else {
             doIndex(request, response, session);
@@ -294,8 +288,8 @@ public class ControllerServlet extends HttpServlet {
                 }
                 response.sendRedirect("settingsView.jsp");
                 break;
-            case "test":
-                response.sendRedirect("testView.jsp");
+            case "instructions":
+                response.sendRedirect("instructionsView.jsp");
                 break;
             case "login":
                 response.sendRedirect("loginView.jsp");
@@ -368,7 +362,7 @@ public class ControllerServlet extends HttpServlet {
     private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // Separat från resten, do what you want
 
-        response.sendRedirect("testView.jsp");
+        response.sendRedirect("instructionsView.jsp");
 
     }
 

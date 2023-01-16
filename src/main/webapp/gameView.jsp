@@ -39,7 +39,6 @@
     </p>
 
 
-
     <script>
         let timeLeft = <%=timeLeft%>;
         let timer = setInterval(function () {
