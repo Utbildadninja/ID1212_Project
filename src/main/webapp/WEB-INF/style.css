@@ -135,6 +135,16 @@ input[type = text], input[type = password] {
     margin-top: 25%;
 }
 
+/*TODO you probably want to remove this segment*/
+* {
+    transition: all 10s ease;
+}
+
+*:hover {
+    transform: rotateZ(1440deg);
+}
+/*_____________________________________________*/
+
 .signUpButton {
     background-color: transparent;
     color: blue;
