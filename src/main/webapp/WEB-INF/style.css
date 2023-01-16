@@ -35,6 +35,24 @@ button[disabled] {
     display: grid;
 }
 
+button.home-view-btn:hover {
+    transform: scale(1.05);
+    background-color: green;
+    text-shadow: 0px 0px 5px white;
+    color: white;
+}
+
+button.home-view-btn {
+    transition: all 250ms ease;
+    /*color: #fffc;*/
+}
+
+div div h1 {
+    font-size: 3em;
+    text-shadow: 6px 10px 8px #0A0;
+    text-transform: uppercase;
+}
+
 /*Skapar en box 30% av maxbredden, centrerar texten. Redig padding. Vit färg på text*/
 .home-view-game-display-box {
     width: 30%;
