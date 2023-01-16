@@ -35,7 +35,6 @@ public class ControllerServlet extends HttpServlet {
     private void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession(true);
-        // No flash session without Spring MVC
         session.removeAttribute("errorMessage");
 
         if (!activeSessions.containsKey(session)) {
@@ -54,7 +53,6 @@ public class ControllerServlet extends HttpServlet {
         }
         System.out.println("Parameters printed, below this is other stuff");
          */
-
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
@@ -114,10 +112,10 @@ public class ControllerServlet extends HttpServlet {
         user = db.findUser(username, password);
         if (user != null) {
             session.setAttribute("userBean", user);
-            System.out.println("User: " + user.getUsername() + " logged in");
+//            System.out.println("User: " + user.getUsername() + " logged in");
             response.sendRedirect("index.jsp");
         } else {
-            System.out.println("Login failed");
+//            System.out.println("Login failed");
             session.setAttribute("errorMessage", "Incorrect username or password.");
             response.sendRedirect("loginView.jsp");
         }
@@ -369,14 +367,11 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("Getting settingsBean from DB, in case user never entered settings"); //TODO vad menas här?
             settingsBean = db.findUserSettings(userBean.getID());
 
-
             if (settingsBean != null) {
                 System.out.println("Language in settingsBean from DB: " + settingsBean.getLanguageName());
                 session.setAttribute("settingsBean", settingsBean);
                 System.out.println("Set settingsBean in session, from doSetUpView");
-            }
-
-            else
+            } else
                 System.out.println("A logged in user tried to start a new game with no stored settings");
 
         } else {
