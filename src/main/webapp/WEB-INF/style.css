@@ -133,6 +133,8 @@ input[type = text], input[type = password] {
 }
 
 .gameActualWord {
+    font-weight: bold;
+    font-size: xxx-large;
     margin-top: 25%;
 }
 

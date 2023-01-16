@@ -31,8 +31,8 @@
     </h1>
 
     <div class="gameViewWord">
-        <h1 class="gameActualWord"><%=currentWord%>
-        </h1>
+        <h2 class="gameActualWord"><%=currentWord%>
+        </h2>
     </div>
     <p>Current score: <%=score%>
     </p>
