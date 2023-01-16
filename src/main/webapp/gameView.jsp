@@ -19,7 +19,6 @@
 <div class="outerDiv">
     <noscript>JavaScript is disabled. Website might not work as intended.</noscript>
 
-<%--    <h1><span id="timer"><%=timeLeft%></span> seconds</h1>--%>
     <h1>
         <c:choose>
             <c:when test="${timeLeft <= 0}">
@@ -31,13 +30,14 @@
         </c:choose>
     </h1>
 
-    <div class="gameViewWord"><h1 class="gameActualWord"><%=currentWord%></h1>
+    <div class="gameViewWord">
+        <h1 class="gameActualWord"><%=currentWord%>
+        </h1>
     </div>
     <p>Current score: <%=score%>
     </p>
     <p>Current team: <%=teamBean.getName()%>
     </p>
-
 
     <script>
         let timeLeft = <%=timeLeft%>;

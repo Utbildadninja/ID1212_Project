@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: swedi
-  Date: 2023-01-05
-  Time: 21:57
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
@@ -32,9 +25,11 @@
                 you feel stuck, you can press "skip" and you get a new word. Try not to skip too many words, since it is
                 more fun to challenge yourself and actually try to explain even the difficult words!
             </p>
-            When the times runs out, you are not allowed to talk anymore. Your teammate gets a final guess, press
-            "correct"
-            or "skip" depending on the outcome, then the turn moves on to the next team.
+            <p>
+                When the times runs out, you are not allowed to talk anymore. Your teammate gets a final guess, press
+                "correct"
+                or "skip" depending on the outcome, then the turn moves on to the next team.
+            </p>
             <p>
                 This implementation is suited for playing in hotseat mode, that is, when everyone playing is in the same
                 room. Pass the phone around so that the person explaining is the one holding it, and so that no other
@@ -52,7 +47,8 @@
                 <button type="submit">Back to menu</button>
             </form>
 
-        </div></div>
+        </div>
     </div>
+</div>
 </body>
 </html>

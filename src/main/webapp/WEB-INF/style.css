@@ -4,16 +4,15 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/*Changes cursor when using buttons*/
 button {
     cursor: pointer;
 }
 button[disabled] {
     cursor:default;
 }
-/*Button on home view*/
+
 .home-view-btn {
-    width: 100%; /*Forms tvingar oss att sätta bredd på stylade knappar*/
+    width: 100%;
     background-color: darkgreen;
     color: white;
     font-weight: bolder;
@@ -50,7 +49,6 @@ div div h1 {
     text-transform: uppercase;
 }
 
-/*Skapar en box 30% av maxbredden, centrerar texten. Redig padding. */
 .home-view-game-display-box {
     width: 30%;
     margin: auto;
@@ -67,7 +65,6 @@ div div h1 {
     color: darkgreen;
 }
 
-/*Verkar inte göra allt för mycket*/
 .outerDiv {
     height: auto;
     max-height: available;

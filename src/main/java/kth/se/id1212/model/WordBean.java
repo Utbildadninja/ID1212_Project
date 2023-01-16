@@ -5,6 +5,11 @@ public class WordBean {
     private String word;
     private String clue;
 
+    public WordBean(int id, String word){
+        this.id = id;
+        this.word = word;
+    }
+
     public WordBean(int id, String word, String clue){
         this.id = id;
         this.word = word;

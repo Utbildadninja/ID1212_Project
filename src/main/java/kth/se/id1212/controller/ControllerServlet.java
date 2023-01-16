@@ -5,6 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import kth.se.id1212.integration.OtherWordsDAO;
 import kth.se.id1212.model.*;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -16,13 +17,11 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //System.out.println("Received GET request");
         handleRequest(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //System.out.println("Received POST request");
         handleRequest(request, response);
     }
 
@@ -36,8 +35,7 @@ public class ControllerServlet extends HttpServlet {
             activeSessions.put(session, game);
         }
 
-        // Prints all parameters for the request, simply for debugging
-
+        /*        // Prints all parameters for the request, simply for debugging
         System.out.println("Printing parameters in this request");
         Map<String, String[]> parameterMap = request.getParameterMap();
         for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
@@ -45,7 +43,7 @@ public class ControllerServlet extends HttpServlet {
             String[] parameterValues = entry.getValue();
             System.out.println(parameterName + ": " + Arrays.toString(parameterValues));
         }
-        System.out.println("Parameters printed, below this is other stuff");
+        System.out.println("Parameters printed, below this is other stuff");*/
 
 
         // Checks the parameter "jspFile" to point the request to correct method
@@ -68,11 +66,10 @@ public class ControllerServlet extends HttpServlet {
         } else if (jspFile.endsWith("/createAccountView.jsp")) {
             doCreateAccountView(request, response, session);
         } else if (jspFile.endsWith("/instructionsView.jsp")) {
-            doTestView(request, response, session);
+            doInstructionsView(request, response, session);
         } else {
             doIndex(request, response, session);
         }
-
     }
 
     private void doCreateAccountView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -85,7 +82,7 @@ public class ControllerServlet extends HttpServlet {
             System.out.println("Account created");
 
             // Login with new account and send to index
-            if(createStatus == 0) {
+            if (createStatus == 0) {
                 login(response, session, username, password);
             } else {
                 System.out.println("Create account failed, status not 0");
@@ -98,7 +95,6 @@ public class ControllerServlet extends HttpServlet {
             session.setAttribute("errorMessage", "Passwords do not match.");
             response.sendRedirect("createAccountView.jsp");
         }
-
     }
 
     private void login(HttpServletResponse response, HttpSession session, String username, String password) throws IOException {
@@ -106,10 +102,10 @@ public class ControllerServlet extends HttpServlet {
         user = db.findUser(username, password);
         if (user != null) {
             session.setAttribute("userBean", user);
-//            System.out.println("User: " + user.getUsername() + " logged in");
+            System.out.println("User: " + user.getUsername() + " logged in");
             response.sendRedirect("index.jsp");
         } else {
-//            System.out.println("Login failed");
+            System.out.println("Login failed");
             session.setAttribute("errorMessage", "Incorrect username or password.");
             response.sendRedirect("loginView.jsp");
         }
@@ -212,7 +208,6 @@ public class ControllerServlet extends HttpServlet {
                 System.out.println("Action was " + action + ". That was unexpected");
                 break;
         }
-
     }
 
     private void doSettingsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -223,24 +218,22 @@ public class ControllerServlet extends HttpServlet {
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         // Always set when hitting Settings, so should never be null.
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
-        if (userBean != null ) {
+        if (userBean != null) {
             System.out.println("A logged in user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
-            if (language != null){
+            if (language != null) {
                 settingsBean.setLanguageName(language);
-                for (LanguageBean languageBean: languageBeans) {
-                    if(languageBean.getLanguageName().equals(language)){
+                for (LanguageBean languageBean : languageBeans) {
+                    if (languageBean.getLanguageName().equals(language)) {
                         settingsBean.setLanguageID(languageBean.getLanguageID());
                         settingsBean.setLanguageBean(languageBean);
                     }
                 }
             }
-            System.out.println("settingsBean language sent to DB: " + settingsBean.getLanguageName());
             session.setAttribute("settingsBean", settingsBean);
             db.updateSettings(userBean.getID(), settingsBean);
         } else {
-            System.out.println("A logged out user tried to update settings");
             settingsBean.setSecondsPerRound(roundTimeSlider);
             settingsBean.setRoundsPerGame(numberOfRounds);
             if (language != null)
@@ -254,7 +247,6 @@ public class ControllerServlet extends HttpServlet {
     private void doPauseView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         // SettingsBean always exists at this stage
         SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
-
         Game game = activeSessions.get(session);
 
         game.nextRound(settingsBean);
@@ -268,7 +260,6 @@ public class ControllerServlet extends HttpServlet {
         } else {
             response.sendRedirect("gameView.jsp");
         }
-
     }
 
     private void doResultsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
@@ -286,7 +277,7 @@ public class ControllerServlet extends HttpServlet {
                 try {
                     ArrayList<LanguageBean> languages = db.findLanguages();
                     session.setAttribute("languages", languages);
-                } catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     System.out.println(e.getMessage());
                     e.printStackTrace();
                 }
@@ -307,15 +298,14 @@ public class ControllerServlet extends HttpServlet {
                 response.sendRedirect("index.jsp");
                 break;
         }
-
     }
 
     private void loadSettings(HttpSession session) {
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         SettingsBean settingsBean;
-        if (userBean != null ) {
+        if (userBean != null) {
             settingsBean = db.findUserSettings(userBean.getID());
-            if(settingsBean != null) {
+            if (settingsBean != null) {
                 session.setAttribute("settingsBean", settingsBean);
             } else {
                 settingsBean = new SettingsBean();
@@ -332,14 +322,12 @@ public class ControllerServlet extends HttpServlet {
     private SettingsBean preventNullSettingsBean(HttpSession session) {
         UserBean userBean = (UserBean) session.getAttribute("userBean");
         SettingsBean settingsBean;
-        // Maybe combine with loadSettings
+
         if (userBean != null) {
             settingsBean = db.findUserSettings(userBean.getID());
             if (settingsBean != null) {
                 session.setAttribute("settingsBean", settingsBean);
-            } else
-                System.out.println("A logged in user tried to start a new game with no stored settings");
-
+            }
         } else {
             settingsBean = (SettingsBean) session.getAttribute("settingsBean");
         }
@@ -352,11 +340,8 @@ public class ControllerServlet extends HttpServlet {
         return settingsBean;
     }
 
-    private void doTestView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
-        // Separat från resten, do what you want
-
+    private void doInstructionsView(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         response.sendRedirect("instructionsView.jsp");
-
     }
 
 }

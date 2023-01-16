@@ -6,14 +6,12 @@
     String sneaky;
     if (userBean != null) {
         sneaky = "";
-    }
-    else sneaky = "hidden";
+    } else sneaky = "hidden";
 
     String reverseSneaky;
     if (userBean == null) {
         reverseSneaky = "";
-    }
-    else reverseSneaky = "hidden";
+    } else reverseSneaky = "hidden";
 %>
 <!DOCTYPE html>
 <html>
@@ -29,7 +27,6 @@
     <noscript>JavaScript is disabled. Website might not work as intended.</noscript>
 
     <div class="home-view-game-display-box">
-
         <div class="home-view-btn-container">
             <h1>Med egna ord</h1>
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
@@ -55,7 +52,7 @@
             <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
                 <input type="hidden" name="action" value="logout">
                 <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                <button id= "<%=sneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
+                <button id="<%=sneaky%>" class="home-view-btn" type="submit">LOGOUT</button>
             </form>
         </div>
     </div>

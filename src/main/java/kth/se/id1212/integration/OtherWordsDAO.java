@@ -21,10 +21,10 @@ public class OtherWordsDAO {
     private PreparedStatement findRandomWordStmt;
 
     private PreparedStatement createReportStmt;
-    private PreparedStatement updateSettingsStmt;
     private PreparedStatement createUserStmt;
     private PreparedStatement createWordStmt;
     private PreparedStatement createSettingsStmt;
+    private PreparedStatement updateSettingsStmt;
     private PreparedStatement updateWordCorrectStmt;
     private PreparedStatement updateWordSkippedStmt;
     private PreparedStatement updateUserGamesStmt;
@@ -102,7 +102,7 @@ public class OtherWordsDAO {
         try {
             resultSet = findReportsStmt.executeQuery();
             while (resultSet.next()) {
-                reports.add(new ReportBean());  //TODO add properties to the ReportBeans
+                reports.add(new ReportBean());
             }
             connection.commit();
         } catch (SQLException e) {
@@ -115,10 +115,10 @@ public class OtherWordsDAO {
     }
 
     /**
-     * Takes UserID and find what settings that user has saved in the database
+     * Takes UserID and find what settings that user has saved in the database.
      *
      * @param userID the ID of the logged-in user
-     * @return list of
+     * @return a newly created SettingsBean with the new settings
      */
     public SettingsBean findUserSettings(int userID) {
         SettingsBean userSettings = null;
@@ -138,9 +138,10 @@ public class OtherWordsDAO {
         } finally {
             closeResult(resultSet);
         }
-        try{System.out.println("current/new settings for user " + userID + ": " +
-                userSettings.getLanguageID() + " " + userSettings.getLanguageName());
-        } catch(NullPointerException e){
+        try {
+            System.out.println("current/new settings for user " + userID + ": " +
+                    userSettings.getLanguageID() + " " + userSettings.getLanguageName());
+        } catch (NullPointerException e) {
             System.out.println("no prev settings for user");
         }
         return userSettings;
@@ -182,10 +183,7 @@ public class OtherWordsDAO {
     public UserBean findUser(String username, String password) {
         ResultSet resultSet = null;
         UserBean user = null;
-        int resultSize = 0;
-        int id = 0;
         try {
-            //set the params for the PreparedStatement
             findUserStmt.setString(1, username);
             findUserStmt.setString(2, password);
 
@@ -195,16 +193,15 @@ public class OtherWordsDAO {
                 user = new UserBean(resultSet.getInt("id"), resultSet.getString("username"),
                         resultSet.getBoolean("admin"), resultSet.getInt("gamesPlayed")
                 );
-                System.out.println("user: " + user.getID() + user.getUsername() + "logged in. (DAO)");
             }
             connection.commit();
         } catch (Exception e) {
             exceptionHandler("Couldn't execute match user (login) query: ", e);
-        } finally { //always close the result set
+        } finally {
             closeResult(resultSet);
         }
 
-        return user;            //TODO give some kind of feedback to user if this is null (do in higher layer)
+        return user;
     }
 
     /**
@@ -247,10 +244,8 @@ public class OtherWordsDAO {
             findRandomWordStmt.setInt(2, offset);
             resultSet = findRandomWordStmt.executeQuery();
             if (resultSet.next()) {
-                System.out.println("Ord from DAO föööre wordbean: " + resultSet.getString("word"));
                 word = new WordBean(resultSet.getInt("id"),
                         resultSet.getString("word"), resultSet.getString("clue"));
-                System.out.println("Ord from DAO efter wordbean: " + word.getWord());
             }
             connection.commit();
         } catch (SQLException e) {
@@ -269,8 +264,6 @@ public class OtherWordsDAO {
      * @param newSettings SettingsBean with the new settings as chosen by the user
      */
     public void updateSettings(int userID, SettingsBean newSettings) {
-        System.out.println("user wants to update the settings. language setting requested: " +
-                newSettings.getLanguageID() + " " + newSettings.getLanguageName());
         int affectedRows = 0;
         try {
             updateSettingsStmt.setInt(1, newSettings.getLanguageID());
@@ -302,7 +295,6 @@ public class OtherWordsDAO {
             exceptionHandler("Couldn't execute update/create user settings query: ", e);
         }
     }
-
 
     /**
      * Creates a new user entry in the DB when a user wants to create an account.
@@ -418,7 +410,6 @@ public class OtherWordsDAO {
             result.close();
         } catch (SQLException | NullPointerException e) {
             System.out.println("Could not close result");
-//            throw new RuntimeException(e);
         }
     }
 
@@ -427,10 +418,9 @@ public class OtherWordsDAO {
         try {
             connection.rollback();
             exception.printStackTrace();
-        } catch (SQLException  | NullPointerException e) {
+        } catch (SQLException | NullPointerException e) {
             System.out.println("Could not rollback: " + e.getMessage());
             e.printStackTrace();
-//            throw new RuntimeException(e);
         }
     }
 

@@ -37,23 +37,23 @@
                 if (teamsPlaying != null) {
                     for (TeamBean teamBean : teamsPlaying) {
             %>
-                <tr>
-                    <td>
-                        <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
-                            <input type="hidden" name="action" value="remove">
-                            <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-                            <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
-                            <button class="removeButton" type="submit">X</button>
-                        </form>
-                    </td>
-                    <td>
-                        <%=teamBean.getName()%>
-                    </td>
-                    <%
-                            }
+            <tr>
+                <td>
+                    <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
+                        <input type="hidden" name="action" value="remove">
+                        <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
+                        <input type="hidden" name="teamToRemove" value="<%=teamBean.getName()%>">
+                        <button class="removeButton" type="submit">X</button>
+                    </form>
+                </td>
+                <td>
+                    <%=teamBean.getName()%>
+                </td>
+                <%
                         }
-                    %>
-                </tr>
+                    }
+                %>
+            </tr>
             </tbody>
         </table>
     </div>

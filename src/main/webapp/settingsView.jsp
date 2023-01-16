@@ -1,9 +1,7 @@
 <%@ page import="kth.se.id1212.model.UserBean" %>
 <%@ page import="kth.se.id1212.model.SettingsBean" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%--<%@ page session="true" %>--%>
 
 <%
     SettingsBean settingsBean = (SettingsBean) session.getAttribute("settingsBean");
@@ -41,18 +39,23 @@
     <h2>Settings</h2>
 
     <p id=<%=reverseSneaky%>>Not logged in</p>
-    <p id=<%=sneaky%>>Logged in as: <%=username%></p>
+    <p id=<%=sneaky%>>Logged in as: <%=username%>
+    </p>
 
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label for="roundTimeSlider">Round time:</label>
-        <input name="roundTimeSlider" type="range" min="10" max="120" value="<%=secondsPerRound%>" step="5" class="slider"
+        <input name="roundTimeSlider" type="range" min="10" max="120" value="<%=secondsPerRound%>" step="5"
+               class="slider"
                id="roundTimeSlider" oninput="roundTimeOutput.value = roundTimeSlider.value">
-        <output name="roundTimeOutput" id="roundTimeOutput"><%=secondsPerRound%></output>
+        <output name="roundTimeOutput" id="roundTimeOutput"><%=secondsPerRound%>
+        </output>
         <br>
         <label for="numberOfRounds">Number of Rounds:</label>
-        <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="<%=roundsPerGame%>" step="1"
+        <input type="range" id="numberOfRounds" name="numberOfRounds" min="1" max="5" value="<%=roundsPerGame%>"
+               step="1"
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
-        <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%></output>
+        <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%>
+        </output>
         <br>
         Current source of words: ${settingsBean.languageName}
         <br>

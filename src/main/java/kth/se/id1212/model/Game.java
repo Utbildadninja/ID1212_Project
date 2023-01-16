@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Game {
     ApiCalls apiCalls = new ApiCalls();
-    WordBean wordBean = null;
     ArrayList<WordBean> wordBeanArrayList = null;
     int currentRound = -1;
     String currentWord = null;
@@ -26,13 +25,12 @@ public class Game {
     TeamBean nextTeam;
     SettingsBean settingsBean;
     OtherWordsDAO db;
-//    OtherWordsDAO db = new OtherWordsDAO(); // TODO db sent from controller, keep in mind might cause problems
 
-    public Game(){
+    public Game() {
 
     }
 
-    public Game(OtherWordsDAO dbConnection){
+    public Game(OtherWordsDAO dbConnection) {
         this.db = dbConnection;
     }
 
@@ -56,6 +54,7 @@ public class Game {
 
     /**
      * When we start a new game, we get words from either API or database.
+     *
      * @throws IOException
      */
     public void fetchNewArray() throws IOException {
@@ -63,14 +62,11 @@ public class Game {
         String languageName = settingsBean.getLanguageName();
         int languageID = settingsBean.getLanguageID();
         System.out.println("language set to " + languageBean.getLanguageName());
-        if(languageName.equals("Test_API")){
+        if (languageName.equals("Test_API")) {
             wordList = apiCalls.getNewArrayFree();
-            //for (String word : wordList){}        TODO convert to WordBean if reports are to be implemented
-        }
-        else if(languageName.equals("English_API")){
+        } else if (languageName.equals("English_API")) {
             wordList = apiCalls.getNewArrayPremium();
-        }
-        else if(languageID!=0){
+        } else if (languageID != 0) {
             this.wordBeanArrayList = fetchWordBeansFromDB(languageID);
             String[] onlyWords = new String[wordBeanArrayList.size()];
             for (int i = 0; i < wordBeanArrayList.size(); i++) {        //Converts Beans to Strings
@@ -78,14 +74,13 @@ public class Game {
                 System.out.println(onlyWords[i]);
             }
             this.wordList = onlyWords;
-        }
-        else {
+        } else {
             System.out.println("The language/word source setting is not behaving as expected. ");
         }
     }
 
     //helper method to get random words (WordBeans) from the bd (sadly one at a time)
-    private ArrayList<WordBean> fetchWordBeansFromDB(int languageID ){
+    private ArrayList<WordBean> fetchWordBeansFromDB(int languageID) {
         int noOfWordsToFetch = 10;
         int totalNoOfWordsInDB = db.findNoOfWords(languageID);
         System.out.println(
@@ -93,10 +88,10 @@ public class Game {
         ArrayList<WordBean> wordBeans = new ArrayList<>();
         Random rand = new Random();
         int[] offsets = new int[noOfWordsToFetch];
-        for (int i =0; i < noOfWordsToFetch ; i++){
+        for (int i = 0; i < noOfWordsToFetch; i++) {
             offsets[i] = rand.nextInt(totalNoOfWordsInDB);
         }
-        for (int i =0; i < noOfWordsToFetch ; i++){
+        for (int i = 0; i < noOfWordsToFetch; i++) {
             wordBeans.add(db.findRandomWord(languageID, offsets[i]));
         }
         return wordBeans;
@@ -110,7 +105,6 @@ public class Game {
             System.out.println("One word remaining in list");
         }
 
-        // TODO If APIs are laggy, this could be moved to set before getting a new array when there's one word remaining.
         this.currentWord = wordList[currentWordCounter];
     }
 
@@ -138,7 +132,6 @@ public class Game {
             setTimeLeft(settingsBean.getSecondsPerRound());
             startTimer();
         }
-
     }
 
     public void addCorrectGuess(String word) {
@@ -156,10 +149,8 @@ public class Game {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(() -> {
             if (timeLeft > 0) {
-                //System.out.println("Time remaining: " + timeLeft + " seconds");
                 timeLeft--;
             } else {
-//                    System.out.println("Time's up!");
                 executor.shutdown();
             }
         }, 0, 1, TimeUnit.SECONDS);
@@ -167,7 +158,7 @@ public class Game {
 
     public void addTeam(String teamToAdd) {
         boolean exists = false;
-        for (TeamBean team:teamsPlaying) {
+        for (TeamBean team : teamsPlaying) {
             if (team.getName().equals(teamToAdd)) {
                 exists = true;
                 break;

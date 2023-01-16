@@ -4,7 +4,7 @@ public class LanguageBean {
     int languageID;
     String languageName;
 
-    public LanguageBean(int id, String languageName){
+    public LanguageBean(int id, String languageName) {
         this.languageID = id;
         this.languageName = languageName;
     }

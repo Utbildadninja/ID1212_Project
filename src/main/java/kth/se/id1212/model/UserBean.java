@@ -3,7 +3,7 @@ package kth.se.id1212.model;
 public class UserBean {
     int ID;
     String username;
-    boolean admin; // TODO This seems like a security risk...
+    boolean admin;
     int gamesPlayed;
 
     public UserBean(int ID, String username, boolean admin, int gamesPlayed) {

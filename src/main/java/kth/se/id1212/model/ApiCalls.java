@@ -34,6 +34,7 @@ public class ApiCalls {
      * Calls the RESTful API to get 20 words.
      * Minimum 5 characters.
      * API KEY has to be used to access this API.
+     *
      * @return A String array
      * @throws IOException Anything that goes wrong
      */
@@ -66,12 +67,7 @@ public class ApiCalls {
         int counter = 0;
         for (WordBean wordBean : wordBeans) {
             wordListStringArray[counter++] = wordBean.getWord();
-            //System.out.println(wordBean.getWord());
-
         }
-
-        //System.out.println("Some kind of array: " + wordBeans);
-        //System.out.println("Number of words that was returned from API: " + wordListStringArray.length);
         return wordListStringArray;
     }
 
@@ -89,26 +85,11 @@ public class ApiCalls {
 
         String[] wordListStringArray = new Gson().fromJson(apiResponseBody, String[].class);
 
-//        for (String word : wordListStringArray) {
-//            System.out.println(word);
-//        }
-        //System.out.println("Number of words that was returned from API: " + wordListStringArray.length);
         return wordListStringArray;
     }
 
     private String getAPI_KEY() {
-        String API_KEY = System.getenv("api_key");
-
-//        try {
-//            Scanner scanner = new Scanner(new File("C:\\API_KEY.txt"));
-//            API_KEY = scanner.nextLine();
-//            scanner.close();
-//        } catch (FileNotFoundException e) {
-//            System.err.println("Scanner failed in the most horrible way");
-//            e.printStackTrace();
-//        }
-
-        return API_KEY;
+        return System.getenv("api_key");
     }
 
 }
