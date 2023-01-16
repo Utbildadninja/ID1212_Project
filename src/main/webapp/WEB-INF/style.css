@@ -59,7 +59,8 @@ h2 {
     width: 30%;
     margin: auto;
     text-align: center;
-    padding: 60px 60px 60px 60px;
+    /*padding: 60px 60px 60px 60px;*/
+    padding-top: 60px;
     color: darkgreen;
 }
 
@@ -158,4 +159,10 @@ input[type = text], input[type = password] {
 
 .signUpButton:hover {
     color: purple;
+}
+
+@media (max-width: 750px) {
+    .home-view-game-display-box {
+        width: 80%;
+    }
 }
