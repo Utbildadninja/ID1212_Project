@@ -13,6 +13,7 @@
     <title>Med egna ord</title>
     <style>
         <%@include file="/WEB-INF/style.css" %>
+        <%@include file="/WEB-INF/buttons.css" %>
     </style>
 </head>
 <body>
@@ -34,6 +35,10 @@
         <h2 class="gameActualWord"><%=currentWord%>
         </h2>
     </div>
+
+    <c:if test="${timeLeft <= 0}">
+        <p>No more talking! Make a final guess!</p>
+    </c:if>
     <p>Current score: <%=score%>
     </p>
     <p>Current team: <%=teamBean.getName()%>
@@ -56,12 +61,12 @@
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <input type="hidden" name="action" value="correct">
         <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button id="correct" type="submit">Correct</button>
+        <button class="correctButton" type="submit">Correct</button>
     </form>
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <input type="hidden" name="action" value="skip">
         <input type="hidden" name="jspFile" value="<%= request.getRequestURI() %>">
-        <button type="submit">Skip</button>
+        <button class="skipButton" type="submit">Skip</button>
     </form>
 </div>
 <form id="timerUpForm" action="${pageContext.request.contextPath}/ControllerServlet" method="get">

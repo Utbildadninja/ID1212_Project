@@ -1,0 +1,53 @@
+.correctButton {
+    width: 200px;
+    background-color: darkgreen;
+    color: white;
+    font-weight: bolder;
+    font-size: 24px;
+    border-radius: 24px;
+    border-width: thick;
+    border-color: darkgoldenrod;
+    text-align: center;
+    display: inline-block;
+    /*margin-right: 10px;*/
+    /*margin-left: 10px;*/
+    margin-top: 10px;
+    transition: all 250ms ease;
+}
+.correctButton[disabled] {
+    background-color: gray;
+}
+
+.correctButton:hover {
+    transform: scale(1.05);
+    background-color: lawngreen;
+    text-shadow: 0px 0px 5px white;
+    color: white;
+}
+
+.skipButton {
+    width: 200px;
+    background-color: darkred;
+    color: white;
+    font-weight: bolder;
+    font-size: 24px;
+    border-radius: 24px;
+    border-width: thick;
+    border-color: darkgoldenrod;
+    text-align: center;
+    display: inline-block;
+    /*margin-right: 10px;*/
+    /*margin-left: 10px;*/
+    margin-top: 10px;
+    transition: all 250ms ease;
+}
+.skipButton[disabled] {
+    background-color: gray;
+}
+
+.skipButton:hover {
+    transform: scale(1.05);
+    background-color: red;
+    text-shadow: 0px 0px 5px white;
+    color: white;
+}
