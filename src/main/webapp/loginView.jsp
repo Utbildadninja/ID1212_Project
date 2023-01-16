@@ -9,11 +9,12 @@
 </head>
 <body>
 <div class="outerDiv">
-    Please enter credentials:
+    <h2>Log In</h2>
+
+    <span>Please enter credentials:</span>
     <c:if test="${not empty errorMessage}">
         <p class="errorMessage">${errorMessage}</p>
     </c:if>
-    <br>
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="post">
         <label>
             <input type="hidden" name="action" value="login">
@@ -26,9 +27,8 @@
         </label>
     </form>
 
-    <br>
-    Are you not yet part of our growing empire?
-    <br>
+    <span>Are you not yet part of our growing empire?</span>
+
     <form action="${pageContext.request.contextPath}/ControllerServlet" method="get">
         <label>
             <input type="hidden" name="action" value="createAccount">

@@ -49,6 +49,12 @@ div div h1 {
     text-transform: uppercase;
 }
 
+h2 {
+    color: darkgreen;
+    text-align: center;
+    margin-top: 60px;
+}
+
 .home-view-game-display-box {
     width: 30%;
     margin: auto;
@@ -59,10 +65,14 @@ div div h1 {
 
 .instructions-view{
     width: 30%;
-    margin: auto;
+    margin: 60px auto;
     text-align: center;
-    padding: 60px 60px 60px 60px;
     color: darkgreen;
+}
+
+.instructions-view p{
+    text-align: justify;
+    color: black;
 }
 
 .outerDiv {
@@ -143,7 +153,7 @@ input[type = text], input[type = password] {
     color: blue;
     border: none;
     text-decoration: underline;
-    font-size: 1.5em;
+    font-size: 1.0em;
 }
 
 .signUpButton:hover {

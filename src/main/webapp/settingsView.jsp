@@ -56,9 +56,8 @@
                oninput="numberOfRoundsValue.value=numberOfRounds.value">
         <output name="numberOfRoundsValue" id="numberOfRoundsValue"><%=roundsPerGame%>
         </output>
-        <br>
-        Current source of words: ${settingsBean.languageName}
-        <br>
+
+        <div><br>Current source of words: ${settingsBean.languageName} </div>
 
         <label>
             <select name="language">
@@ -74,8 +73,8 @@
                 </c:if>
             </select>
         </label>
-
         <br>
+
 
         <input type="hidden" name="action" value="submit">
         <input type="hidden" name="jspFile" value="<%=request.getRequestURI()%>">
