@@ -48,7 +48,6 @@ public class ControllerServlet extends HttpServlet {
 
         // Checks the parameter "jspFile" to point the request to correct method
         String jspFile = request.getParameter("jspFile");
-        //System.out.println("jspFile from Controller: " + jspFile);
         if (jspFile == null) {
             System.out.println("Seems the jspFile is null");
         } else if (jspFile.endsWith("/gameView.jsp")) {
@@ -141,12 +140,10 @@ public class ControllerServlet extends HttpServlet {
         Game game = activeSessions.get(session);
         switch (action) {
             case "correct":
-                System.out.println("Action was: " + action);
                 game.correct();
                 doGameViewProgress(request, response, session);
                 break;
             case "skip":
-                System.out.println("Action was: " + action);
                 game.skip();
                 doGameViewProgress(request, response, session);
                 break;
@@ -170,8 +167,7 @@ public class ControllerServlet extends HttpServlet {
         int timeLeft = game.getTimeLeft();
         session.setAttribute("timeLeft", timeLeft);
 
-        // TODO Possibly add game over boolean instead
-        if (timeLeft <= 0) {
+        if (game.roundOver()) {
             response.sendRedirect("pauseView.jsp");
         } else
             response.sendRedirect("gameView.jsp");

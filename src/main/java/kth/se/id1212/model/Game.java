@@ -52,16 +52,11 @@ public class Game {
         setTimeLeft(settingsBean.getSecondsPerRound());
     }
 
-    /**
-     * When we start a new game, we get words from either API or database.
-     *
-     * @throws IOException
-     */
-    public void fetchNewArray() throws IOException {
+    private void fetchNewArray() throws IOException {
         LanguageBean languageBean = settingsBean.getLanguageBean();
         String languageName = settingsBean.getLanguageName();
         int languageID = settingsBean.getLanguageID();
-        System.out.println("language set to " + languageBean.getLanguageName());
+//        System.out.println("language set to " + languageBean.getLanguageName());
         if (languageName.equals("Test_API")) {
             wordList = apiCalls.getNewArrayFree();
         } else if (languageName.equals("English_API")) {
@@ -71,7 +66,7 @@ public class Game {
             String[] onlyWords = new String[wordBeanArrayList.size()];
             for (int i = 0; i < wordBeanArrayList.size(); i++) {        //Converts Beans to Strings
                 onlyWords[i] = wordBeanArrayList.get(i).getWord();
-                System.out.println(onlyWords[i]);
+//                System.out.println(onlyWords[i]);
             }
             this.wordList = onlyWords;
         } else {
@@ -79,7 +74,7 @@ public class Game {
         }
     }
 
-    //helper method to get random words (WordBeans) from the bd (sadly one at a time)
+    // Helper method to get random words (WordBeans) from the bd (sadly one at a time)
     private ArrayList<WordBean> fetchWordBeansFromDB(int languageID) {
         int noOfWordsToFetch = 10;
         int totalNoOfWordsInDB = db.findNoOfWords(languageID);
@@ -97,7 +92,7 @@ public class Game {
         return wordBeans;
     }
 
-    public void setCurrentWord() throws IOException {
+    private void setCurrentWord() throws IOException {
         if (this.currentWordCounter >= wordList.length) {
             fetchNewArray();
             this.currentWordCounter = 0;
@@ -134,7 +129,7 @@ public class Game {
         }
     }
 
-    public void addCorrectGuess(String word) {
+    private void addCorrectGuess(String word) {
         ArrayList<String> correctGuesses = currentTeam.getCorrectGuesses();
         correctGuesses.add(word);
         currentTeam.setCorrectGuesses(correctGuesses);
@@ -145,7 +140,7 @@ public class Game {
         this.gameOver = true;
     }
 
-    public void startTimer() {
+    private void startTimer() {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
         executor.scheduleAtFixedRate(() -> {
             if (timeLeft > 0) {
@@ -172,6 +167,10 @@ public class Game {
 
     }
 
+    public boolean roundOver() {
+        return timeLeft <= 0;
+    }
+
     public void removeTeam(String name) {
         teamsPlaying.removeIf(team -> team.getName().equals(name));
     }
@@ -182,14 +181,6 @@ public class Game {
 
     public String getCurrentWord() {
         return currentWord;
-    }
-
-    public int getCurrentWordCounter() {
-        return currentWordCounter;
-    }
-
-    public void setCurrentWordCounter(int currentWordCounter) {
-        this.currentWordCounter = currentWordCounter;
     }
 
     public int getScore() {
