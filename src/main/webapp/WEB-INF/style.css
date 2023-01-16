@@ -49,6 +49,7 @@ button.home-view-btn {
 
 div div h1 {
     font-size: 3em;
+    font-weight: 900;
     text-shadow: 6px 10px 8px #0A0;
     text-transform: uppercase;
 }
